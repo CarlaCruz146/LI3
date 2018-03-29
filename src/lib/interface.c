@@ -1,12 +1,13 @@
-#include "date.h"
+/*#include "date.h"
 #include "pair.h"
 #include "list.h"
 #include "user.h"
 #include "estruturas.h"
+#include <gmodule.h>
 
 typedef struct TAD_community{
-  Post post;
-  User userint;
+  GTree *Posts;
+  GTree *Users;
 };
 
 TAD_community init();
@@ -48,3 +49,4 @@ LONG_list better_answer(TAD_community com, int id);
 LONG_list most_used_best_rep(TAD_community com, int N, Date begin, Date end);
 
 TAD_community clean(TAD_community com);
+*/

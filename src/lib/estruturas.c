@@ -19,14 +19,19 @@ struct userint{
   long id;
   int reputacao;
   char* nome;
-  USER user;
+  char* bio;
 };
 
-User createUser(long id, int reputacao, char* nome, USER user){
+User mycreateUser(long id, int reputacao, char* nome, char* bio){
+  assert(id >= 0);
+  assert(reputacao >= 0);
+  assert(nome != NULL);
+  assert(bio != NULL);
   User u = malloc(sizeof(struct userint));
   u->id = id;
   u->reputacao = reputacao;
   u->nome = mystrdup(nome);
+  u->bio = mystrdup(bio);
   return u;
 }
 
@@ -35,27 +40,28 @@ long getUserId(User u){
   return -1;
 }
 
-int getUserReputacao(User u){
+int getUserRep(User u){
   if(u) return u->reputacao;
   return -1;
 }
 
-char* getUserNome(User u){
+char* getUserName(User u){
   if(u) return u->nome;
   return NULL;
 }
 
-USER getUser(User u){
-
-  if(u){
-    USER usr;
-
-    usr = create_user(get_bio(u->user),get_10_latest_posts(u->user));
-    return usr;
-  }
+char* mygetbio(User u){
+  if(u) return u->bio;
   return NULL;
 }
 
+void myfreeUser(User u){
+  if (u){
+    free(u->nome);
+    free(u->bio);
+    free(u);
+  }
+}
 
 
 Post createPost(long id, int type, int score, int vcount, Date data, long owner, char* titulo){

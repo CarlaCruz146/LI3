@@ -9,11 +9,13 @@
 typedef struct post* Post;
 typedef struct userint* User;
 
-User createUser(long id, int reputacao, char* nome, USER user);
+User mycreateUser(long id, int reputacao, char* nome, char* bio);
 long getUserId(User u);
 int getUserReputacao(User u);
 char* getUserNome(User u);
-USER getUser(User u);
+char* mygetbio(User u);
+void myfreeUser(User u);
+
 Post createPost(long id, int type, int score, int vcount, Date data, long owner, char* titulo);
 long getPostId(Post p);
 int getPostType(Post p);

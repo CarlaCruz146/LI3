@@ -6,7 +6,6 @@
 
 void UserInfo (xmlDocPtr doc, xmlNodePtr cur) {
 
-	xmlChar *uri;
 
 	//printf("USERS: \n");
 
@@ -16,34 +15,36 @@ void UserInfo (xmlDocPtr doc, xmlNodePtr cur) {
 	while (cur != NULL) { //Enquanto houver tags row's:
 
 			if ((!xmlStrcmp(cur->name, (const xmlChar *)"row"))) { //compara as tags
-		    uri = xmlGetProp(cur, (const xmlChar *) "Id"); //Procura o atributo Id
-		    //printf("Id: %s\n", uri);
-		    xmlFree(uri);
+				long id = atoi((char*) xmlGetProp(cur, (const xmlChar *) "Id")); //Procura o atributo Id
+		  //  printf("Id: %s\n", id);
+				free(id);
 				}
 
 			if ((!xmlStrcmp(cur->name, (const xmlChar *)"row"))) {
-			   uri = xmlGetProp(cur, (const xmlChar *) "Reputation"); //Procura o atributo Reputation
+			   int rep = atoi((char*)xmlGetProp(cur, (const xmlChar *) "Reputation")); //Procura o atributo Reputation
 			   //printf("Reputation: %s\n", uri);
 			   xmlFree(uri);
 		    }
-
+/*
 			if ((!xmlStrcmp(cur->name, (const xmlChar *)"row"))) {
 			   uri = xmlGetProp(cur, (const xmlChar *) "CreationDate"); //Procura o atributo CreationDate
 			  // printf("Creation Date: %s\n", uri);
 			   xmlFree(uri);
 		   }
-
+*/
 			if ((!xmlStrcmp(cur->name, (const xmlChar *)"row"))) {
-					uri = xmlGetProp(cur, (const xmlChar *) "DisplayName"); //Procura o atributo DisplayName
+					char* nome = (char*)xmlGetProp(cur, (const xmlChar *) "DisplayName"); //Procura o atributo DisplayName
 					//printf("Display Name: %s\n", uri);
 					xmlFree(uri);
 				}
 
 			if ((!xmlStrcmp(cur->name, (const xmlChar *)"row"))) {
-						uri = xmlGetProp(cur, (const xmlChar *) "AboutMe"); //Procura o atributo AboutMe
+						char* bio =(char*) xmlGetProp(cur, (const xmlChar *) "AboutMe"); //Procura o atributo AboutMe
 						//printf("About Me: %s\n", uri);
 						xmlFree(uri);
 				}
+			User u = mycreateUser(id, rep, nome, bio);
+			insereUser(tcd->user, id, u);
 			cur = cur->next;
 	}
 }

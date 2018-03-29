@@ -1,39 +1,47 @@
 #include "TCD.h"
 
 int idusercompare(const void* id1, const void* id2){ //sendo id1 o a colocar
-  if (id1 == id2)
+  long key1 = *(long *) id1;
+  long key2 = *(long *) id2;
+  if (key1 == key2)
     return 0; //o elemento é o mesmo
-  if (id1 > id2)
+  if (key1 < key2)
     return 1; //vai para a direita
   else return (-1); //vai para a esquerda
 }
 
 
 int idpostcompare(const void* id1, const void* id2){ //sendo id1 o a colocar
-  if (id1 == id2)
+  long key1 = *(long *) id1;
+  long key2 = *(long *) id2;
+  if (key1 == key2)
     return 0; //o elemento é o mesmo
-  if (id1 > id2)
+  if (key1 < key2)
     return 1; //vai para a direita
   else return (-1); //vai para a esquerda
 }
 
-
+// ver se esta bem porque as datas sao confusas
 int datacompare(Date data1, Date data2){ //sendo data1 o a colocar
-  if (data1->ano > data2->ano)
+  Date key1 = *(Date *) data1;
+  Date key2 = *(Date *) data2;
+
+  if (key1->ano < key2->ano)
     return 1;
-  if (data1->ano < data2->ano)
+  if (key1->ano > key2->ano)
     return (-1);
-  if (data1->ano == data2->ano)
-    if(data1->mes > data2->mes)
+  if (key1->ano == key2->ano){
+    if(key1->mes < key2->mes)
       return 1;
-    if(data1->mes < data2->mes)
+    if(key1->mes > key2->mes)
       return (-1);
     else{
-        if(data1->dia > data2->dia)
+        if(key1->dia < key2->dia)
           return 1;
-        if(data1->dia < data2->dia)
+        if(key1->dia > key2->dia)
           return (-1);
         else return 0;
+    }
     }
 }
 

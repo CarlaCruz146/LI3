@@ -4,7 +4,32 @@
 #include <libxml/xmlmemory.h>
 #include <libxml/parser.h>
 #include "estruturas.h"
-#include "TCD.h"
+//#include "TCD.h"
+#
+#include <gmodule.h>
+
+int idusercompare(const void* id1, const void* id2){ //sendo id1 o a colocar
+  long key1 = *(long *) id1;
+  long key2 = *(long *) id2;
+  if (key1 == key2)
+    return 0; //o elemento é o mesmo
+  if (key1 < key2)
+    return 1; //vai para a direita
+  else return (-1); //vai para a esquerda
+}
+
+
+int idpostcompare(const void* id1, const void* id2){ //sendo id1 o a colocar
+  long key1 = *(long *) id1;
+  long key2 = *(long *) id2;
+  if (key1 == key2)
+    return 0; //o elemento é o mesmo
+  if (key1 < key2)
+    return 1; //vai para a direita
+  else return (-1); //vai para a esquerda
+}
+
+
 
 void UserInfo (xmlDocPtr doc, xmlNodePtr cur) {
 
@@ -17,6 +42,8 @@ void UserInfo (xmlDocPtr doc, xmlNodePtr cur) {
 	int rep;
 	char* nome;
 	char* bio;
+	gpointer compdata;
+	GTree *arv_users = g_tree_new_full(&(idusercompare), compdata, NULL, &(free_user));
 
 
 	while (cur != NULL) { //Enquanto houver tags row's:
@@ -51,11 +78,10 @@ void UserInfo (xmlDocPtr doc, xmlNodePtr cur) {
 
 				}
 			User u = mycreateUser(id, rep, nome, bio);
-			TCD tcd = init();
-			User user = get
-			insereUser(tcd->users, id, u);
+			g_tree_insert(arv_users, id, u);
 			cur = cur->next;
 	}
+			return arv_users;
 }
 
 

@@ -3,6 +3,8 @@
 #include <stdlib.h>
 #include <libxml/xmlmemory.h>
 #include <libxml/parser.h>
+#include "estruturas.h"
+#include "TCD.h"
 
 void UserInfo (xmlDocPtr doc, xmlNodePtr cur) {
 
@@ -11,19 +13,24 @@ void UserInfo (xmlDocPtr doc, xmlNodePtr cur) {
 
 	cur = xmlDocGetRootElement(doc); // Acede à raíz do documento: "<users>"
 	cur = cur->xmlChildrenNode; // Vai para o filho: tag <row>
+	long id;
+	int rep;
+	char* nome;
+	char* bio;
+
 
 	while (cur != NULL) { //Enquanto houver tags row's:
 
 			if ((!xmlStrcmp(cur->name, (const xmlChar *)"row"))) { //compara as tags
-				long id = atoi((char*) xmlGetProp(cur, (const xmlChar *) "Id")); //Procura o atributo Id
+				id = atoi((char*) xmlGetProp(cur, (const xmlChar *) "Id")); //Procura o atributo Id
 		  //  printf("Id: %s\n", id);
-				free(id);
+
 				}
 
 			if ((!xmlStrcmp(cur->name, (const xmlChar *)"row"))) {
-			   int rep = atoi((char*)xmlGetProp(cur, (const xmlChar *) "Reputation")); //Procura o atributo Reputation
+			   rep = atoi((char*)xmlGetProp(cur, (const xmlChar *) "Reputation")); //Procura o atributo Reputation
 			   //printf("Reputation: %s\n", uri);
-			   xmlFree(uri);
+
 		    }
 /*
 			if ((!xmlStrcmp(cur->name, (const xmlChar *)"row"))) {
@@ -33,18 +40,20 @@ void UserInfo (xmlDocPtr doc, xmlNodePtr cur) {
 		   }
 */
 			if ((!xmlStrcmp(cur->name, (const xmlChar *)"row"))) {
-					char* nome = (char*)xmlGetProp(cur, (const xmlChar *) "DisplayName"); //Procura o atributo DisplayName
+					nome = (char*)xmlGetProp(cur, (const xmlChar *) "DisplayName"); //Procura o atributo DisplayName
 					//printf("Display Name: %s\n", uri);
-					xmlFree(uri);
+
 				}
 
 			if ((!xmlStrcmp(cur->name, (const xmlChar *)"row"))) {
-						char* bio =(char*) xmlGetProp(cur, (const xmlChar *) "AboutMe"); //Procura o atributo AboutMe
+						bio =(char*) xmlGetProp(cur, (const xmlChar *) "AboutMe"); //Procura o atributo AboutMe
 						//printf("About Me: %s\n", uri);
-						xmlFree(uri);
+
 				}
 			User u = mycreateUser(id, rep, nome, bio);
-			insereUser(tcd->user, id, u);
+			TCD tcd = init();
+			User user = get
+			insereUser(tcd->users, id, u);
 			cur = cur->next;
 	}
 }

@@ -16,3 +16,5 @@ TCD init();
 void insereUser();
 void inserePost();
 void freeTCD();
+
+#endif

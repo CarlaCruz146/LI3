@@ -1,5 +1,27 @@
 #include "TCD.h"
 
+typedef struct TCD{
+  GTree *posts;
+  GTree *users;
+};
+
+GTree getUsers(TCD tcd){
+  if (tcd){
+    GTree users = tcd->users;
+    return users;
+  }
+  return NULL;
+}
+
+GTree getPosts(TCD tcd){
+  if (tcd){
+    GTree posts = tcd->posts;
+    return posts;
+  }
+  return NULL;
+}
+
+
 int idusercompare(const void* id1, const void* id2){ //sendo id1 o a colocar
   long key1 = *(long *) id1;
   long key2 = *(long *) id2;
@@ -23,8 +45,8 @@ int idpostcompare(const void* id1, const void* id2){ //sendo id1 o a colocar
 
 // ver se esta bem porque as datas sao confusas
 int datacompare(Date data1, Date data2){ //sendo data1 o a colocar
-  Date key1 = *(Date *) data1;
-  Date key2 = *(Date *) data2;
+  Date key1 = (Date) data1;
+  Date key2 = (Date) data2;
 
   if (key1->ano < key2->ano)
     return 1;
@@ -46,11 +68,10 @@ int datacompare(Date data1, Date data2){ //sendo data1 o a colocar
 }
 
 TCD init(){
-TCD tcd = malloc(sizeof(struct(TCD)));
-tcd->users =g_tree_new();
-tcd->posts = g_tree_new();
-
-return tcd;
+  TCD tcd = malloc(sizeof(struct(TCD)));
+  //tcd->users =g_tree_new_full(idusercompare(), NULL, NULL, );
+  //tcd->posts = g_tree_new_full(idpostcompare(), NULL, NULL, );
+  return tcd;
 }
 
 

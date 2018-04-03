@@ -4,6 +4,7 @@
 #include "common.h"
 #include "date.h"
 #include "estruturas.h"
+#include <assert.h>
 
 struct post{
   long id;
@@ -46,12 +47,12 @@ int getUserRep(User u){
 }
 
 char* getUserName(User u){
-  if(u) return u->nome;
+  if(u) return mystrdup(u->nome);
   return NULL;
 }
 
 char* mygetbio(User u){
-  if(u) return u->bio;
+  if(u) return mystrdup(u->bio);
   return NULL;
 }
 
@@ -98,7 +99,13 @@ int getPostVCount(Post p){
 }
 
 Date getPostData(Post p){
-  if(p) return p->data;
+  if (p){
+  int dia = get_day(p->data);
+  int mes = get_month(p->data);
+  int ano = get_year(p->data);
+  Date d = createDate(dia,mes,ano);
+  return d;
+  }
   return NULL;
 }
 
@@ -108,7 +115,7 @@ long getPostOwner(Post p){
 }
 
 char* getPostTitulo(Post p){
-  if(p) return p->titulo;
+  if(p) return mystrdup(p->titulo);
   return NULL;
 }
 

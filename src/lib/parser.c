@@ -4,11 +4,24 @@
 #include <libxml/xmlmemory.h>
 #include <libxml/parser.h>
 #include "estruturas.h"
+#include "parser.h"
 //#include "TCD.h"
-#
+
 #include <gmodule.h>
 
-int idusercompare(const void* id1, const void* id2){ //sendo id1 o a colocar
+gint idusercompare(gconstpointer id1, gconstpointer id2){ //sendo id1 o a colocar
+  long key1 = getKey((Key) id1);
+  long key2 = getKey((Key) id2);
+  printf("%ld : %ld\n",key1, key2);
+  if (key1 == key2)
+    return 0; //o elemento é o mesmo
+  if (key1 < key2)
+    return 1; //vai para a direita
+  else return (-1); //vai para a esquerda
+}
+
+
+gint idpostcompare(const void* id1, const void* id2){ //sendo id1 o a colocar
   long key1 = *(long *) id1;
   long key2 = *(long *) id2;
   if (key1 == key2)
@@ -19,46 +32,22 @@ int idusercompare(const void* id1, const void* id2){ //sendo id1 o a colocar
 }
 
 
-int idpostcompare(const void* id1, const void* id2){ //sendo id1 o a colocar
-  long key1 = *(long *) id1;
-  long key2 = *(long *) id2;
-  if (key1 == key2)
-    return 0; //o elemento é o mesmo
-  if (key1 < key2)
-    return 1; //vai para a direita
-  else return (-1); //vai para a esquerda
-}
 
-
-
-void UserInfo (xmlDocPtr doc, xmlNodePtr cur) {
-
-
+void userInfo (xmlDocPtr doc, GTree * arv_users) {
 	//printf("USERS: \n");
 
-	cur = xmlDocGetRootElement(doc); // Acede à raíz do documento: "<users>"
+	xmlNodePtr cur = xmlDocGetRootElement(doc); // Acede à raíz do documento: "<users>"
 	cur = cur->xmlChildrenNode; // Vai para o filho: tag <row>
-	long id;
-	int rep;
-	char* nome;
-	char* bio;
-	gpointer compdata;
-	GTree *arv_users = g_tree_new_full(&(idusercompare), compdata, NULL, &(free_user));
 
+	// GTree *arv_users = g_tree_new(idusercompare);
 
 	while (cur != NULL) { //Enquanto houver tags row's:
-
 			if ((!xmlStrcmp(cur->name, (const xmlChar *)"row"))) { //compara as tags
-				id = atoi((char*) xmlGetProp(cur, (const xmlChar *) "Id")); //Procura o atributo Id
-		  //  printf("Id: %s\n", id);
+				 long id = atol((char*) xmlGetProp(cur, (const xmlChar *) "Id")); //Procura o atributo Id
+         //printf("Id: %ld\n", id);
+		     int rep = atoi((char*)xmlGetProp(cur, (const xmlChar *) "Reputation")); //Procura o atributo Reputation
+         //printf("Reputation: %d\n", rep);
 
-				}
-
-			if ((!xmlStrcmp(cur->name, (const xmlChar *)"row"))) {
-			   rep = atoi((char*)xmlGetProp(cur, (const xmlChar *) "Reputation")); //Procura o atributo Reputation
-			   //printf("Reputation: %s\n", uri);
-
-		    }
 /*
 			if ((!xmlStrcmp(cur->name, (const xmlChar *)"row"))) {
 			   uri = xmlGetProp(cur, (const xmlChar *) "CreationDate"); //Procura o atributo CreationDate
@@ -66,27 +55,24 @@ void UserInfo (xmlDocPtr doc, xmlNodePtr cur) {
 			   xmlFree(uri);
 		   }
 */
-			if ((!xmlStrcmp(cur->name, (const xmlChar *)"row"))) {
-					nome = (char*)xmlGetProp(cur, (const xmlChar *) "DisplayName"); //Procura o atributo DisplayName
-					//printf("Display Name: %s\n", uri);
 
-				}
-
-			if ((!xmlStrcmp(cur->name, (const xmlChar *)"row"))) {
-						bio =(char*) xmlGetProp(cur, (const xmlChar *) "AboutMe"); //Procura o atributo AboutMe
-						//printf("About Me: %s\n", uri);
-
-				}
-			User u = mycreateUser(id, rep, nome, bio);
-			g_tree_insert(arv_users, id, u);
+					char* nome = (char*)xmlGetProp(cur, (const xmlChar *) "DisplayName"); //Procura o atributo DisplayName
+					//printf("Display Name: %s\n", nome);
+					char* bio = (char*) xmlGetProp(cur, (const xmlChar *) "AboutMe"); //Procura o atributo AboutMe					printf("About Me: %s\n", bio);
+          User u = mycreateUser(id, rep, nome, bio);
+          Key uid = createKey(getUserId(u));
+          printf("1- %ld\n", getKey(uid));
+          g_tree_insert(arv_users, uid, u);
+          printf("4- %d\n", g_tree_nnodes(arv_users));
+    }
 			cur = cur->next;
+
 	}
-			return arv_users;
 }
 
 
 
-void PostsInfo (xmlDocPtr doc, xmlNodePtr cur) {
+void postsInfo(xmlDocPtr doc, xmlNodePtr cur) {
 
 	xmlChar *uri;
 
@@ -142,7 +128,7 @@ void PostsInfo (xmlDocPtr doc, xmlNodePtr cur) {
 }
 
 
-void VotesInfo (xmlDocPtr doc, xmlNodePtr cur) {
+void votesInfo(xmlDocPtr doc, xmlNodePtr cur) {
 
 	xmlChar *uri;
 
@@ -182,7 +168,7 @@ void VotesInfo (xmlDocPtr doc, xmlNodePtr cur) {
 
 
 
-void parseDo(char *docname, char *docname2, char *docname3) {
+void parseDo(char *docname, char *docname2, char *docname3, GTree * arv_users) {
 
 	xmlDocPtr doc;
 	xmlNodePtr cur;
@@ -259,19 +245,19 @@ void parseDo(char *docname, char *docname2, char *docname3) {
 		return;
 	}
 
-	UserInfo (doc, cur);
+	userInfo (doc, arv_users);
 	xmlFreeDoc(doc);
 
-	PostsInfo (doc2, cur2);
+	postsInfo (doc2, cur2);
 	xmlFreeDoc(doc2);
 
-	VotesInfo (doc3, cur3);
+	votesInfo (doc3, cur3);
 	xmlFreeDoc(doc3);
 }
 
 
 
-
+/*
 int main (int argc, char **argv) {
 
 	char *docname;
@@ -291,3 +277,4 @@ int main (int argc, char **argv) {
 
 	return 1;
 }
+*/

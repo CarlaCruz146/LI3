@@ -1,9 +1,13 @@
-#include "TCD.h"
 
+
+//#include "TCD.h"
+
+/*
 typedef struct TCD{
   GTree *posts;
   GTree *users;
 };
+
 
 GTree getUsers(TCD tcd){
   if (tcd){
@@ -20,6 +24,7 @@ GTree getPosts(TCD tcd){
   }
   return NULL;
 }
+
 
 
 int idusercompare(const void* id1, const void* id2){ //sendo id1 o a colocar
@@ -79,3 +84,4 @@ void insereUser(TCD tcd, User u){
   assert ( u!= NULL);
   g_tree_insert(tcd->users, u->id, u);
 }
+*/

@@ -8,11 +8,15 @@
 
 typedef struct post* Post;
 typedef struct userint* User;
+typedef struct key* Key;
+
+Key createKey(long key);
+long getKey(Key k);
 
 User mycreateUser(long id, int reputacao, char* nome, char* bio);
 long getUserId(User u);
 int getUserReputacao(User u);
-char* getUserNome(User u);
+char* getUserName(User u);
 char* mygetbio(User u);
 void myfreeUser(User u);
 

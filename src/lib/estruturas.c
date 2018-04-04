@@ -23,23 +23,43 @@ struct userint{
   char* bio;
 };
 
+struct key{
+  long key;
+};
+
+Key createKey(long key){
+  Key k = malloc(sizeof(struct key));
+  k->key = key;
+  return k;
+}
+
+long getKey(Key k){
+  return k->key;
+}
+
+
 User mycreateUser(long id, int reputacao, char* nome, char* bio){
-  assert(id >= 0);
-  assert(reputacao >= 0);
-  assert(nome != NULL);
-  assert(bio != NULL);
+  //assert(id >= 0);
+  //assert(reputacao >= 0);
+  //assert(nome != NULL);
+  //assert(bio != NULL);
+  if(id>=-1){
   User u = malloc(sizeof(struct userint));
   u->id = id;
   u->reputacao = reputacao;
   u->nome = mystrdup(nome);
   u->bio = mystrdup(bio);
   return u;
+  }
+  return NULL;
 }
 
 long getUserId(User u){
   if(u) return u->id;
-  return -1;
+  return -2;
 }
+
+
 
 int getUserRep(User u){
   if(u) return u->reputacao;

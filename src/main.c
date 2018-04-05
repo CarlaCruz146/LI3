@@ -35,11 +35,12 @@ int main(int argc, char **argv){
 
   //userInfo(doc2, arv_users);
   postsInfo(doc2, arv_posts);
-  
+
   Key pid = createKey(4);
   Post p = (Post)g_tree_lookup(arv_posts, pid);
   assert(p!=NULL);
   g_tree_foreach(arv_posts, (GTraverseFunc)iterator, NULL);
+  g_tree_free(arv_posts);
   //Key uid = createKey(1);
   //User u = (User)g_tree_lookup(arv_users, uid);
   //assert(u!=NULL);

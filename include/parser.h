@@ -13,15 +13,15 @@
 
 int idusercompare(gconstpointer id1, gconstpointer id2);
 
-int idpostcompare(const void* id1, const void* id2);
+int idpostcompare(gconstpointer id1, gconstpointer id2);
 
 void userInfo (xmlDocPtr doc, GTree * arv_users);
 
-void PostsInfo (xmlDocPtr doc, xmlNodePtr cur);
+void postsInfo(xmlDocPtr doc, GTree * arv_users);
 
-void VotesInfo (xmlDocPtr doc, xmlNodePtr cur);
+void votesInfo (xmlDocPtr doc, xmlNodePtr cur);
 
-void parseDo(char *docname, char *docname2, char *docname3, GTree * arv_users);
+void parseDo(char *docname, char *docname2, char *docname3, GTree * arv_users, GTree * arv_posts);
 
 
 #endif

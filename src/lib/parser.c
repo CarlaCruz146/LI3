@@ -12,7 +12,7 @@
 gint idusercompare(gconstpointer id1, gconstpointer id2){ //sendo id1 o a colocar
   long key1 = getKey((Key) id1);
   long key2 = getKey((Key) id2);
-  printf("%ld : %ld\n",key1, key2);
+  //printf("%ld : %ld\n",key1, key2);
   if (key1 == key2)
     return 0; //o elemento é o mesmo
   if (key1 < key2)
@@ -21,9 +21,9 @@ gint idusercompare(gconstpointer id1, gconstpointer id2){ //sendo id1 o a coloca
 }
 
 
-gint idpostcompare(const void* id1, const void* id2){ //sendo id1 o a colocar
-  long key1 = *(long *) id1;
-  long key2 = *(long *) id2;
+gint idpostcompare(gconstpointer id1, gconstpointer id2){ //sendo id1 o a colocar
+  long key1 = getKey((Key) id1);
+  long key2 = getKey((Key) id2);
   if (key1 == key2)
     return 0; //o elemento é o mesmo
   if (key1 < key2)
@@ -35,94 +35,95 @@ gint idpostcompare(const void* id1, const void* id2){ //sendo id1 o a colocar
 
 void userInfo (xmlDocPtr doc, GTree * arv_users) {
 	//printf("USERS: \n");
-
 	xmlNodePtr cur = xmlDocGetRootElement(doc); // Acede à raíz do documento: "<users>"
 	cur = cur->xmlChildrenNode; // Vai para o filho: tag <row>
 
-	// GTree *arv_users = g_tree_new(idusercompare);
-
 	while (cur != NULL) { //Enquanto houver tags row's:
 			if ((!xmlStrcmp(cur->name, (const xmlChar *)"row"))) { //compara as tags
-				 long id = atol((char*) xmlGetProp(cur, (const xmlChar *) "Id")); //Procura o atributo Id
-         //printf("Id: %ld\n", id);
-		     int rep = atoi((char*)xmlGetProp(cur, (const xmlChar *) "Reputation")); //Procura o atributo Reputation
-         //printf("Reputation: %d\n", rep);
-
-/*
-			if ((!xmlStrcmp(cur->name, (const xmlChar *)"row"))) {
-			   uri = xmlGetProp(cur, (const xmlChar *) "CreationDate"); //Procura o atributo CreationDate
-			  // printf("Creation Date: %s\n", uri);
-			   xmlFree(uri);
-		   }
-*/
-
-					char* nome = (char*)xmlGetProp(cur, (const xmlChar *) "DisplayName"); //Procura o atributo DisplayName
-					//printf("Display Name: %s\n", nome);
-					char* bio = (char*) xmlGetProp(cur, (const xmlChar *) "AboutMe"); //Procura o atributo AboutMe					printf("About Me: %s\n", bio);
-          User u = mycreateUser(id, rep, nome, bio);
-          Key uid = createKey(getUserId(u));
-          printf("1- %ld\n", getKey(uid));
-          g_tree_insert(arv_users, uid, u);
-          printf("4- %d\n", g_tree_nnodes(arv_users));
-    }
+			     long id = atol((char*) xmlGetProp(cur, (const xmlChar *) "Id")); //Procura o atributo Id
+           //printf("Id: %ld\n", id);
+		       int rep = atoi((char*)xmlGetProp(cur, (const xmlChar *) "Reputation")); //Procura o atributo Reputation
+           //printf("Reputation: %d\n", rep);
+					 char* nome = (char*)xmlGetProp(cur, (const xmlChar *) "DisplayName"); //Procura o atributo DisplayName
+					 //printf("Display Name: %s\n", nome);
+					 char* bio = (char*) xmlGetProp(cur, (const xmlChar *) "AboutMe"); //Procura o atributo AboutMe					printf("About Me: %s\n", bio);
+           User u = mycreateUser(id, rep, nome, bio);
+           Key uid = createKey(getUserId(u));
+           //printf("1- %ld\n", getKey(uid));
+           g_tree_insert(arv_users, uid, u);
+           //printf("4- %d\n", g_tree_nnodes(arv_users));
+         }
 			cur = cur->next;
-
-	}
+    }
 }
 
+//tipo=0 se for pra ir buscar o ano
+//tipo=1 se for p ir buscar o mes
+//tipo=2 se for p ir buscar o dia
+char* getDate(char* d, int tipo){
+    if(tipo==0){
+      int i=0;
+      while(d[i]!='-') i++;
+      d[i]='\0';
+      return d;
+    }
+    if(tipo==1){
+      int j, w=0;
+      for(j=0;j<5;j++)
+        ;
+      while(j<7){
+        d[w++]=d[j++];
+      }
+      d[w]='\0';
+      return d;
+    }
+    if(tipo==2){
+      int a, b=0;
+      for(a=0;a<8;a++)
+        ;
+      while(a<10){
+        d[b++]=d[a++];
+      }
+      d[b]='\0';
+      return d;
+    }
+    return NULL;
+}
 
-
-void postsInfo(xmlDocPtr doc, xmlNodePtr cur) {
-
-	xmlChar *uri;
-
+void postsInfo(xmlDocPtr doc, GTree * arv_posts) {
 	//printf("POSTS: \n");
-
-	cur = xmlDocGetRootElement(doc);
+	xmlNodePtr cur = xmlDocGetRootElement(doc);
 	cur = cur->xmlChildrenNode;
+
 	while (cur != NULL) {
 
 			if ((!xmlStrcmp(cur->name, (const xmlChar *)"row"))) {
-		    uri = xmlGetProp(cur, (const xmlChar *) "Id");
-		//    printf("Id Post: %s\n", uri);
-		    xmlFree(uri);
+		      long id = atol((char*)xmlGetProp(cur, (const xmlChar *) "Id"));
+		      printf("Id Post: %ld\n", id);
+		      int typeid = atoi((char*)xmlGetProp(cur, (const xmlChar *) "PostTypeId"));
+			    printf("Post Type ID: %d\n", typeid);
+          //TEMOS DE VER O Q VAMOS FAZER COM A DATA
+          char* cdate = (char*)xmlGetProp(cur, (const xmlChar *) "CreationDate");
+
+          int year = atoi(getDate(cdate,0));
+          int month = atoi(getDate(cdate,1));
+          int day = atoi(getDate(cdate,2));
+          Date date = createDate(day,month,year);
+			    printf("Creation Date: %d %d %d\n", get_day(date), get_month(date), get_year(date));
+			    int score = atoi((char*)xmlGetProp(cur, (const xmlChar *) "Score"));
+					printf("Score: %d\n", score);
+					int vcount = atoi((char*)xmlGetProp(cur, (const xmlChar *) "ViewCount"));
+					printf("View Count: %d\n", vcount);
+					long ownerid = atol((char*)xmlGetProp(cur, (const xmlChar *) "OwnerUserId"));
+					printf("Owner User Id: %ld\n", ownerid);
+					char* title = (char*)xmlGetProp(cur, (const xmlChar *) "Title");
+				  printf("Title: %s\n", title);
+          Post p = createPost(id,typeid,score,vcount,date,ownerid,title);
+          Key pid = createKey(getPostId(p));
+          printf("Pid- %ld\n", getKey(pid));
+          g_tree_insert(arv_posts, pid, p);
+
 				}
-
-			if ((!xmlStrcmp(cur->name, (const xmlChar *)"row"))) {
-			   uri = xmlGetProp(cur, (const xmlChar *) "PostTypeId");
-			//   printf("Post Type ID: %s\n", uri);
-			   xmlFree(uri);
-		    }
-
-			if ((!xmlStrcmp(cur->name, (const xmlChar *)"row"))) {
-			   uri = xmlGetProp(cur, (const xmlChar *) "CreationDate");
-			  // printf("Creation Date: %s\n", uri);
-			   xmlFree(uri);
-		   }
-
-			if ((!xmlStrcmp(cur->name, (const xmlChar *)"row"))) {
-					uri = xmlGetProp(cur, (const xmlChar *) "Score");
-					//printf("Score: %s\n", uri);
-					xmlFree(uri);
-				}
-
-			if ((!xmlStrcmp(cur->name, (const xmlChar *)"row"))) {
-						uri = xmlGetProp(cur, (const xmlChar *) "ViewCount");
-					//	printf("View Count: %s\n", uri);
-						xmlFree(uri);
-				}
-
-			if ((!xmlStrcmp(cur->name, (const xmlChar *)"row"))) {
-							uri = xmlGetProp(cur, (const xmlChar *) "OwnerUserId");
-						//	printf("Owner User Id: %s\n", uri);
-							xmlFree(uri);
-					}
-
-			if ((!xmlStrcmp(cur->name, (const xmlChar *)"row"))) {
-								uri = xmlGetProp(cur, (const xmlChar *) "Body");
-							//	printf("Title: %s\n", uri);
-								xmlFree(uri);
-						}
 			cur = cur->next;
 	}
 }
@@ -168,7 +169,7 @@ void votesInfo(xmlDocPtr doc, xmlNodePtr cur) {
 
 
 
-void parseDo(char *docname, char *docname2, char *docname3, GTree * arv_users) {
+void parseDo(char *docname, char *docname2, char *docname3, GTree * arv_users, GTree * arv_posts) {
 
 	xmlDocPtr doc;
 	xmlNodePtr cur;
@@ -248,7 +249,7 @@ void parseDo(char *docname, char *docname2, char *docname3, GTree * arv_users) {
 	userInfo (doc, arv_users);
 	xmlFreeDoc(doc);
 
-	postsInfo (doc2, cur2);
+	postsInfo (doc2, arv_posts);
 	xmlFreeDoc(doc2);
 
 	votesInfo (doc3, cur3);

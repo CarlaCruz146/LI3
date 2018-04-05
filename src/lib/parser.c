@@ -60,34 +60,32 @@ void userInfo (xmlDocPtr doc, GTree * arv_users) {
 //tipo=0 se for pra ir buscar o ano
 //tipo=1 se for p ir buscar o mes
 //tipo=2 se for p ir buscar o dia
-char* getDate(char* d, int tipo){
-    if(tipo==0){
-      int i=0;
-      while(d[i]!='-') i++;
-      d[i]='\0';
-      return d;
-    }
-    if(tipo==1){
-      int j, w=0;
-      for(j=0;j<5;j++)
-        ;
-      while(j<7){
-        d[w++]=d[j++];
-      }
-      d[w]='\0';
-      return d;
-    }
-    if(tipo==2){
-      int a, b=0;
-      for(a=0;a<8;a++)
-        ;
-      while(a<10){
-        d[b++]=d[a++];
-      }
-      d[b]='\0';
-      return d;
-    }
-    return NULL;
+char* getYear(char* d){
+    int i=0;
+    while(d[i]!='-')
+      i++;
+    d[i]='\0';
+    return d;
+  }
+
+char* getMonth(char* d){
+    int j, w=0;
+    for(j=0;j<5;j++)
+      ;
+    while(j<7)
+      d[w++]=d[j++];
+    d[w]='\0';
+    return d;
+}
+
+char* getDay(char* d){
+    int a, b=0;
+    for(a=0;a<8;a++)
+      ;
+    while(a<10)
+      d[b++]=d[a++];
+    d[b]='\0';
+    return d;
 }
 
 void postsInfo(xmlDocPtr doc, GTree * arv_posts) {
@@ -105,9 +103,9 @@ void postsInfo(xmlDocPtr doc, GTree * arv_posts) {
           //TEMOS DE VER O Q VAMOS FAZER COM A DATA
           char* cdate = (char*)xmlGetProp(cur, (const xmlChar *) "CreationDate");
 
-          int year = atoi(getDate(cdate,0));
-          int month = atoi(getDate(cdate,1));
-          int day = atoi(getDate(cdate,2));
+          int year = atoi(getYear(cdate));
+          int month = atoi(getMonth(cdate));
+          int day = atoi(getDay(cdate));
           Date date = createDate(day,month,year);
 			    printf("Creation Date: %d %d %d\n", get_day(date), get_month(date), get_year(date));
 			    int score = atoi((char*)xmlGetProp(cur, (const xmlChar *) "Score"));

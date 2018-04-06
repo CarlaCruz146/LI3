@@ -92,6 +92,7 @@ void postsInfo(xmlDocPtr doc, GTree * arv_posts) {
 	//printf("POSTS: \n");
 	xmlNodePtr cur = xmlDocGetRootElement(doc);
 	cur = cur->xmlChildrenNode;
+  char* aux;
 
 	while (cur != NULL) {
 
@@ -110,8 +111,9 @@ void postsInfo(xmlDocPtr doc, GTree * arv_posts) {
 			    printf("Creation Date: %d %d %d\n", get_day(date), get_month(date), get_year(date));
 			    int score = atoi((char*)xmlGetProp(cur, (const xmlChar *) "Score"));
 					printf("Score: %d\n", score);
-					int vcount = atoi((char*)xmlGetProp(cur, (const xmlChar *) "ViewCount"));
-					printf("View Count: %d\n", vcount);
+          aux = (char*)xmlGetProp(cur, (const xmlChar *) "ViewCount");
+          int vcount = aux ? atoi(aux) : 0;
+          printf("View Count: %d\n", vcount);
 					long ownerid = atol((char*)xmlGetProp(cur, (const xmlChar *) "OwnerUserId"));
 					printf("Owner User Id: %ld\n", ownerid);
 					char* title = (char*)xmlGetProp(cur, (const xmlChar *) "Title");

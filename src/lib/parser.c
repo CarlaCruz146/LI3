@@ -31,6 +31,60 @@ gint idpostcompare(gconstpointer id1, gconstpointer id2){ //sendo id1 o a coloca
   else return (-1); //vai para a esquerda
 }
 
+gint datacompare(gconstpointer data1, gconstpointer data2){ //sendo data1 o a colocar
+  myDate key1 = (myDate) data1;
+  myDate key2 = (myDate) data2;
+  int year1 = myget_year(key1);
+  int month1 = myget_month(key1);
+  int day1 = myget_day(key1);
+  int hour1 = myget_hour(key1);
+  int min1 = myget_min(key1);
+  float sec1 = myget_sec(key1);
+  int year2 = myget_year(key2);
+  int month2 = myget_month(key2);
+  int day2 = myget_day(key2);
+  int hour2 = myget_hour(key2);
+  int min2 = myget_min(key2);
+  float sec2 = myget_sec(key2);
+
+
+  if (year1 < year2)
+    return 1;
+  if (year1 > year2)
+    return (-1);
+  if (year1 == year2){
+    if(month1 < month2)
+      return 1;
+    if(month1 > month2)
+      return (-1);
+    if (month1 == month2){
+      if(day1 < day2)
+        return 1;
+      if(day1 > day2)
+        return (-1);
+      if (day1 == day2){
+        if(hour1 < hour2)
+          return 1;
+        if(hour1 > hour2)
+          return (-1);
+        if (hour1 == hour2){
+          if(min1 < min2)
+            return 1;
+          if(min1 > min2)
+            return (-1);
+          if (min1 == min2){
+            if(sec1 < sec2)
+              return 1;
+            if(sec1 > sec2)
+              return (-1);
+            else return 0;
+          }
+        }
+      }
+    }
+  }
+  return -2;
+}
 
 
 void userInfo (xmlDocPtr doc, GTree * arv_users) {
@@ -140,7 +194,9 @@ void postsInfo(xmlDocPtr doc, GTree * arv_posts) {
           float sec = atof(getMin(cdate));
 
           myDate date = mycreateDate(day,month,year,hour,min,sec);
-			    printf("Creation Date: %d %d %d\n", myget_day(date), myget_month(date), myget_year(date));
+			    printf("Creation Date: %d %d %d H:%d m:%d s:%f\n",
+                  myget_day(date), myget_month(date), myget_year(date),
+                  myget_hour(date), myget_min(date), myget_sec(date));
 
           int score = atoi((char*)xmlGetProp(cur, (const xmlChar *) "Score"));
 					printf("Score: %d\n", score);

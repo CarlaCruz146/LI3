@@ -206,7 +206,7 @@ void postsInfo(xmlDocPtr doc, GTree * arv_posts) {
 
           Post p = createPost(id,typeid,score,vcount,date,ownerid,title);
           Key pid = createKey(getPostId(p));
-        //  printf("Pid- %ld\n", getKey(pid));
+         printf("Pid- %ld\n", getKey(pid));
           g_tree_insert(arv_posts, pid, p);
 
 				}

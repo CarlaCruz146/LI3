@@ -23,6 +23,14 @@ struct userint{
   char* bio;
 };
 
+struct mydate {
+  Date date;
+  int hour;
+  int min;
+  int sec;
+};
+
+
 struct key{
   long key;
 };
@@ -144,4 +152,44 @@ void freePost(Post p){
     free(p->titulo);
     free(p);
   }
+}
+
+
+
+myDate mycreateDate(int day, int month, int year, int hour, int min, int sec) {
+    myDate d = malloc(sizeof(struct mydate));
+    d->date = createDate(day,month,year);
+    d->hour = hour;
+    d->min = min;
+    d->sec = sec;
+    return d;
+}
+
+int myget_day(myDate d) {
+    return (get_day(d->date));
+}
+
+int myget_month(myDate d) {
+    return (get_month(d->date)); //change to enum? (Acho que sim. Desta forma já garantimos a limitação necessária)
+}
+
+int myget_year(myDate d) {
+    return (get_year(d->date));
+}
+
+int myget_hour(myDate d) {
+    return d->hour;
+}
+
+int myget_min(myDate d) {
+    return d->min;
+}
+
+int myget_sec(myDate d) {
+    return d->sec;
+}
+
+void myfree_date(myDate d) {
+    free(d->date);
+    free(d);
 }

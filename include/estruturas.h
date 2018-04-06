@@ -9,6 +9,7 @@
 typedef struct post* Post;
 typedef struct userint* User;
 typedef struct key* Key;
+typedef struct mydate* myDate;
 
 Key createKey(long key);
 long getKey(Key k);
@@ -29,5 +30,14 @@ Date getPostData(Post p);
 long getPostOwner(Post p);
 char* getPostTitulo(Post p);
 void freePost(Post p);
+
+myDate mycreateDate(int day, int month, int year, int hours, int min, int sec);
+int myget_day(myDate d);
+int myget_month(myDate d); // must return a value between 0 and 11
+int myget_year(myDate d);
+int myget_hour(myDate d);
+int myget_min(myDate d);
+int myget_sec(myDate d);
+void myfree_date(myDate d);
 
 #endif

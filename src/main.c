@@ -40,7 +40,7 @@ int main(int argc, char **argv){
   Post p = (Post)g_tree_lookup(arv_posts, pid);
   assert(p!=NULL);
   g_tree_foreach(arv_posts, (GTraverseFunc)iterator, NULL);
-  g_tree_free(arv_posts);
+  g_tree_destroy(arv_posts);
   //Key uid = createKey(1);
   //User u = (User)g_tree_lookup(arv_users, uid);
   //assert(u!=NULL);

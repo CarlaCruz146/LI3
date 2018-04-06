@@ -11,7 +11,7 @@ struct post{
   int type; // 1 ou 2 (pergunta ou resposta)
   int score;
   int vcount;
-  Date data;
+  myDate date;
   long owner;
   char * titulo;
 };
@@ -27,7 +27,7 @@ struct mydate {
   Date date;
   int hour;
   int min;
-  int sec;
+  float sec;
 };
 
 
@@ -93,13 +93,13 @@ void myfreeUser(User u){
 }
 
 
-Post createPost(long id, int type, int score, int vcount, Date data, long owner, char* titulo){
+Post createPost(long id, int type, int score, int vcount, myDate date, long owner, char* titulo){
   Post p = malloc(sizeof(struct post));
   p->id = id;
   p->type = type;
   p->score = score;
   p->vcount = vcount;
-  p->data = data;
+  p->date = date;
   p->owner = owner;
   p->titulo = mystrdup(titulo);
   return p;
@@ -126,12 +126,15 @@ int getPostVCount(Post p){
   return -1;
 }
 
-Date getPostData(Post p){
+myDate getPostDate(Post p){
   if (p){
-  int dia = get_day(p->data);
-  int mes = get_month(p->data);
-  int ano = get_year(p->data);
-  Date d = createDate(dia,mes,ano);
+  int day = myget_day(p->date);
+  int month = myget_month(p->date);
+  int year = myget_year(p->date);
+  int hour = myget_hour(p->date);
+  int min = myget_min(p->date);
+  float sec = myget_sec(p->date);
+  myDate d = mycreateDate(day,month,year,hour,min,sec);
   return d;
   }
   return NULL;
@@ -149,6 +152,7 @@ char* getPostTitulo(Post p){
 
 void freePost(Post p){
   if(p) {
+    free(p->date);
     free(p->titulo);
     free(p);
   }
@@ -156,7 +160,7 @@ void freePost(Post p){
 
 
 
-myDate mycreateDate(int day, int month, int year, int hour, int min, int sec) {
+myDate mycreateDate(int day, int month, int year, int hour, int min, float sec) {
     myDate d = malloc(sizeof(struct mydate));
     d->date = createDate(day,month,year);
     d->hour = hour;
@@ -185,7 +189,7 @@ int myget_min(myDate d) {
     return d->min;
 }
 
-int myget_sec(myDate d) {
+float myget_sec(myDate d) {
     return d->sec;
 }
 

@@ -57,9 +57,7 @@ void userInfo (xmlDocPtr doc, GTree * arv_users) {
     }
 }
 
-//tipo=0 se for pra ir buscar o ano
-//tipo=1 se for p ir buscar o mes
-//tipo=2 se for p ir buscar o dia
+
 char* getYear(char* d){
     int i=0;
     while(d[i]!='-')
@@ -88,6 +86,36 @@ char* getDay(char* d){
     return d;
 }
 
+char* getHour(char* d){
+  int i=0, hi=0, j;
+  while(d[i]!='T')
+    i++;
+  for(j=i+1; d[j]!=':'; j++)
+    d[hi++]=d[j];
+  d[hi]='\0';
+  return d;
+}
+
+char* getMin(char* d){
+  int i=0, mi=0, j;
+  while(d[i]!=':')
+    i++;
+  for(j=i+1; d[j]!=':'; j++)
+    d[mi++]=d[j];
+  d[mi]='\0';
+  return d;
+}
+
+char* getSec(char* d){
+  int si=0, j;
+  for(j=17; d[j]!='\0'; j++)
+    d[si++]=d[j];
+  d[si]='\0';
+  return d;
+}
+
+
+
 void postsInfo(xmlDocPtr doc, GTree * arv_posts) {
 	//printf("POSTS: \n");
 	xmlNodePtr cur = xmlDocGetRootElement(doc);
@@ -107,8 +135,12 @@ void postsInfo(xmlDocPtr doc, GTree * arv_posts) {
           int year = atoi(getYear(cdate));
           int month = atoi(getMonth(cdate));
           int day = atoi(getDay(cdate));
-          Date date = createDate(day,month,year);
-			    printf("Creation Date: %d %d %d\n", get_day(date), get_month(date), get_year(date));
+          int hour = atoi(getHour(cdate));
+          int min = atoi(getMin(cdate));
+          float sec = atof(getMin(cdate));
+
+          myDate date = mycreateDate(day,month,year,hour,min,sec);
+			    printf("Creation Date: %d %d %d\n", myget_day(date), myget_month(date), myget_year(date));
 
           int score = atoi((char*)xmlGetProp(cur, (const xmlChar *) "Score"));
 					printf("Score: %d\n", score);

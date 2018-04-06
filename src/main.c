@@ -19,32 +19,40 @@ gboolean iterator(gpointer key, gpointer value, gpointer user_data){
   return FALSE;
 }
 
+
+
 int main(int argc, char **argv){
   if (argc <= 1) {
 		printf("Usage: %s docname\n", argv[0]);
 		return(0);
   }
 
-  char *doc;
-  doc = argv[1];
-  xmlDocPtr doc2 = xmlParseFile(doc);
-    //GTree *arv_users = g_tree_new((GCompareFunc) idusercompare);
-  GTree *arv_posts = g_tree_new((GCompareFunc) idpostcompare);
+  char *pos;
+  pos = argv[1];
+  xmlDocPtr pos2 = xmlParseFile(pos);
+  char *us;
+  us = argv[2];
+  xmlDocPtr us2 = xmlParseFile(us);
 
+  GTree *arv_users = g_tree_new_full((GCompareDataFunc) idusercompare, NULL, NULL, (GDestroyNotify) myfreeUser);
+  GTree *arv_posts = g_tree_new_full((GCompareDataFunc) idpostcompare, NULL , NULL, (GDestroyNotify) freePost );
 
+  postsInfo(pos2, arv_posts);
+  userInfo(us2, arv_users);
 
-  //userInfo(doc2, arv_users);
-  postsInfo(doc2, arv_posts);
-
-  Key pid = createKey(4);
-  Post p = (Post)g_tree_lookup(arv_posts, pid);
-  assert(p!=NULL);
-  g_tree_foreach(arv_posts, (GTraverseFunc)iterator, NULL);
+  //Key pid = createKey(4);
+  //Post p = (Post)g_tree_lookup(arv_posts, pid);
+  //assert(p!=NULL);
+  g_tree_foreach(arv_posts, (GTraverseFunc)freePost, NULL);
+  g_tree_foreach(arv_users, (GTraverseFunc)myfreeUser, NULL);
   g_tree_destroy(arv_posts);
+  g_tree_destroy(arv_users);
   //Key uid = createKey(1);
   //User u = (User)g_tree_lookup(arv_users, uid);
   //assert(u!=NULL);
   //printf("%s\n",getUserName(u) );
   //g_tree_foreach(arv_users, (GTraverseFunc)iterator, NULL);
   //printf("dldasjdlk\n");
+  xmlFreeDoc(pos2);
+  xmlFreeDoc(us2);
 }

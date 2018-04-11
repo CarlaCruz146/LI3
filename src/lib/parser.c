@@ -87,16 +87,23 @@ void userInfo (xmlDocPtr doc, GTree * arv_users) {
 
 	while (cur != NULL) { //Enquanto houver tags row's:
 			if ((!xmlStrcmp(cur->name, (const xmlChar *)"row"))) { //compara as tags
-			     long id = atol((char*) xmlGetProp(cur, (const xmlChar *) "Id")); //Procura o atributo Id
+
+           long id = atol((char*) xmlGetProp(cur, (const xmlChar *) "Id")); //Procura o atributo Id
            //printf("Id: %ld\n", id);
-		       int rep = atoi((char*)xmlGetProp(cur, (const xmlChar *) "Reputation")); //Procura o atributo Reputation
+
+           int rep = atoi((char*)xmlGetProp(cur, (const xmlChar *) "Reputation")); //Procura o atributo Reputation
            //printf("Reputation: %d\n", rep);
-					 char* nome = (char*)xmlGetProp(cur, (const xmlChar *) "DisplayName"); //Procura o atributo DisplayName
+
+           char* nome = (char*)xmlGetProp(cur, (const xmlChar *) "DisplayName"); //Procura o atributo DisplayName
 					 //printf("Display Name: %s\n", nome);
-					 char* bio = (char*) xmlGetProp(cur, (const xmlChar *) "AboutMe"); //Procura o atributo AboutMe					printf("About Me: %s\n", bio);
+
+           char* bio = (char*) xmlGetProp(cur, (const xmlChar *) "AboutMe"); //Procura o atributo AboutMe					printf("About Me: %s\n", bio);
+
            User u = mycreateUser(id, rep, nome, bio);
+
            Key uid = createKey(getUserId(u));
            //printf("1- %ld\n", getKey(uid));
+
            g_tree_insert(arv_users, uid, u);
            //printf("4- %d\n", g_tree_nnodes(arv_users));
          }
@@ -171,8 +178,11 @@ void postsInfo(xmlDocPtr doc, GTree * arv_posts) {
 	 while (cur != NULL) {
 
 			if ((!xmlStrcmp(cur->name, (const xmlChar *)"row"))) {
-		      long id = atol((char*)xmlGetProp(cur, (const xmlChar *) "Id"));
+
+          long id = atol((char*)xmlGetProp(cur, (const xmlChar *) "Id"));
+
 		      int typeid = atoi((char*)xmlGetProp(cur, (const xmlChar *) "PostTypeId"));
+
           char* cdate = (char*)xmlGetProp(cur, (const xmlChar *) "CreationDate");
 
           int year = atoi(getYear(cdate));
@@ -183,13 +193,20 @@ void postsInfo(xmlDocPtr doc, GTree * arv_posts) {
           float sec = atof(getMin(cdate));
 
           myDate date = mycreateDate(day,month,year,hour,min,sec);
+
           int score = atoi((char*)xmlGetProp(cur, (const xmlChar *) "Score"));
+
           aux = (char*)xmlGetProp(cur, (const xmlChar *) "ViewCount");
           int vcount = aux ? atoi(aux) : 0;
+
           long ownerid = atol((char*)xmlGetProp(cur, (const xmlChar *) "OwnerUserId"));
+
           char* title = (char*)xmlGetProp(cur, (const xmlChar *) "Title");
+
           Post p = createPost(id,typeid,score,vcount,date,ownerid,title);
+
           Key pid = createKey(getPostId(p));
+
           g_tree_insert(arv_posts, pid, p);
 				}
 			cur = cur->next;

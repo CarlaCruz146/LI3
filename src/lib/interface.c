@@ -1,22 +1,49 @@
-/*#include "date.h"
+#include "date.h"
 #include "pair.h"
 #include "list.h"
 #include "user.h"
 #include "estruturas.h"
 #include <gmodule.h>
+#include "parser.h"
+#include "interface.h"
 
-typedef struct TAD_community{
+struct TCD_community{
   GTree *Posts;
   GTree *Users;
 };
 
-TAD_community init();
+TAD_community init(){
+  TAD_community tad = (TAD_community)malloc(sizeof(struct TCD_community));
+  tad->Users = g_tree_new((GCompareFunc) idusercompare);
+  tad->Posts = g_tree_new((GCompareFunc) idpostcompare);
+  return tad;
+}
+
 
 // query 0
-TAD_community load(TAD_community com, char* dump_path);  //diretoria onde estarão os ficheiros do dump
+TAD_community load(TAD_community com, char* dump_path){
 
+  char* pos = concat(dump_path, "/Posts.xml");
+  xmlDocPtr pos2 = xmlParseFile(pos);
+
+  char *us;
+  us = concat(dump_path,"/Users.xml");
+  xmlDocPtr us2 = xmlParseFile(us);
+
+  postsInfo(pos2, com->Posts);
+  userInfo(us2, com->Users);
+
+  free(pos);
+  free(us);
+
+  return com;
+
+}
+
+/*
 // query 1
 STR_pair info_from_post(TAD_community com, int id);
+
 
 // query 2
 LONG_list top_most_active(TAD_community com, int N);

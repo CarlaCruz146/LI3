@@ -7,6 +7,7 @@
 #include "parser.h"
 #include <glib.h>
 #include <assert.h>
+#include "interface.h"
 
 
 gboolean iterator(gpointer key, gpointer value, gpointer user_data){
@@ -31,7 +32,7 @@ gboolean freePostaux(gpointer key, gpointer value, gpointer user_data){
 
 
 int main(int argc, char **argv){
-
+/*
   char *pos;
   pos = "/home/pedro90/Desktop/LI/Grupo51/src/Posts.xml" ;
   xmlDocPtr pos2 = xmlParseFile(pos);
@@ -42,9 +43,13 @@ int main(int argc, char **argv){
 
   GTree *arv_users = g_tree_new((GCompareFunc) idusercompare);
   GTree *arv_posts = g_tree_new((GCompareFunc) idpostcompare);
-  postsInfo(pos2, arv_posts);
-  userInfo(us2, arv_users);
+  //postsInfo(pos2, arv_posts);
+  //userInfo(us2, arv_users);
+*/
+  TAD_community tad = init();
+  char* path = "/home/pedro90/Desktop/LI/Grupo51/src";
 
+  tad = load(tad,path);
 
   //Por enquanto nao sabemos se esta funçao esta a fazer algo de util
   //g_tree_foreach(arv_posts, (GTraverseFunc)freePostaux, NULL);
@@ -60,6 +65,7 @@ int main(int argc, char **argv){
   //printf("%s\n",getUserName(u) );
   //g_tree_foreach(arv_posts, (GTraverseFunc)iterator, NULL);
   //printf("dldasjdlk\n");
-  xmlFreeDoc(pos2);
-  xmlFreeDoc(us2);
+  //xmlFreeDoc(pos2);
+  //xmlFreeDoc(us2);
+  return 0;
 }

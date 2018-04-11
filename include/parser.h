@@ -11,9 +11,9 @@
 
 #include <gmodule.h>
 
-int idusercompare(gconstpointer id1, gconstpointer id2, void * data);
+int idusercompare(gconstpointer id1, gconstpointer id2);
 
-int idpostcompare(gconstpointer id1, gconstpointer id2, void * data);
+int idpostcompare(gconstpointer id1, gconstpointer id2);
 
 void userInfo (xmlDocPtr doc, GTree * arv_users);
 

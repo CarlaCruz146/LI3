@@ -31,16 +31,13 @@ gboolean freePostaux(gpointer key, gpointer value, gpointer user_data){
 
 
 int main(int argc, char **argv){
-  if (argc <= 1) {
-		printf("Usage: %s docname\n", argv[0]);
-		return(0);
-  }
 
   char *pos;
-  pos = argv[1];
+  pos = "/home/pedro90/Desktop/LI/Grupo51/src/Posts.xml" ;
   xmlDocPtr pos2 = xmlParseFile(pos);
+
   char *us;
-  us = argv[2];
+  us = "/home/pedro90/Desktop/LI/Grupo51/src/Users.xml";
   xmlDocPtr us2 = xmlParseFile(us);
 
   GTree *arv_users = g_tree_new((GCompareFunc) idusercompare);

@@ -9,7 +9,7 @@
 struct post{
   long id;
   int type; // 1 ou 2 (pergunta ou resposta)
-  int pid;
+  long pid;
   int score;
   int vcount;
   myDate date;
@@ -95,7 +95,7 @@ void myfreeUser(User u){
 }
 
 
-Post createPost(long id, int type, int pid, int score, int vcount, myDate date, long owner, char* titulo){
+Post createPost(long id, int type, long pid, int score, int vcount, myDate date, long owner, char* titulo){
   Post p = malloc(sizeof(struct post));
   p->id = id;
   p->type = type;
@@ -120,7 +120,7 @@ int getPostType(Post p){
 }
 
 
-int getPid(Post p){
+long getPid(Post p){
   if(p) return p->pid;
   return -1;
 }

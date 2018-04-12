@@ -51,7 +51,7 @@ gint datacompare(gconstpointer data1, gconstpointer data2){ //sendo data1 o a co
 
 
 void userInfo (xmlDocPtr doc, GTree * arv_users) {
-	//printf("USERS: \n");
+
 	xmlNodePtr cur = xmlDocGetRootElement(doc); // Acede à raíz do documento: "<users>"
 	cur = cur->xmlChildrenNode; // Vai para o filho: tag <row>
 
@@ -151,9 +151,10 @@ void postsInfo(xmlDocPtr doc, GTree * arv_posts) {
 
           long id = atol((char*)xmlGetProp(cur, (const xmlChar *) "Id"));
 
-		      int typeid = atoi((char*)xmlGetProp(cur, (const xmlChar *) "PostTypeId"));
+		    	int typeid = atoi((char*)xmlGetProp(cur, (const xmlChar *) "PostTypeId"));
 
-          int pid = atoi((char*)xmlGetProp(cur, (const xmlChar *) "ParentId"));
+          aux =(char*)xmlGetProp(cur, (const xmlChar *) "ParentId");
+            long pid = aux ? atol (aux) : -2;
 
           char* cdate = (char*)xmlGetProp(cur, (const xmlChar *) "CreationDate");
 
@@ -169,7 +170,7 @@ void postsInfo(xmlDocPtr doc, GTree * arv_posts) {
           int score = atoi((char*)xmlGetProp(cur, (const xmlChar *) "Score"));
 
           aux = (char*)xmlGetProp(cur, (const xmlChar *) "ViewCount");
-          int vcount = aux ? atoi(aux) : 0;
+            int vcount = aux ? atoi(aux) : 0;
 
           long ownerid = atol((char*)xmlGetProp(cur, (const xmlChar *) "OwnerUserId"));
 

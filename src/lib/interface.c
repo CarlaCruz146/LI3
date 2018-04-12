@@ -6,6 +6,9 @@
 #include <gmodule.h>
 #include "parser.h"
 #include "interface.h"
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
 
 struct TCD_community{
   GTree *Posts;
@@ -22,29 +25,82 @@ TAD_community init(){
 
 // query 0
 TAD_community load(TAD_community com, char* dump_path){
-  printf("cenas1\n");
-  char* pos = (char*) myconcat(dump_path, "/exemplo2.xml");
+
+  char* pos = (char*) myconcat(dump_path, "/Posts.xml");
   xmlDocPtr pos2 = xmlParseFile(pos);
-  printf("cenas2\n" );
-  char* us = (char*) myconcat(dump_path,"/exemplo.xml");
+
+  char* us = (char*) myconcat(dump_path,"/Users.xml");
+
   xmlDocPtr us2 = xmlParseFile(us);
-  printf("cenas5\n" );
+
   postsInfo(pos2, com->Posts);
-  printf("crenas3\n" );
+
   userInfo(us2, com->Users);
-  printf("cenas4\n" );
+
   free(pos);
   free(us);
 
   return com;
-
 }
 
 
 // query 1
+
+STR_pair info_from_post(TAD_community com, long id){
+
+
+  STR_pair ret = create_str_pair("Null","Null");
+
+  printf("%ld\n",id);
+
+  Key idd = createKey (id); //Cria uma key para procurar na estrutura dos Posts
+
+  Post p = (Post)g_tree_lookup(com->Posts, idd); //Procura o post com o id dado
+
+  if (getPostType(p) == 1 ) { //Verifica se é pergunta
+
+      long owner_id = getPostOwner(p); //Vai buscar o id de quem fez o post
+
+      Key owid = createKey (owner_id); //Cria uma key para procurar o user na estrutura dos users
+
+      User u = (User)g_tree_lookup(com->Users,owid); //procura o user
+
+      ret = create_str_pair(getPostTitulo(p),getUserName(u)); //Devolve o par com o titulo e o nick do autor
+  }
+
+
+  if (getPostType(p) == 2) { //Verifica se é resposta
+
+    Key pid = createKey(getPid(p)); //Cria uma key com o id da pergunta a qual foi respondida
+
+    p = (Post)g_tree_lookup(com->Posts,pid); //Procura essa pergunta
+
+    Key oid = createKey(getPostOwner(p)); //Cria uma key com o id de quem fez o post
+
+    User u = (User)g_tree_lookup(com->Users,oid); //procura o user através do seu id
+
+
+    ret = create_str_pair(getPostTitulo(p),getUserName(u)); //Devolve o par com o titulo da pergunta e quem fez a pergunta
+  }
+
+  else ret = create_str_pair("","");
+
+  printf("%s \n %s \n", get_fst_str(ret), get_snd_str(ret));
+
+  free(p);
+
+  return ret;
+}
+
+
+
+
+
+
+/*
 STR_pair info_from_post(TAD_community com, long id){
   Key k = createKey(id);
-  Post p = g_tree_lookup(com->Posts, k);
+  Post p = (Post)g_tree_lookup(com->Posts, k);
 
   if(getPostType(p) == 2){
     Key pid = createKey(getPid(p));
@@ -56,7 +112,7 @@ STR_pair info_from_post(TAD_community com, long id){
   STR_pair res = create_str_pair(getPostTitulo(p),getUserName(u));
   return res;
 }
-
+*/
 /*
 // query 2
 LONG_list top_most_active(TAD_community com, int N);

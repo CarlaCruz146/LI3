@@ -21,9 +21,10 @@ char* getUserName(User u);
 char* mygetbio(User u);
 void myfreeUser(User u);
 
-Post createPost(long id, int type, int score, int vcount, myDate date, long owner, char* titulo);
+Post createPost(long id, int type, int pid, int score, int vcount, myDate date, long owner, char* titulo);
 long getPostId(Post p);
 int getPostType(Post p);
+int getPid(Post p);
 int getPostScore(Post p);
 int getPostVCount(Post p);
 myDate getPostData(Post p);

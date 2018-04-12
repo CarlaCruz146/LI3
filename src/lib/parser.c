@@ -5,16 +5,13 @@
 #include <libxml/parser.h>
 #include "estruturas.h"
 #include "parser.h"
-//#include "TCD.h"
 #include <stdlib.h>
 #include <string.h>
 #include <gmodule.h>
 
 
-char* concat(const char *s1, const char *s2)
-{
-    char *result = malloc(strlen(s1)+strlen(s2)+1);//+1 for the zero-terminator
-    //in real code you would check for errors in malloc here
+char* myconcat(const char *s1, const char *s2){
+    char *result = malloc(strlen(s1)+strlen(s2)+1);
     strcpy(result, s1);
     strcat(result, s2);
     return result;
@@ -39,56 +36,17 @@ int idpostcompare(gconstpointer id1, gconstpointer id2){ //sendo id2 o a colocar
 gint datacompare(gconstpointer data1, gconstpointer data2){ //sendo data1 o a colocar
   myDate key1 = (myDate) data1;
   myDate key2 = (myDate) data2;
-  int year1 = myget_year(key1);
-  int month1 = myget_month(key1);
-  int day1 = myget_day(key1);
   int hour1 = myget_hour(key1);
   int min1 = myget_min(key1);
-  float sec1 = myget_sec(key1);
-  int year2 = myget_year(key2);
-  int month2 = myget_month(key2);
-  int day2 = myget_day(key2);
+  int sec1 = myget_sec(key1);
   int hour2 = myget_hour(key2);
   int min2 = myget_min(key2);
-  float sec2 = myget_sec(key2);
+  int sec2 = myget_sec(key2);
 
+  long time1 = (hour1*60*60) + (min1*60) + sec1;
+  long time2 = (hour2*60*60) + (min2*60) + sec2;
 
-  if (year1 < year2)
-    return 1;
-  if (year1 > year2)
-    return (-1);
-  if (year1 == year2){
-    if(month1 < month2)
-      return 1;
-    if(month1 > month2)
-      return (-1);
-    if (month1 == month2){
-      if(day1 < day2)
-        return 1;
-      if(day1 > day2)
-        return (-1);
-      if (day1 == day2){
-        if(hour1 < hour2)
-          return 1;
-        if(hour1 > hour2)
-          return (-1);
-        if (hour1 == hour2){
-          if(min1 < min2)
-            return 1;
-          if(min1 > min2)
-            return (-1);
-          if (min1 == min2){
-            if(sec1 < sec2)
-              return 1;
-            if(sec1 > sec2)
-              return (-1);
-            else return 0;
-          }
-        }
-      }
-    }
-  }
-  return -2;
+  return time1-time2;
 }
 
 
@@ -195,6 +153,8 @@ void postsInfo(xmlDocPtr doc, GTree * arv_posts) {
 
 		      int typeid = atoi((char*)xmlGetProp(cur, (const xmlChar *) "PostTypeId"));
 
+          int pid = atoi((char*)xmlGetProp(cur, (const xmlChar *) "ParentId"));
+
           char* cdate = (char*)xmlGetProp(cur, (const xmlChar *) "CreationDate");
 
           int year = atoi(getYear(cdate));
@@ -202,7 +162,7 @@ void postsInfo(xmlDocPtr doc, GTree * arv_posts) {
           int day = atoi(getDay(cdate));
           int hour = atoi(getHour(cdate));
           int min = atoi(getMin(cdate));
-          float sec = atof(getMin(cdate));
+          int sec = atoi(getMin(cdate));
 
           myDate date = mycreateDate(day,month,year,hour,min,sec);
 
@@ -215,11 +175,11 @@ void postsInfo(xmlDocPtr doc, GTree * arv_posts) {
 
           char* title = (char*)xmlGetProp(cur, (const xmlChar *) "Title");
 
-          Post p = createPost(id,typeid,score,vcount,date,ownerid,title);
+          Post p = createPost(id,typeid,pid,score,vcount,date,ownerid,title);
 
-          Key pid = createKey(getPostId(p));
+          Key key = createKey(getPostId(p));
 
-          g_tree_insert(arv_posts, pid, p);
+          g_tree_insert(arv_posts, key, p);
 				}
 			cur = cur->next;
 	}

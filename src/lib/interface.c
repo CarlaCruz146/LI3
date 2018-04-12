@@ -22,17 +22,17 @@ TAD_community init(){
 
 // query 0
 TAD_community load(TAD_community com, char* dump_path){
-
-  char* pos = concat(dump_path, "/Posts.xml");
+  printf("cenas1\n");
+  char* pos = (char*) myconcat(dump_path, "/exemplo2.xml");
   xmlDocPtr pos2 = xmlParseFile(pos);
-
-  char *us;
-  us = concat(dump_path,"/Users.xml");
+  printf("cenas2\n" );
+  char* us = (char*) myconcat(dump_path,"/exemplo.xml");
   xmlDocPtr us2 = xmlParseFile(us);
-
+  printf("cenas5\n" );
   postsInfo(pos2, com->Posts);
+  printf("crenas3\n" );
   userInfo(us2, com->Users);
-
+  printf("cenas4\n" );
   free(pos);
   free(us);
 
@@ -40,11 +40,24 @@ TAD_community load(TAD_community com, char* dump_path){
 
 }
 
-/*
+
 // query 1
-STR_pair info_from_post(TAD_community com, int id);
+STR_pair info_from_post(TAD_community com, long id){
+  Key k = createKey(id);
+  Post p = g_tree_lookup(com->Posts, k);
 
+  if(getPostType(p) == 2){
+    Key pid = createKey(getPid(p));
+    p = g_tree_lookup(com->Posts, pid);
+  }
+  Key owner = createKey(getPostOwner(p));
+  User u = g_tree_lookup(com->Users, owner);
 
+  STR_pair res = create_str_pair(getPostTitulo(p),getUserName(u));
+  return res;
+}
+
+/*
 // query 2
 LONG_list top_most_active(TAD_community com, int N);
 

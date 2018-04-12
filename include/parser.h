@@ -11,6 +11,8 @@
 
 #include <gmodule.h>
 
+char* myconcat(const char *s1, const char *s2);
+
 int idusercompare(gconstpointer id1, gconstpointer id2);
 
 int idpostcompare(gconstpointer id1, gconstpointer id2);

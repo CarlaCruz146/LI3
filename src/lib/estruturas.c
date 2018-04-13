@@ -22,6 +22,7 @@ struct userint{
   int reputacao;
   char* nome;
   char* bio;
+  long posts[10];
 };
 
 struct mydate {
@@ -48,18 +49,21 @@ long getKey(Key k){
 }
 
 
-User mycreateUser(long id, int reputacao, char* nome, char* bio){
+User mycreateUser(long id, int reputacao, char* nome, char* bio, long posts[10]){
   //assert(id >= 0);
   //assert(reputacao >= 0);
   //assert(nome != NULL);
   //assert(bio != NULL);
   if(id>=-1){
-  User u = malloc(sizeof(struct userint));
-  u->id = id;
-  u->reputacao = reputacao;
-  u->nome = mystrdup(nome);
-  u->bio = mystrdup(bio);
-  return u;
+    int i;
+    User u = malloc(sizeof(struct userint));
+    u->id = id;
+    u->reputacao = reputacao;
+    u->nome = mystrdup(nome);
+    u->bio = mystrdup(bio);
+    for(i=0; i<10; i++);
+      u->posts[i] = posts[i];
+    return u;
   }
   return NULL;
 }

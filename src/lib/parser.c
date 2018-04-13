@@ -50,6 +50,8 @@ gint datacompare(gconstpointer data1, gconstpointer data2){ //sendo data1 o a co
 }
 
 
+
+
 void userInfo (xmlDocPtr doc, GTree * arv_users) {
 
 	xmlNodePtr cur = xmlDocGetRootElement(doc); // Acede à raíz do documento: "<users>"
@@ -69,7 +71,8 @@ void userInfo (xmlDocPtr doc, GTree * arv_users) {
 
            char* bio = (char*) xmlGetProp(cur, (const xmlChar *) "AboutMe"); //Procura o atributo AboutMe					printf("About Me: %s\n", bio);
 
-           User u = mycreateUser(id, rep, nome, bio);
+           long posts[10];
+           User u = mycreateUser(id, rep, nome, bio, posts);
 
            Key uid = createKey(getUserId(u));
            //printf("1- %ld\n", getKey(uid));

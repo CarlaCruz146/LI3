@@ -14,17 +14,17 @@ typedef struct mydate* myDate;
 Key createKey(long key);
 long getKey(Key k);
 
-User mycreateUser(long id, int reputacao, char* nome, char* bio);
+User mycreateUser(long id, int reputacao, char* nome, char* bio, long posts[10]);
 long getUserId(User u);
 int getUserReputacao(User u);
 char* getUserName(User u);
 char* mygetbio(User u);
 void myfreeUser(User u);
 
-Post createPost(long id, int type, int pid, int score, int vcount, myDate date, long owner, char* titulo);
+Post createPost(long id, int type, long pid, int score, int vcount, myDate date, long owner, char* titulo);
 long getPostId(Post p);
 int getPostType(Post p);
-int getPid(Post p);
+long getPid(Post p);
 int getPostScore(Post p);
 int getPostVCount(Post p);
 myDate getPostData(Post p);

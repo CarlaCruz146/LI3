@@ -48,39 +48,29 @@ TAD_community load(TAD_community com, char* dump_path){
 
 STR_pair info_from_post(TAD_community com, long id){
 
-
   STR_pair ret = create_str_pair("Null","Null");
-
   printf("%ld\n",id);
 
-  Key idd = createKey (id); //Cria uma key para procurar na estrutura dos Posts
-
-  Post p = (Post)g_tree_lookup(com->Posts, idd); //Procura o post com o id dado
+  Post p = (Post)g_tree_lookup(com->Posts, createKey(id)); //Procura o post com o id dado
 
   if (getPostType(p) == 1 ) { //Verifica se é pergunta
 
-      long owner_id = getPostOwner(p); //Vai buscar o id de quem fez o post
-
-      Key owid = createKey (owner_id); //Cria uma key para procurar o user na estrutura dos users
-
-      User u = (User)g_tree_lookup(com->Users,owid); //procura o user
+      User u = (User)g_tree_lookup(com->Users,createKey(getPostOwner(p))); //procura o user
 
       ret = create_str_pair(getPostTitulo(p),getUserName(u)); //Devolve o par com o titulo e o nick do autor
-  }
 
+      free(u);
+  }
 
   if (getPostType(p) == 2) { //Verifica se é resposta
 
-    Key pid = createKey(getPid(p)); //Cria uma key com o id da pergunta a qual foi respondida
+    p = (Post)g_tree_lookup(com->Posts,createKey(getPid(p))); //Procura essa pergunta
 
-    p = (Post)g_tree_lookup(com->Posts,pid); //Procura essa pergunta
-
-    Key oid = createKey(getPostOwner(p)); //Cria uma key com o id de quem fez o post
-
-    User u = (User)g_tree_lookup(com->Users,oid); //procura o user através do seu id
-
+    User u = (User)g_tree_lookup(com->Users,createKey(getPostOwner(p))); //procura o user através do seu id
 
     ret = create_str_pair(getPostTitulo(p),getUserName(u)); //Devolve o par com o titulo da pergunta e quem fez a pergunta
+
+    free(u);
   }
 
   else ret = create_str_pair("","");

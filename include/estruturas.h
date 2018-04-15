@@ -27,8 +27,8 @@ char* getUserName(User u);
 char* mygetbio(User u);
 void myfreeUser(User u);
 
+Post initPost();
 Post createPost(long id, int type, long pid, int score, int vcount, Date date, long owner, char* titulo);
-
 long getPostId(Post p);
 int getPostType(Post p);
 long getPid(Post p);

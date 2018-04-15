@@ -185,6 +185,11 @@ void myfreeUser(User u){
 }
 
 
+Post initPost(){
+  Post p = malloc(sizeof(struct post));
+  return p;
+}
+
 Post createPost(long id, int type, long pid, int score, int vcount, Date date, long owner, char* titulo){
   Post p = malloc(sizeof(struct post));
   p->id = id;

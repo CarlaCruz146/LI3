@@ -94,25 +94,35 @@ int idpostcompare(gconstpointer id1, gconstpointer id2){ //sendo id2 o a colocar
 
   return key1-key2;
 }
-/*
+
+
 gint datacompare(gconstpointer data1, gconstpointer data2){ //sendo data1 o a colocar
-  Date key1 = (myDate) data1;
-  Date key2 = (myDate) data2;
-  int hour1 = get_hour(key1);
-  int min1 = get_min(key1);
-  int sec1 = get_sec(key1);
-  int hour2 = myget_hour(key2);
-  int min2 = myget_min(key2);
-  int sec2 = myget_sec(key2);
+  Date key1 = (Date) data1;
+  Date key2 = (Date) data2;
+  int day1 = get_day(key1);
+  int month1 = get_month(key1);
+  int year1 = get_year(key1);
+  int day2 = get_day(key2);
+  int month2 = get_month(key2);
+  int year2 = get_year(key2);
 
-  long time1 = (hour1*60*60) + (min1*60) + sec1;
-  long time2 = (hour2*60*60) + (min2*60) + sec2;
-
-  return time1-time2;
+  if(year1 < year2) return -1;
+  if(year1 > year2) return 1;
+  if(year1 == year2){
+    if(month1 < month2) return -1;
+    else
+    if (month1 > month2) return 1;
+    else
+    {
+      if(day1 < day2) return -1;
+      else
+      if(day1 > day2) return 1;
+      else
+      return 0;
+    }
+  }
+  return 0;
 }
-*/
-
-
 
 
 
@@ -136,11 +146,11 @@ void userInfo (xmlDocPtr doc, GTree * arv_users) {
            char* bio = (char*) xmlGetProp(cur, (const xmlChar *) "AboutMe"); //Procura o atributo AboutMe					printf("About Me: %s\n", bio);
 
            long posts[10];
-           User u = mycreateUser(id, rep, nome, bio, posts);
+           GTree* arv_uposts = g_tree_new((GCompareFunc) datacompare);
+           User u = mycreateUser(id, rep, nome, bio, posts, arv_uposts);
 
            Key uid = createKey(getUserId(u));
            //printf("1- %ld\n", getKey(uid));
-
            g_tree_insert(arv_users, uid, u);
            //printf("4- %d\n", g_tree_nnodes(arv_users));
          }
@@ -261,7 +271,14 @@ void postsInfo(xmlDocPtr doc, GTree * arv_posts, GHashTable *datash) {
           Date dnova = (getPostDate(p));
 
           g_tree_insert(arv_posts, key, p);
+
           inseredatas(datash, dnova , p);
+
+
+          //ver ownerid, se ja tiver uma heap dele, fazer insert na u->heap
+          //caso contrario criar a heap
+          //g_tree_insert(arv_uposts, key, )
+
 				}
 			cur = cur->next;
 	}

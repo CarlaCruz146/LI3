@@ -1,9 +1,12 @@
 #include <string.h>
 #include <stdlib.h>
+#include <time.h>
+#include <stdio.h>
 #include "user.h"
 #include "common.h"
 #include "date.h"
 #include "estruturas.h"
+#include "parser.h"
 #include <assert.h>
 
 struct post{
@@ -23,6 +26,7 @@ struct userint{
   char* nome;
   char* bio;
   long posts[10];
+  GTree* arv_uposts;
 };
 /*
 struct mydate {
@@ -83,8 +87,54 @@ long getKey(Key k){
   return k->key;
 }
 
+/*
+int maisrecente(gconstpointer id1, gconstpointer id2){ //sendo id2 o a colocar
+   Date key1 = (Date)malloc(sizeof(struct Date));
+   Date key2 = (Date)malloc(sizeof(struct Date));
+   key1 = id1;
+   key2 = id2;
+   time_t t0 = time(NULL);
+   int ret1, ret2;
+   struct tm d1, d2;
+   char buffer[80];
 
-User mycreateUser(long id, int reputacao, char* nome, char* bio, long posts[10]){
+   d1.tm_year = get_year(key1) - 1900;
+   d1.tm_mon = get_month(key1) - 1;
+   d1.tm_mday = get_day(key1);
+   d1.tm_hour = 0;
+   d1.tm_min = 0;
+   d1.tm_sec = 0;
+   d1.tm_isdst = -1;
+
+   ret1 = mktime(&d1);
+   if( ret == -1 ) {
+      printf("Error: unable to make time using mktime\n");
+   }
+
+   d2.tm_year = get_year(key2) - 1900;
+   d2.tm_mon = get_month(key2) - 1;
+   d2.tm_mday = get_day(key2);
+   d2.tm_hour = 0;
+   d2.tm_min = 0;
+   d2.tm_sec = 0;
+   d2.tm_isdst = -1;
+
+   ret2 = mktime(&d2);
+   if( ret == -1 ) {
+      printf("Error: unable to make time using mktime\n");
+   }
+
+   double diff_t1 = difftime(&t0,&d1);
+   double diff_t2 = difftime(&t0,&d2);
+
+   if(diff_t1 < diff_t2) return -1;
+   else if (diff_t1 > diff_t2) return 1;
+   else return 0;
+
+}
+*/
+
+User mycreateUser(long id, int reputacao, char* nome, char* bio, long posts[10], GTree* arv_uposts){
   //assert(id >= 0);
   //assert(reputacao >= 0);
   //assert(nome != NULL);
@@ -96,8 +146,9 @@ User mycreateUser(long id, int reputacao, char* nome, char* bio, long posts[10])
     u->reputacao = reputacao;
     u->nome = mystrdup(nome);
     u->bio = mystrdup(bio);
-    for(i=0; i<10; i++);
-      u->posts[i] = posts[i];
+    for(i=0; i!=9; i++);
+      (u->posts)[i] = posts[i];
+    u->arv_uposts = arv_uposts;
     return u;
   }
   return NULL;

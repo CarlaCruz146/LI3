@@ -4,6 +4,7 @@
 #include "user.h"
 #include "common.h"
 #include "date.h"
+#include <gmodule.h>
 
 
 typedef struct post* Post;
@@ -18,7 +19,8 @@ void freeArray(ArrayD a);
 Key createKey(long key);
 long getKey(Key k);
 
-User mycreateUser(long id, int reputacao, char* nome, char* bio, long posts[10]);
+//int maisrecente(gconstpointer id1, gconstpointer id2);
+User mycreateUser(long id, int reputacao, char* nome, char* bio, long posts[10], GTree* arv_uposts);
 long getUserId(User u);
 int getUserReputacao(User u);
 char* getUserName(User u);

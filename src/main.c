@@ -45,15 +45,18 @@ int main(int argc, char **argv){
   GTree *arv_posts = g_tree_new((GCompareFunc) idpostcompare);
   //postsInfo(pos2, arv_posts);
   //userInfo(us2, arv_users);
-*/printf("ola1\n");
+*///printf("ola1\n");
   TAD_community tad = init();
   char* path = "/home/carlacruz/Desktop/LI3/Grupo51/src";
-  printf("ola3\n" );
-  tad = load(tad,path);
-  printf("ola\n" );
-  STR_pair pair = info_from_post(tad, 4);
+  //printf("ola3\n" );
 
-  printf("%s e %s\n", get_fst_str(pair), get_snd_str(pair)  );
+  tad = load(tad,path);
+  //printf("ola\n" );
+
+  srand(time(NULL));
+  info_from_post(tad, rand() % 187277);
+
+  //printf("%s e %s\n", get_fst_str(pair), get_snd_str(pair)  );
   //Por enquanto nao sabemos se esta funçao esta a fazer algo de util
   //g_tree_foreach(arv_posts, (GTraverseFunc)freePostaux, NULL);
   //g_tree_destroy(arv_posts);

@@ -9,10 +9,10 @@
 struct post{
   long id;
   int type; // 1 ou 2 (pergunta ou resposta)
-  int pid;
+  long pid;
   int score;
   int vcount;
-  myDate date;
+  Date date;
   long owner;
   char * titulo;
 };
@@ -22,19 +22,55 @@ struct userint{
   int reputacao;
   char* nome;
   char* bio;
+  long posts[10];
 };
-
+/*
 struct mydate {
   Date date;
   int hour;
   int min;
   int sec;
 };
-
+*/
 
 struct key{
   long key;
 };
+
+struct arrayd{
+  Post* array;
+  long used;
+  long size;
+  long res;
+  long per;
+};
+
+ArrayD creatArray(long comp){
+  ArrayD a = malloc (sizeof(struct arrayd));
+  a->array = malloc(comp * sizeof(struct post));
+  a->used = 0;
+  a->size = comp;
+  a->res = 0;
+  a->per = 0;
+  return a;
+}
+
+ArrayD insereArray(ArrayD a, Post p){
+  if (a-> used == a->size) {
+    a->size *= 2;
+    a->array = realloc (a->array, a->size * (sizeof(struct post)));
+    }
+  int type = getPostType(p);
+  if (type == 1) a->per++;
+  if (type == 2) a->res++;
+  a->array[a->used++] = p;
+  return a;
+}
+
+void freeArray(ArrayD a){
+  free(a->array);
+  free(a);
+}
 
 
 Key createKey(long key){
@@ -48,18 +84,21 @@ long getKey(Key k){
 }
 
 
-User mycreateUser(long id, int reputacao, char* nome, char* bio){
+User mycreateUser(long id, int reputacao, char* nome, char* bio, long posts[10]){
   //assert(id >= 0);
   //assert(reputacao >= 0);
   //assert(nome != NULL);
   //assert(bio != NULL);
   if(id>=-1){
-  User u = malloc(sizeof(struct userint));
-  u->id = id;
-  u->reputacao = reputacao;
-  u->nome = mystrdup(nome);
-  u->bio = mystrdup(bio);
-  return u;
+    int i;
+    User u = malloc(sizeof(struct userint));
+    u->id = id;
+    u->reputacao = reputacao;
+    u->nome = mystrdup(nome);
+    u->bio = mystrdup(bio);
+    for(i=0; i<10; i++);
+      u->posts[i] = posts[i];
+    return u;
   }
   return NULL;
 }
@@ -95,7 +134,7 @@ void myfreeUser(User u){
 }
 
 
-Post createPost(long id, int type, int pid, int score, int vcount, myDate date, long owner, char* titulo){
+Post createPost(long id, int type, long pid, int score, int vcount, Date date, long owner, char* titulo){
   Post p = malloc(sizeof(struct post));
   p->id = id;
   p->type = type;
@@ -120,7 +159,7 @@ int getPostType(Post p){
 }
 
 
-int getPid(Post p){
+long getPid(Post p){
   if(p) return p->pid;
   return -1;
 }
@@ -135,15 +174,15 @@ int getPostVCount(Post p){
   return -1;
 }
 
-myDate getPostDate(Post p){
+Date getPostDate(Post p){
   if (p){
-  int day = myget_day(p->date);
-  int month = myget_month(p->date);
-  int year = myget_year(p->date);
-  int hour = myget_hour(p->date);
-  int min = myget_min(p->date);
-  float sec = myget_sec(p->date);
-  myDate d = mycreateDate(day,month,year,hour,min,sec);
+  int day = get_day(p->date);
+  int month = get_month(p->date);
+  int year = get_year(p->date);
+  //int hour = myget_hour(p->date);
+//  int min = myget_min(p->date);
+//  float sec = myget_sec(p->date);
+  Date d = createDate(day,month,year);
   return d;
   }
   return NULL;
@@ -168,7 +207,7 @@ void freePost(Post p){
 }
 
 
-
+/*
 myDate mycreateDate(int day, int month, int year, int hour, int min, float sec) {
     myDate d = malloc(sizeof(struct mydate));
     d->date = createDate(day,month,year);
@@ -205,4 +244,4 @@ float myget_sec(myDate d) {
 void myfree_date(myDate d) {
     free(d->date);
     free(d);
-}
+}*/

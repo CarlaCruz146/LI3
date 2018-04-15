@@ -17,6 +17,68 @@ char* myconcat(const char *s1, const char *s2){
     return result;
 }
 
+gint hash (gconstpointer a){
+  Date b = (Date) a;
+  int hash = 7;
+  hash = 31* hash + get_day(b);
+  hash = 31* hash + get_month(b);
+  hash = 31* hash + get_year(b);
+  return hash;
+}
+
+Date incrementaData (Date data){
+  int day1 = get_day(data);
+  int month1 = get_month(data);
+  int year1 = get_year(data);
+  int dayn = day1;
+  int monthn = month1;
+  int yearn = year1;
+
+  if((day1 == 29 || day1 == 28 )&& month1 == 1) {
+    dayn = 1;
+    monthn = month1 +1;
+    yearn = year1;
+    Date newd = createDate(dayn,monthn,yearn);
+    return newd;
+  }
+  if (day1 == 31 && (month1 == 0 || month1 == 2 || month1 == 4 || month1 == 6 ||
+  month1 == 7 || month1 == 9 )){
+    day1 = 1;
+    monthn = month1 +1;
+    yearn = year1;
+    Date newd = createDate(dayn,monthn,yearn);
+    return newd;
+  }
+  if (day1 == 30 && (month1 == 3 || month1 == 5 || month1 == 8 || month1 == 10 )){
+    dayn = 1;
+    monthn = month1 +1;
+    yearn = year1;
+    Date newd = createDate(dayn,monthn,yearn);
+    return newd;
+  }
+  if (day1 == 31 && month1 == 11){
+    dayn = 1;
+    monthn = 1;
+    yearn = year1 +1;
+    Date newd = createDate(dayn,monthn,yearn);
+    return newd;
+  }
+  else {
+    dayn = day1++;
+    Date newd = createDate(dayn,monthn,yearn);
+    return newd;
+  }
+}
+
+gboolean iguais (gconstpointer a, gconstpointer b){
+  Date data1 = (Date) a;
+  Date data2 = (Date) b;
+  if( get_day(data1) == get_day(data2)
+      && get_month(data1) == get_month(data2)
+      && get_year(data1) == get_year(data2))
+      return TRUE;
+  else return FALSE;
+}
 
 int idusercompare(gconstpointer id1, gconstpointer id2){ //sendo id2 o a colocar
   long key1 = getKey((Key) id1);
@@ -32,13 +94,13 @@ int idpostcompare(gconstpointer id1, gconstpointer id2){ //sendo id2 o a colocar
 
   return key1-key2;
 }
-
+/*
 gint datacompare(gconstpointer data1, gconstpointer data2){ //sendo data1 o a colocar
-  myDate key1 = (myDate) data1;
-  myDate key2 = (myDate) data2;
-  int hour1 = myget_hour(key1);
-  int min1 = myget_min(key1);
-  int sec1 = myget_sec(key1);
+  Date key1 = (myDate) data1;
+  Date key2 = (myDate) data2;
+  int hour1 = get_hour(key1);
+  int min1 = get_min(key1);
+  int sec1 = get_sec(key1);
   int hour2 = myget_hour(key2);
   int min2 = myget_min(key2);
   int sec2 = myget_sec(key2);
@@ -48,10 +110,12 @@ gint datacompare(gconstpointer data1, gconstpointer data2){ //sendo data1 o a co
 
   return time1-time2;
 }
+*/
+
 
 
 void userInfo (xmlDocPtr doc, GTree * arv_users) {
-	//printf("USERS: \n");
+
 	xmlNodePtr cur = xmlDocGetRootElement(doc); // Acede à raíz do documento: "<users>"
 	cur = cur->xmlChildrenNode; // Vai para o filho: tag <row>
 
@@ -69,7 +133,8 @@ void userInfo (xmlDocPtr doc, GTree * arv_users) {
 
            char* bio = (char*) xmlGetProp(cur, (const xmlChar *) "AboutMe"); //Procura o atributo AboutMe					printf("About Me: %s\n", bio);
 
-           User u = mycreateUser(id, rep, nome, bio);
+           long posts[10];
+           User u = mycreateUser(id, rep, nome, bio, posts);
 
            Key uid = createKey(getUserId(u));
            //printf("1- %ld\n", getKey(uid));
@@ -109,7 +174,7 @@ char* getDay(char* d){
     d[b]='\0';
     return d;
 }
-
+/*
 char* getHour(char* d){
   int i=0, hi=0, j;
   while(d[i]!='T')
@@ -138,9 +203,24 @@ char* getSec(char* d){
   return d;
 }
 
+*/
 
+void inseredatas(GHashTable *hdate, Date date, Post p){
+  gpointer x = g_hash_table_lookup(hdate, date);
+  if( x == NULL){
+    ArrayD a = creatArray(1);
+    a = insereArray(a,p);
+    g_hash_table_insert(hdate,date,a);
+  }
+  else{
+    free_date(date);
+    ArrayD d = (ArrayD) x;
+    d = insereArray(d,p);
+  }
 
-void postsInfo(xmlDocPtr doc, GTree * arv_posts) {
+}
+
+void postsInfo(xmlDocPtr doc, GTree * arv_posts, GHashTable *datash) {
 	 xmlNodePtr cur = xmlDocGetRootElement(doc);
 	 cur = cur->xmlChildrenNode;
    char* aux;
@@ -151,25 +231,23 @@ void postsInfo(xmlDocPtr doc, GTree * arv_posts) {
 
           long id = atol((char*)xmlGetProp(cur, (const xmlChar *) "Id"));
 
-		      int typeid = atoi((char*)xmlGetProp(cur, (const xmlChar *) "PostTypeId"));
+		    	int typeid = atoi((char*)xmlGetProp(cur, (const xmlChar *) "PostTypeId"));
 
-          int pid = atoi((char*)xmlGetProp(cur, (const xmlChar *) "ParentId"));
+          aux =(char*)xmlGetProp(cur, (const xmlChar *) "ParentId");
+            long pid = aux ? atol (aux) : -2;
 
           char* cdate = (char*)xmlGetProp(cur, (const xmlChar *) "CreationDate");
 
           int year = atoi(getYear(cdate));
           int month = atoi(getMonth(cdate));
           int day = atoi(getDay(cdate));
-          int hour = atoi(getHour(cdate));
-          int min = atoi(getMin(cdate));
-          int sec = atoi(getMin(cdate));
 
-          myDate date = mycreateDate(day,month,year,hour,min,sec);
+          Date date = createDate(day,month-1,year);
 
           int score = atoi((char*)xmlGetProp(cur, (const xmlChar *) "Score"));
 
           aux = (char*)xmlGetProp(cur, (const xmlChar *) "ViewCount");
-          int vcount = aux ? atoi(aux) : 0;
+            int vcount = aux ? atoi(aux) : 0;
 
           long ownerid = atol((char*)xmlGetProp(cur, (const xmlChar *) "OwnerUserId"));
 
@@ -178,8 +256,10 @@ void postsInfo(xmlDocPtr doc, GTree * arv_posts) {
           Post p = createPost(id,typeid,pid,score,vcount,date,ownerid,title);
 
           Key key = createKey(getPostId(p));
+          Date dnova = (getPostDate(p));
 
           g_tree_insert(arv_posts, key, p);
+          inseredatas(datash, dnova , p);
 				}
 			cur = cur->next;
 	}
@@ -216,7 +296,7 @@ void votesInfo(xmlDocPtr doc, xmlNodePtr cur) {
 }
 
 
-
+/*
 void parseDo(char *docname, char *docname2, char *docname3, GTree * arv_users, GTree * arv_posts) {
 
 	xmlDocPtr doc;
@@ -297,7 +377,7 @@ void parseDo(char *docname, char *docname2, char *docname3, GTree * arv_users, G
 	userInfo (doc, arv_users);
 	xmlFreeDoc(doc);
 
-	postsInfo (doc2, arv_posts);
+	postsInfo (doc2, arv_posts,hdate);
 	xmlFreeDoc(doc2);
 
 	votesInfo (doc3, cur3);
@@ -306,7 +386,7 @@ void parseDo(char *docname, char *docname2, char *docname3, GTree * arv_users, G
 
 
 
-/*
+
 int main (int argc, char **argv) {
 
 	char *docname;

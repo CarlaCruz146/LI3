@@ -114,6 +114,8 @@ gint datacompare(gconstpointer data1, gconstpointer data2){ //sendo data1 o a co
 
 
 
+
+
 void userInfo (xmlDocPtr doc, GTree * arv_users) {
 
 	xmlNodePtr cur = xmlDocGetRootElement(doc); // Acede à raíz do documento: "<users>"

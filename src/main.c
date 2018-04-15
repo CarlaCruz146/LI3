@@ -47,9 +47,18 @@ int main(int argc, char **argv){
   //userInfo(us2, arv_users);
 *///printf("ola1\n");
   TAD_community tad = init();
+<<<<<<< HEAD
   char* path = "/home/carlacruz/Desktop/LI3/Grupo51/src";
   //printf("ola3\n" );
 
+||||||| merged common ancestors
+  char* path = "/home/carlacruz/Desktop/LI3/Grupo51/src";
+  printf("ola3\n" );
+=======
+  char* path = "/home/pedro90/Desktop/LI/Grupo51/src";
+  //printf("ola3\n" );
+
+>>>>>>> a87cf02db0034a222a6ecdf39f78666795849855
   tad = load(tad,path);
   //printf("ola\n" );
 

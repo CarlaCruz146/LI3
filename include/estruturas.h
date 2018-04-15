@@ -25,7 +25,13 @@ char* getUserName(User u);
 char* mygetbio(User u);
 void myfreeUser(User u);
 
+<<<<<<< HEAD
 Post createPost(long id, int type, long pid, int score, int vcount, Date date, long owner, char* titulo);
+||||||| merged common ancestors
+Post createPost(long id, int type, int pid, int score, int vcount, myDate date, long owner, char* titulo);
+=======
+Post createPost(long id, int type, long pid, int score, int vcount, myDate date, long owner, char* titulo);
+>>>>>>> a87cf02db0034a222a6ecdf39f78666795849855
 long getPostId(Post p);
 int getPostType(Post p);
 long getPid(Post p);

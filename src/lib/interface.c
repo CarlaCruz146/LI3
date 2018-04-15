@@ -34,9 +34,19 @@ TAD_community load(TAD_community com, char* dump_path){
   char* us = (char*) myconcat(dump_path,"/Users.xml");
 
   xmlDocPtr us2 = xmlParseFile(us);
+<<<<<<< HEAD
 
   postsInfo(pos2, com->Posts, com->Hdates);
 
+||||||| merged common ancestors
+  printf("cenas5\n" );
+  postsInfo(pos2, com->Posts);
+  printf("crenas3\n" );
+=======
+
+  postsInfo(pos2, com->Posts);
+
+>>>>>>> a87cf02db0034a222a6ecdf39f78666795849855
   userInfo(us2, com->Users);
 
   free(pos);

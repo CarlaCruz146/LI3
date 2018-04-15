@@ -134,7 +134,13 @@ void myfreeUser(User u){
 }
 
 
+<<<<<<< HEAD
 Post createPost(long id, int type, long pid, int score, int vcount, Date date, long owner, char* titulo){
+||||||| merged common ancestors
+Post createPost(long id, int type, int pid, int score, int vcount, myDate date, long owner, char* titulo){
+=======
+Post createPost(long id, int type, long pid, int score, int vcount, myDate date, long owner, char* titulo){
+>>>>>>> a87cf02db0034a222a6ecdf39f78666795849855
   Post p = malloc(sizeof(struct post));
   p->id = id;
   p->type = type;

@@ -31,7 +31,7 @@ TAD_community load(TAD_community com, char* dump_path){
   char* pos = (char*) myconcat(dump_path, "/Posts.xml");
   xmlDocPtr pos2 = xmlParseFile(pos);
 
-  char* us = (char*) myconcat(dump_path,"/Users.xml");
+  char* us = (char*) myconcat(dump_path,"/exemplo.xml");
 
   xmlDocPtr us2 = xmlParseFile(us);
 
@@ -105,13 +105,49 @@ STR_pair info_from_post(TAD_community com, long id){
   return res;
 }
 */
+static int date_equal(Date begin, Date end){
+  int d,m,a,r;
+  d = (get_day(begin) == get_day(end)) ? 0 : 1;
+  m = (get_month(begin) == get_month(end)) ? 0 : 1;
+  a = (get_year(begin) == get_year(end)) ? 0 : 1;
+
+  r = (d + m + a) > 0 ? 1 : 0;
+
+  return r;
+}
 /*
 // query 2
 LONG_list top_most_active(TAD_community com, int N);
-
+*/
 // query 3
-LONG_pair total_posts(TAD_community com, Date begin, Date end);
 
+LONG_pair total_posts(TAD_community com, Date begin, Date end){
+  long fst = 0;
+  long snd = 0;
+  gpointer x;
+  ArrayD d;
+  while(date_equal(begin,end) > 0){
+          x = g_hash_table_lookup(com->Hdates, begin);
+          d = (ArrayD) x;
+          if (d){
+            fst += getPer(d);
+            snd += getRes(d);
+          }
+          begin = incrementaData(begin);
+  }
+  x = g_hash_table_lookup(com->Hdates, end);
+  d = (ArrayD) x;
+  if (d){
+    fst += getPer(d);
+    snd += getRes(d);
+  }
+  LONG_pair pair = create_long_pair(fst,snd);
+  return pair;
+}
+
+
+
+/*
 // query 4
 LONG_list questions_with_tag(TAD_community com, char* tag, Date begin, Date end);
 

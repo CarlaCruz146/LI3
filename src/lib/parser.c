@@ -33,49 +33,76 @@ Date incrementaData (Date data){
   int dayn = day1;
   int monthn = month1;
   int yearn = year1;
+  free_date(data);
+  Date newd;
 
-  if((day1 == 29 || day1 == 28 )&& month1 == 1) {
-    dayn = 1;
-    monthn = month1 +1;
-    yearn = year1;
-    Date newd = createDate(dayn,monthn,yearn);
+  if (month1 == 0 || month1 == 2 || month1 == 4 || month1 == 6 || month1 == 7 || month1 == 9){
+    if (day1 == 31){
+      dayn = 1;
+      monthn++;
+    }
+    else{
+      dayn++;
+    }
+    newd = createDate(dayn,monthn,yearn);
     return newd;
   }
-  if (day1 == 31 && (month1 == 0 || month1 == 2 || month1 == 4 || month1 == 6 ||
-  month1 == 7 || month1 == 9 )){
-    day1 = 1;
-    monthn = month1 +1;
-    yearn = year1;
-    Date newd = createDate(dayn,monthn,yearn);
+  if (month1 == 1){
+    if ((year1 % 4) == 0){
+      if (day1==29){
+          dayn = 1;
+          monthn++;
+      }
+      else dayn++;
+    }
+    else if(day1==28){
+      dayn = 1;
+      monthn++;
+    }else dayn++;
+    newd = createDate(dayn,monthn,yearn);
     return newd;
   }
-  if (day1 == 30 && (month1 == 3 || month1 == 5 || month1 == 8 || month1 == 10 )){
-    dayn = 1;
-    monthn = month1 +1;
-    yearn = year1;
-    Date newd = createDate(dayn,monthn,yearn);
+  if (month1 == 3 || month1 == 5 || month1 == 8 || month1 == 10){
+    if (day1 == 30){
+      dayn = 1;
+      monthn++;
+    }
+    else{
+      dayn++;
+    }
+    newd = createDate(dayn,monthn,yearn);
     return newd;
   }
-  if (day1 == 31 && month1 == 11){
-    dayn = 1;
-    monthn = 1;
-    yearn = year1 +1;
-    Date newd = createDate(dayn,monthn,yearn);
+  if (month1 == 11){
+    if (day1 == 31){
+      dayn = 1;
+      monthn = 0;
+      yearn++;
+    }
+    else{
+      dayn++;
+    }
+    newd = createDate(dayn,monthn,yearn);
     return newd;
   }
-  else {
-    dayn = day1++;
-    Date newd = createDate(dayn,monthn,yearn);
-    return newd;
-  }
+  return NULL;
+}
+
+static int date_equal(Date begin, Date end){
+  int d,m,a,r;
+  d = (get_day(begin) == get_day(end)) ? 0 : 1;
+  m = (get_month(begin) == get_month(end)) ? 0 : 1;
+  a = (get_year(begin) == get_year(end)) ? 0 : 1;
+
+  r = (d + m + a) > 0 ? 1 : 0;
+
+  return r;
 }
 
 gboolean iguais (gconstpointer a, gconstpointer b){
   Date data1 = (Date) a;
   Date data2 = (Date) b;
-  if( get_day(data1) == get_day(data2)
-      && get_month(data1) == get_month(data2)
-      && get_year(data1) == get_year(data2))
+  if(date_equal(data1,data2)==0)
       return TRUE;
   else return FALSE;
 }
@@ -186,50 +213,19 @@ char* getDay(char* d){
     d[b]='\0';
     return d;
 }
-/*
-char* getHour(char* d){
-  int i=0, hi=0, j;
-  while(d[i]!='T')
-    i++;
-  for(j=i+1; d[j]!=':'; j++)
-    d[hi++]=d[j];
-  d[hi]='\0';
-  return d;
-}
-
-char* getMin(char* d){
-  int i=0, mi=0, j;
-  while(d[i]!=':')
-    i++;
-  for(j=i+1; d[j]!=':'; j++)
-    d[mi++]=d[j];
-  d[mi]='\0';
-  return d;
-}
-
-char* getSec(char* d){
-  int si=0, j;
-  for(j=17; d[j]!='\0'; j++)
-    d[si++]=d[j];
-  d[si]='\0';
-  return d;
-}
-
-*/
 
 void inseredatas(GHashTable *hdate, Date date, Post p){
   gpointer x = g_hash_table_lookup(hdate, date);
   if( x == NULL){
-    ArrayD a = creatArray(1);
-    a = insereArray(a,p);
+    ArrayD a = createArray(2);
+    insereArray(a,p);
     g_hash_table_insert(hdate,date,a);
   }
   else{
     free_date(date);
     ArrayD d = (ArrayD) x;
-    d = insereArray(d,p);
+    insereArray(d,p);
   }
-
 }
 
 void postsInfo(xmlDocPtr doc, GTree * arv_posts, GHashTable *datash) {
@@ -267,7 +263,7 @@ void postsInfo(xmlDocPtr doc, GTree * arv_posts, GHashTable *datash) {
 
           Post p = createPost(id,typeid,pid,score,vcount,date,ownerid,title);
 
-          Key key = createKey(getPostId(p));
+          Key key = createKey(id);
           Date dnova = (getPostDate(p));
 
           g_tree_insert(arv_posts, key, p);

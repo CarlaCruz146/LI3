@@ -12,9 +12,17 @@ typedef struct userint* User;
 typedef struct key* Key;
 typedef struct arrayd *ArrayD;
 
-ArrayD creatArray(long comp);
-ArrayD insereArray(ArrayD a, Post p);
+
+ArrayD createArray(long comp);
+long getPer(ArrayD d);
+long getRes(ArrayD d);
+long getSize(ArrayD d);
+long getUsed(ArrayD d);
+Post getInd (ArrayD d, int i);
+
+void insereArray(ArrayD a, Post p);
 void freeArray(ArrayD a);
+
 
 Key createKey(long key);
 long getKey(Key k);

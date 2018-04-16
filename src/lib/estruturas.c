@@ -28,14 +28,6 @@ struct userint{
   long posts[10];
   GTree* arv_uposts;
 };
-/*
-struct mydate {
-  Date date;
-  int hour;
-  int min;
-  int sec;
-};
-*/
 
 struct key{
   long key;
@@ -49,7 +41,7 @@ struct arrayd{
   long per;
 };
 
-ArrayD creatArray(long comp){
+ArrayD createArray(long comp){
   ArrayD a = malloc (sizeof(struct arrayd));
   a->array = malloc(comp * sizeof(struct post));
   a->used = 0;
@@ -59,7 +51,33 @@ ArrayD creatArray(long comp){
   return a;
 }
 
-ArrayD insereArray(ArrayD a, Post p){
+long getPer(ArrayD d){
+  if(d) return d->per;
+  else return -1;
+}
+
+long getRes(ArrayD d){
+  if(d) return d->res;
+  else return -1;
+}
+
+long getSize(ArrayD d){
+  if(d) return d->size;
+  else return -1;
+}
+
+long getUsed(ArrayD d){
+  if(d) return d->used;
+  else return -1;
+}
+
+Post getInd(ArrayD d, int i){
+  if (d)
+    return (d->array[i]);
+  else return NULL;
+
+}
+void insereArray(ArrayD a, Post p){
   if (a-> used == a->size) {
     a->size *= 2;
     a->array = realloc (a->array, a->size * (sizeof(struct post)));
@@ -68,7 +86,6 @@ ArrayD insereArray(ArrayD a, Post p){
   if (type == 1) a->per++;
   if (type == 2) a->res++;
   a->array[a->used++] = p;
-  return a;
 }
 
 void freeArray(ArrayD a){
@@ -235,9 +252,6 @@ Date getPostDate(Post p){
   int day = get_day(p->date);
   int month = get_month(p->date);
   int year = get_year(p->date);
-  //int hour = myget_hour(p->date);
-//  int min = myget_min(p->date);
-//  float sec = myget_sec(p->date);
   Date d = createDate(day,month,year);
   return d;
   }

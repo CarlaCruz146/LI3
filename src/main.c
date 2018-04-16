@@ -8,8 +8,9 @@
 #include <glib.h>
 #include <assert.h>
 #include "interface.h"
+#include <time.h>
 
-
+/*
 gboolean iterator(gpointer key, gpointer value, gpointer user_data){
   Key k = (Key) key;
   getKey(k);
@@ -29,6 +30,7 @@ gboolean freePostaux(gpointer key, gpointer value, gpointer user_data){
   free(k);
   return FALSE;
 }
+*/
 
 
 int main(int argc, char **argv){
@@ -36,34 +38,37 @@ int main(int argc, char **argv){
   char *pos;
   pos = "/home/pedro90/Desktop/LI/Grupo51/src/Posts.xml" ;
   xmlDocPtr pos2 = xmlParseFile(pos);
-
   char *us;
   us = "/home/pedro90/Desktop/LI/Grupo51/src/Users.xml";
   xmlDocPtr us2 = xmlParseFile(us);
-
   GTree *arv_users = g_tree_new((GCompareFunc) idusercompare);
   GTree *arv_posts = g_tree_new((GCompareFunc) idpostcompare);
   //postsInfo(pos2, arv_posts);
   //userInfo(us2, arv_users);
 *///printf("ola1\n");
   TAD_community tad = init();
-<<<<<<< HEAD
+  clock_t t;
   char* path = "/home/carlacruz/Desktop/LI3/Grupo51/src";
+
   //printf("ola3\n" );
 
-||||||| merged common ancestors
-  char* path = "/home/carlacruz/Desktop/LI3/Grupo51/src";
-  printf("ola3\n" );
-=======
-  char* path = "/home/pedro90/Desktop/LI/Grupo51/src";
-  //printf("ola3\n" );
-
->>>>>>> a87cf02db0034a222a6ecdf39f78666795849855
   tad = load(tad,path);
   //printf("ola\n" );
 
-  srand(time(NULL));
+  //srand(time(NULL));
   info_from_post(tad, rand() % 187277);
+
+  Date begin = createDate(1,1,2008);
+  Date end = createDate(1,2,2020);
+  t=clock();
+  LONG_pair pair = total_posts(tad, begin, end);
+  t=clock()-t;
+  double a5 = ((double) t) / CLOCKS_PER_SEC *1000;
+  printf("Q3:%f ms\n",a5 );
+
+  long fst = get_fst_long(pair);
+  long snd = get_snd_long(pair);
+  printf("Perguntas: %ld e Respostas: %ld\n", fst,snd );
 
   //printf("%s e %s\n", get_fst_str(pair), get_snd_str(pair)  );
   //Por enquanto nao sabemos se esta funçao esta a fazer algo de util

@@ -45,7 +45,7 @@ struct arrayd{
   long per;
 };
 
-ArrayD creatArray(long comp){
+ArrayD createArray(long comp){
   ArrayD a = malloc (sizeof(struct arrayd));
   a->array = malloc(comp * sizeof(struct post));
   a->used = 0;
@@ -55,7 +55,33 @@ ArrayD creatArray(long comp){
   return a;
 }
 
-ArrayD insereArray(ArrayD a, Post p){
+long getPer(ArrayD d){
+  if(d) return d->per;
+  else return -1;
+}
+
+long getRes(ArrayD d){
+  if(d) return d->res;
+  else return -1;
+}
+
+long getSize(ArrayD d){
+  if(d) return d->size;
+  else return -1;
+}
+
+long getUsed(ArrayD d){
+  if(d) return d->used;
+  else return -1;
+}
+
+Post getInd(ArrayD d, int i){
+  if (d)
+    return (d->array[i]);
+  else return NULL;
+
+}
+void insereArray(ArrayD a, Post p){
   if (a-> used == a->size) {
     a->size *= 2;
     a->array = realloc (a->array, a->size * (sizeof(struct post)));
@@ -64,7 +90,6 @@ ArrayD insereArray(ArrayD a, Post p){
   if (type == 1) a->per++;
   if (type == 2) a->res++;
   a->array[a->used++] = p;
-  return a;
 }
 
 void freeArray(ArrayD a){
@@ -134,13 +159,7 @@ void myfreeUser(User u){
 }
 
 
-<<<<<<< HEAD
 Post createPost(long id, int type, long pid, int score, int vcount, Date date, long owner, char* titulo){
-||||||| merged common ancestors
-Post createPost(long id, int type, int pid, int score, int vcount, myDate date, long owner, char* titulo){
-=======
-Post createPost(long id, int type, long pid, int score, int vcount, myDate date, long owner, char* titulo){
->>>>>>> a87cf02db0034a222a6ecdf39f78666795849855
   Post p = malloc(sizeof(struct post));
   p->id = id;
   p->type = type;

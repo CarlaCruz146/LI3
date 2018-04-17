@@ -31,7 +31,7 @@ TAD_community load(TAD_community com, char* dump_path){
   char* pos = (char*) myconcat(dump_path, "/Posts.xml");
   xmlDocPtr pos2 = xmlParseFile(pos);
 
-  char* us = (char*) myconcat(dump_path,"/exemplo.xml");
+  char* us = (char*) myconcat(dump_path,"/Users.xml");
 
   xmlDocPtr us2 = xmlParseFile(us);
 
@@ -47,7 +47,7 @@ TAD_community load(TAD_community com, char* dump_path){
 
 
 // query 1
-
+/*
 STR_pair info_from_post(TAD_community com, long id){
 
   STR_pair ret = create_str_pair("Null","Null");
@@ -82,29 +82,39 @@ STR_pair info_from_post(TAD_community com, long id){
   free(p);
 
   return ret;
-}
+}*/
 
 
 
 
 
 
-/*
 STR_pair info_from_post(TAD_community com, long id){
   Key k = createKey(id);
   Post p = (Post)g_tree_lookup(com->Posts, k);
+  Key pid,owner;
+  User u;
+  STR_pair res;
 
-  if(getPostType(p) == 2){
-    Key pid = createKey(getPid(p));
-    p = g_tree_lookup(com->Posts, pid);
+  if(getPostType(p) == 1){
+    owner = createKey(getPostOwner(p));
+    u = g_tree_lookup(com->Users, owner);
+    res = create_str_pair(getPostTitulo(p),getUserName(u));
+    return res;
   }
-  Key owner = createKey(getPostOwner(p));
-  User u = g_tree_lookup(com->Users, owner);
-
-  STR_pair res = create_str_pair(getPostTitulo(p),getUserName(u));
+  if(getPostType(p) == 2){
+    pid = createKey(getPid(p));
+    p = g_tree_lookup(com->Posts, pid);
+    owner = createKey(getPostOwner(p));
+    u = g_tree_lookup(com->Users, owner);
+    res = create_str_pair(getPostTitulo(p),getUserName(u));
+    return res;
+  }
+  res = create_str_pair("","");
   return res;
 }
-*/
+
+
 static int date_equal(Date begin, Date end){
   int d,m,a,r;
   d = (get_day(begin) == get_day(end)) ? 0 : 1;

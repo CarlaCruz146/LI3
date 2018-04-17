@@ -48,7 +48,7 @@ int main(int argc, char **argv){
 *///printf("ola1\n");
   TAD_community tad = init();
 
-  clock_t t;
+  clock_t t,q;
   char* path = "/home/carlacruz/Desktop/LI3/Grupo51/src";
 
   //printf("ola3\n" );
@@ -57,15 +57,20 @@ int main(int argc, char **argv){
   //printf("ola\n" );
 
   //srand(time(NULL));
-  info_from_post(tad, rand() % 187277);
+  q = clock();
+  STR_pair str = info_from_post(tad, 219);
+  q = clock()-q;
+  double a1 = ((double) q) / CLOCKS_PER_SEC *1000;
+  printf("Q1:%f ms\n",a1 );
+  printf("%s & %s\n", get_fst_str(str),get_snd_str(str) );
 
   Date begin = createDate(1,1,2008);
   Date end = createDate(1,2,2020);
   t=clock();
   LONG_pair pair = total_posts(tad, begin, end);
   t=clock()-t;
-  double a5 = ((double) t) / CLOCKS_PER_SEC *1000;
-  printf("Q3:%f ms\n",a5 );
+  double a3 = ((double) t) / CLOCKS_PER_SEC *1000;
+  printf("Q3:%f ms\n",a3 );
 
   long fst = get_fst_long(pair);
   long snd = get_snd_long(pair);

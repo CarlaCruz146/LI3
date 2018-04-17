@@ -8,17 +8,11 @@
 #include <glib.h>
 #include <assert.h>
 #include "interface.h"
-<<<<<<< HEAD
+
 #include <time.h>
-
-/*
-||||||| merged common ancestors
-
-
-=======
 #include "heap.h"
 
->>>>>>> Nikes
+/*
 gboolean iterator(gpointer key, gpointer value, gpointer user_data){
   Key k = (Key) key;
   getKey(k);
@@ -42,28 +36,11 @@ gboolean freePostaux(gpointer key, gpointer value, gpointer user_data){
 
 
 int main(int argc, char **argv){
-/*
-  char *pos;
-  pos = "/home/pedro90/Desktop/LI/Grupo51/src/Posts.xml" ;
-  xmlDocPtr pos2 = xmlParseFile(pos);
-  char *us;
-  us = "/home/pedro90/Desktop/LI/Grupo51/src/Users.xml";
-  xmlDocPtr us2 = xmlParseFile(us);
-  GTree *arv_users = g_tree_new((GCompareFunc) idusercompare);
-  GTree *arv_posts = g_tree_new((GCompareFunc) idpostcompare);
-  //postsInfo(pos2, arv_posts);
-  //userInfo(us2, arv_users);
-*///printf("ola1\n");
   TAD_community tad = init();
-<<<<<<< HEAD
+
 
   clock_t t;
-  char* path = "/home/carlacruz/Desktop/LI3/Grupo51/src";
-||||||| merged common ancestors
-  char* path = "/home/carlacruz/Desktop/LI3/Grupo51/src";
-=======
   char* path = "/home/nikes/li3/Grupo51/src";
->>>>>>> Nikes
 
   //printf("ola3\n" );
 
@@ -108,12 +85,7 @@ int main(int argc, char **argv){
   //g_tree_destroy(arv_users);
 
 
-  //Key uid = createKey(1);
-  //User u = (User)g_tree_lookup(arv_users, uid);
-  //assert(u!=NULL);
-  //printf("%s\n",getUserName(u) );
-  //g_tree_foreach(arv_posts, (GTraverseFunc)iterator, NULL);
-  //printf("dldasjdlk\n");
+
   //xmlFreeDoc(pos2);
   //xmlFreeDoc(us2);
   return 0;

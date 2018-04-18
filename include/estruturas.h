@@ -1,9 +1,16 @@
 #ifndef __ESTRUTURAS_H__
 #define __ESTRUTURAS_H__
 
+#include <string.h>
+#include <stdlib.h>
+#include <time.h>
+#include <stdio.h>
+#include <assert.h>
 #include "user.h"
 #include "common.h"
 #include "date.h"
+#include "parser.h"
+#include "heap.h"
 #include <gmodule.h>
 
 

@@ -1,29 +1,9 @@
-#include <stdlib.h>
-#include <string.h>
-#include "estruturas.h"
 #include "heap.h"
 
 #define PAI(i) (i-1)/2
 #define ESQUERDO(i) 2*i + 1
 #define DIREITO(i) 2*i + 2
 
-/*
-#define PAI_P(i) heap->produto[(i-1)/2]
-#define PAI_Q(i) heap->quantidade[(i-1)/2]
-#define PAI_C(i) heap->custo[(i-1)/2]
-
-#define FILHO_E_P(i) heap->produto[2*i+1]
-#define FILHO_E_Q(i) heap->quantidade[2*i+1]
-#define FILHO_E_C(i) heap->custo[2*i+1]
-
-#define FILHO_D_P(i) heap->produto[2*i+2]
-#define FILHO_D_Q(i) heap->quantidade[2*i+2]
-#define FILHO_D_C(i) heap->custo[2*i+2]
-
-#define NODO_P(i) heap->produto[i]
-#define NODO_Q(i) heap->quantidade[i]
-#define NODO_C(i) heap->custo[i]
-*/
 
 
 static Heap swap(Heap heap,int n1,int n2);
@@ -34,36 +14,51 @@ static Heap bubbleUp(Heap heap,int i);
 struct heap {
     int tamanho;
     int pos;
-    Post* post;
-    long* id;
+    Post* posts;
 };
 
+//Função devolve -1 se a primeira data for mais recente e 1 se a segunda data for a mais recente
+int maisRecente(Date date1, Date date2){
+  int y1 = get_year(date1);
+  int m1 = get_month(date1);
+  int d1 = get_day(date1);
+  int y2 = get_year(date2);
+  int m2 = get_month(date2);
+  int d2 = get_day(date2);
+
+  if(y1 > y2) return -1;
+  if(y2 > y1) return 1;
+  if(y1 == y2){
+    if(m1 > m2) return -1;
+    if(m2 > m1) return 1;
+    if(m1 == m2){
+      if(d1 > d2) return -1;
+      if(d2 > d1) return 1;
+    }
+  }
+  return 0;
+}
 
 Heap initHeap(){
-    int i;
     Heap heap = malloc(sizeof(struct heap));
     heap->tamanho = 5;
     heap->pos = 0;
-    heap->id = (long*) malloc(5 * sizeof(long));
-    for(i=0; i<5; i++)
-      heap->post[i] = initPost();
+    heap->posts = malloc(5 * sizeof(Post));
     return heap;
 }
 
 
-Heap heap_push(Heap heap, long id, Post post){
+Heap heap_push(Heap heap, Post post){
 //  int index;
 
 //    index = existe_heap(heap,id);
     if(heap->tamanho-1 == heap->pos) {
         heap->tamanho *= 2;
-        heap->id = realloc(heap->id,heap->tamanho *sizeof(long));
-        heap->post = realloc(heap->post,heap->tamanho *sizeof(Post));
+        heap->posts = realloc(heap->posts,heap->tamanho *sizeof(Post));
     }
 
 //    if(index == -1) {
-        heap->id[heap->pos] = id;
-        heap->post[heap->pos] = post;
+        heap->posts[heap->pos] = post;
         heap = bubbleUp(heap,heap->pos);
         heap->pos++;
 //    }
@@ -72,37 +67,33 @@ return heap;
 
 
 
-int existe_heap(Heap heap, long valor) {
-    int i;
-    int resultado = -1;
-    for(i = 0; i < heap->pos; i++) {
-        if(valor == heap->id[i]) return i;
-    }
-    return resultado;
-}
 
 
-long heap_pop(Heap heap) {
+Post heap_pop(Heap heap) {
     if(heap->pos==0) return 0;
-    long r = heap->id[0];
+    Post r = heap->posts[0];
     heap->pos--;
-    heap->id[0] = heap->id[(heap->pos)];
-    heap->post[0] = heap->post[(heap->pos)];
+    heap->posts[0] = heap->posts[(heap->pos)];
 
     heap = bubbleDown(heap,heap->pos);
 
     return r;
 }
 
-
-static Heap bubbleDown(Heap heap, int n) {
-    int i,m;
+// n -> tamanho do array
+static Heap bubbleDown(Heap heap, int n){
+    int i, m, r;
     i=0;
-    while(ESQUERDO(i) < n) {
-        if(DIREITO(i) < n) m = heap->id[(ESQUERDO(i))] > heap->id[(DIREITO(i))] ? ESQUERDO(i) : DIREITO(i);
+    while(ESQUERDO(i) < n){
+        if(DIREITO(i) < n){
+          r = maisRecente(getPostDate(heap->posts[(ESQUERDO(i))]), getPostDate(heap->posts[(DIREITO(i))]));
+          if (r == -1) m = ESQUERDO(i);
+          else m = DIREITO(i);
+        }
         else m = ESQUERDO(i);
 
-        if(heap->id[(i)] < heap->id[(m)]) {
+        //Se a data do post de indice i(pai) for menos recente do que a data do post de indice m(um dos filhos), fazer swap
+        if(maisRecente(getPostDate(heap->posts[i]), getPostDate(heap->posts[m])) == 1){
             heap = swap(heap,i,m);
             i = m;
         }
@@ -113,7 +104,7 @@ static Heap bubbleDown(Heap heap, int n) {
 
 
 static Heap bubbleUp(Heap heap, int i){
-    while(i > 0 && heap->id[(PAI(i))] < heap->id[(i)]){
+    while(i > 0 && maisRecente(getPostDate(heap->posts[PAI(i)]), getPostDate(heap->posts[i])) == 1){
         heap=swap(heap,i,PAI(i));
         i = PAI(i);
     }
@@ -121,17 +112,10 @@ static Heap bubbleUp(Heap heap, int i){
 }
 
 
-
 static Heap swap(Heap heap,int n1,int n2) {
-    long n = heap->id[(n1)];
-    Post p = heap->post[(n1)];
-
-    heap->id[(n1)] = heap->id[(n2)];
-    heap->post[(n1)] = heap->post[(n2)];
-
-    heap->id[(n2)] = n;
-    heap->post[(n2)] = p;
-
+    Post p = heap->posts[(n1)];
+    heap->posts[(n1)] = heap->posts[(n2)];
+    heap->posts[(n2)] = p;
     return heap;
 }
 
@@ -143,8 +127,7 @@ int heap_count(Heap heap){
 void heap_free(Heap heap){
     int i;
     for(i = 0; i < heap->pos; i++) {
-        free(heap->post[i]);
+        freePost(heap->posts[i]);
     }
-    free(heap->id);
     free(heap);
 }

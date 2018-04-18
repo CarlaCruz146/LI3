@@ -1,13 +1,5 @@
-#include <string.h>
-#include <stdlib.h>
-#include <time.h>
-#include <stdio.h>
-#include "user.h"
-#include "common.h"
-#include "date.h"
 #include "estruturas.h"
-#include "parser.h"
-#include <assert.h>
+
 
 struct post{
   long id;
@@ -27,6 +19,7 @@ struct userint{
   char* bio;
   long posts[10];
   GTree* arv_uposts;
+  //Heap uposts;
 };
 
 struct key{
@@ -75,8 +68,9 @@ Post getInd(ArrayD d, int i){
   if (d)
     return (d->array[i]);
   else return NULL;
-
 }
+
+
 void insereArray(ArrayD a, Post p){
   if (a-> used == a->size) {
     a->size *= 2;
@@ -87,6 +81,7 @@ void insereArray(ArrayD a, Post p){
   if (type == 2) a->res++;
   a->array[a->used++] = p;
 }
+
 
 void freeArray(ArrayD a){
   free(a->array);
@@ -100,62 +95,13 @@ Key createKey(long key){
   return k;
 }
 
+
 long getKey(Key k){
   return k->key;
 }
 
-/*
-int maisrecente(gconstpointer id1, gconstpointer id2){ //sendo id2 o a colocar
-   Date key1 = (Date)malloc(sizeof(struct Date));
-   Date key2 = (Date)malloc(sizeof(struct Date));
-   key1 = id1;
-   key2 = id2;
-   time_t t0 = time(NULL);
-   int ret1, ret2;
-   struct tm d1, d2;
-   char buffer[80];
-
-   d1.tm_year = get_year(key1) - 1900;
-   d1.tm_mon = get_month(key1) - 1;
-   d1.tm_mday = get_day(key1);
-   d1.tm_hour = 0;
-   d1.tm_min = 0;
-   d1.tm_sec = 0;
-   d1.tm_isdst = -1;
-
-   ret1 = mktime(&d1);
-   if( ret == -1 ) {
-      printf("Error: unable to make time using mktime\n");
-   }
-
-   d2.tm_year = get_year(key2) - 1900;
-   d2.tm_mon = get_month(key2) - 1;
-   d2.tm_mday = get_day(key2);
-   d2.tm_hour = 0;
-   d2.tm_min = 0;
-   d2.tm_sec = 0;
-   d2.tm_isdst = -1;
-
-   ret2 = mktime(&d2);
-   if( ret == -1 ) {
-      printf("Error: unable to make time using mktime\n");
-   }
-
-   double diff_t1 = difftime(&t0,&d1);
-   double diff_t2 = difftime(&t0,&d2);
-
-   if(diff_t1 < diff_t2) return -1;
-   else if (diff_t1 > diff_t2) return 1;
-   else return 0;
-
-}
-*/
 
 User mycreateUser(long id, int reputacao, char* nome, char* bio, long posts[10], GTree* arv_uposts){
-  //assert(id >= 0);
-  //assert(reputacao >= 0);
-  //assert(nome != NULL);
-  //assert(bio != NULL);
   if(id>=-1){
     int i;
     User u = malloc(sizeof(struct userint));
@@ -171,11 +117,11 @@ User mycreateUser(long id, int reputacao, char* nome, char* bio, long posts[10],
   return NULL;
 }
 
+
 long getUserId(User u){
   if(u) return u->id;
   return -2;
 }
-
 
 
 int getUserRep(User u){
@@ -183,15 +129,18 @@ int getUserRep(User u){
   return -1;
 }
 
+
 char* getUserName(User u){
   if(u) return mystrdup(u->nome);
   return NULL;
 }
 
+
 char* mygetbio(User u){
   if(u) return mystrdup(u->bio);
   return NULL;
 }
+
 
 void myfreeUser(User u){
   if (u){
@@ -206,6 +155,7 @@ Post initPost(){
   Post p = malloc(sizeof(struct post));
   return p;
 }
+
 
 Post createPost(long id, int type, long pid, int score, int vcount, Date date, long owner, char* titulo){
   Post p = malloc(sizeof(struct post));
@@ -226,6 +176,7 @@ long getPostId(Post p){
   return -1;
 }
 
+
 int getPostType(Post p){
   if(p) return p->type;
   return -1;
@@ -237,15 +188,18 @@ long getPid(Post p){
   return -1;
 }
 
+
 int getPostScore(Post p){
   if(p) return p->score;
   return -1;
 }
 
+
 int getPostVCount(Post p){
   if(p) return p->vcount;
   return -1;
 }
+
 
 Date getPostDate(Post p){
   if (p){
@@ -258,15 +212,18 @@ Date getPostDate(Post p){
   return NULL;
 }
 
+
 long getPostOwner(Post p){
   if(p) return p->owner;
   return -1;
 }
 
+
 char* getPostTitulo(Post p){
   if(p) return mystrdup(p->titulo);
   return NULL;
 }
+
 
 void freePost(Post p){
   if(p) {
@@ -275,43 +232,3 @@ void freePost(Post p){
     free(p);
   }
 }
-
-
-/*
-myDate mycreateDate(int day, int month, int year, int hour, int min, float sec) {
-    myDate d = malloc(sizeof(struct mydate));
-    d->date = createDate(day,month,year);
-    d->hour = hour;
-    d->min = min;
-    d->sec = sec;
-    return d;
-}
-
-int myget_day(myDate d) {
-    return (get_day(d->date));
-}
-
-int myget_month(myDate d) {
-    return (get_month(d->date)); //change to enum? (Acho que sim. Desta forma já garantimos a limitação necessária)
-}
-
-int myget_year(myDate d) {
-    return (get_year(d->date));
-}
-
-int myget_hour(myDate d) {
-    return d->hour;
-}
-
-int myget_min(myDate d) {
-    return d->min;
-}
-
-float myget_sec(myDate d) {
-    return d->sec;
-}
-
-void myfree_date(myDate d) {
-    free(d->date);
-    free(d);
-}*/

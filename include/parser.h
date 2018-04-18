@@ -1,13 +1,17 @@
 #ifndef __PARSER_H__
 #define __PARSER_H__
 
+#include <stdlib.h>
+#include <string.h>
+#include <gmodule.h>
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 #include <libxml/xmlmemory.h>
 #include <libxml/parser.h>
-#include "estruturas.h"
-
+#include "key.h"
+#include "myuser.h"
+#include "mypost.h"
 #include <gmodule.h>
 
 char* myconcat(const char *s1, const char *s2);

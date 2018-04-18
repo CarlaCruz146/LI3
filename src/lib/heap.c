@@ -1,15 +1,13 @@
 #include "heap.h"
+#include "mypost.h"
 
 #define PAI(i) (i-1)/2
 #define ESQUERDO(i) 2*i + 1
 #define DIREITO(i) 2*i + 2
 
-
-
 static Heap swap(Heap heap,int n1,int n2);
 static Heap bubbleDown(Heap heap,int n);
 static Heap bubbleUp(Heap heap,int i);
-
 
 struct heap {
     int tamanho;
@@ -64,9 +62,6 @@ Heap heap_push(Heap heap, Post post){
 //    }
 return heap;
 }
-
-
-
 
 
 Post heap_pop(Heap heap) {

@@ -4,12 +4,14 @@
 #include <libxml/xmlmemory.h>
 #include <libxml/parser.h>
 #include <glib.h>
-#include <assert.h>
-#include "estruturas.h"
-#include "heap.h"
 #include "user.h"
 #include "parser.h"
 #include "interface.h"
+#include "mypost.h"
+#include "myuser.h"
+#include "key.h"
+#include "heap.h"
+
 
 
 /*
@@ -22,7 +24,6 @@ gboolean iterator(gpointer key, gpointer value, gpointer user_data){
   printf("%ld\n", getPostOwner(p));
   return FALSE;
 }
-
 
 gboolean freePostaux(gpointer key, gpointer value, gpointer user_data){
   Key k = (Key) key;

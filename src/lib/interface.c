@@ -1,14 +1,6 @@
-#include "date.h"
-#include "pair.h"
-#include "list.h"
-#include "user.h"
-#include "estruturas.h"
-#include <gmodule.h>
-#include "parser.h"
 #include "interface.h"
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
+#include "mypost.h"
+#include "heap.h"
 
 struct TCD_community{
   GTree *Posts;

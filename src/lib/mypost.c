@@ -1,5 +1,4 @@
-#include "estruturas.h"
-
+#include "mypost.h"
 
 struct post{
   long id;
@@ -10,20 +9,6 @@ struct post{
   Date date;
   long owner;
   char * titulo;
-};
-
-struct userint{
-  long id;
-  int reputacao;
-  char* nome;
-  char* bio;
-  long posts[10];
-  GTree* arv_uposts;
-  //Heap uposts;
-};
-
-struct key{
-  long key;
 };
 
 struct arrayd{
@@ -70,7 +55,6 @@ Post getInd(ArrayD d, int i){
   else return NULL;
 }
 
-
 void insereArray(ArrayD a, Post p){
   if (a-> used == a->size) {
     a->size *= 2;
@@ -82,80 +66,15 @@ void insereArray(ArrayD a, Post p){
   a->array[a->used++] = p;
 }
 
-
 void freeArray(ArrayD a){
   free(a->array);
   free(a);
 }
 
-
-Key createKey(long key){
-  Key k = malloc(sizeof(struct key));
-  k->key = key;
-  return k;
-}
-
-
-long getKey(Key k){
-  return k->key;
-}
-
-
-User mycreateUser(long id, int reputacao, char* nome, char* bio, long posts[10], GTree* arv_uposts){
-  if(id>=-1){
-    int i;
-    User u = malloc(sizeof(struct userint));
-    u->id = id;
-    u->reputacao = reputacao;
-    u->nome = mystrdup(nome);
-    u->bio = mystrdup(bio);
-    for(i=0; i!=9; i++);
-      (u->posts)[i] = posts[i];
-    u->arv_uposts = arv_uposts;
-    return u;
-  }
-  return NULL;
-}
-
-
-long getUserId(User u){
-  if(u) return u->id;
-  return -2;
-}
-
-
-int getUserRep(User u){
-  if(u) return u->reputacao;
-  return -1;
-}
-
-
-char* getUserName(User u){
-  if(u) return mystrdup(u->nome);
-  return NULL;
-}
-
-
-char* mygetbio(User u){
-  if(u) return mystrdup(u->bio);
-  return NULL;
-}
-
-
-void myfreeUser(User u){
-  if (u){
-    free(u->nome);
-    free(u->bio);
-    free(u);
-  }
-}
-
-
 Post initPost(){
   Post p = malloc(sizeof(struct post));
   return p;
 }
-
 
 Post createPost(long id, int type, long pid, int score, int vcount, Date date, long owner, char* titulo){
   Post p = malloc(sizeof(struct post));
@@ -170,36 +89,30 @@ Post createPost(long id, int type, long pid, int score, int vcount, Date date, l
   return p;
 }
 
-
 long getPostId(Post p){
   if(p) return p->id;
   return -1;
 }
-
 
 int getPostType(Post p){
   if(p) return p->type;
   return -1;
 }
 
-
 long getPid(Post p){
   if(p) return p->pid;
   return -1;
 }
-
 
 int getPostScore(Post p){
   if(p) return p->score;
   return -1;
 }
 
-
 int getPostVCount(Post p){
   if(p) return p->vcount;
   return -1;
 }
-
 
 Date getPostDate(Post p){
   if (p){
@@ -212,18 +125,15 @@ Date getPostDate(Post p){
   return NULL;
 }
 
-
 long getPostOwner(Post p){
   if(p) return p->owner;
   return -1;
 }
 
-
 char* getPostTitulo(Post p){
   if(p) return mystrdup(p->titulo);
   return NULL;
 }
-
 
 void freePost(Post p){
   if(p) {

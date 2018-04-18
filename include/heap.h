@@ -1,9 +1,9 @@
-#ifndef _heap_h_
-#define _heap_h_
+#ifndef _HEAP_H_
+#define _HEAP_H_
 
 #include <stdlib.h>
 #include <string.h>
-#include "estruturas.h"
+#include "mypost.h"
 
 typedef struct heap *Heap;
 

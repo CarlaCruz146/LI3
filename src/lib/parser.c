@@ -1,14 +1,5 @@
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-#include <libxml/xmlmemory.h>
-#include <libxml/parser.h>
-#include "estruturas.h"
 #include "parser.h"
-#include <stdlib.h>
-#include <string.h>
-#include <gmodule.h>
-
+#include "heap.h"
 
 char* myconcat(const char *s1, const char *s2){
     char *result = malloc(strlen(s1)+strlen(s2)+1);
@@ -172,9 +163,7 @@ void userInfo (xmlDocPtr doc, GTree * arv_users) {
 
            char* bio = (char*) xmlGetProp(cur, (const xmlChar *) "AboutMe"); //Procura o atributo AboutMe					printf("About Me: %s\n", bio);
 
-           long posts[10];
-           GTree* arv_uposts = g_tree_new((GCompareFunc) datacompare);
-           User u = mycreateUser(id, rep, nome, bio, posts, arv_uposts);
+           User u = mycreateUser(id, rep, nome, bio);
 
            Key uid = createKey(getUserId(u));
            //printf("1- %ld\n", getKey(uid));
@@ -268,7 +257,7 @@ void postsInfo(xmlDocPtr doc, GTree * arv_posts, GHashTable *datash) {
 
           g_tree_insert(arv_posts, key, p);
 
-          inseredatas(datash, dnova , p);
+          inseredatas(datash, dnova, p);
 
 
           //ver ownerid, se ja tiver uma heap dele, fazer insert na u->heap

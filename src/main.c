@@ -41,7 +41,7 @@ int main(int argc, char **argv){
 
 
   clock_t t;
-  char* path = "/home/nikes/li3/Grupo51/src";
+  char* path = "/home/pedro90/Desktop/LI3/Grupo51/src";
 
   //printf("ola3\n" );
 

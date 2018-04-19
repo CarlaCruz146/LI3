@@ -6,6 +6,7 @@ struct TCD_community{
   GTree *Posts;
   GTree *Users;
   GHashTable* Hdates;
+  GTree *Votes;
 };
 
 TAD_community init(){
@@ -13,6 +14,7 @@ TAD_community init(){
   tad->Users = g_tree_new((GCompareFunc) idusercompare);
   tad->Posts = g_tree_new((GCompareFunc) idpostcompare);
   tad->Hdates = g_hash_table_new_full((GHashFunc) hash, (GEqualFunc) iguais, NULL,NULL);
+  tad->Votes = g_tree_new((GCompareFunc) idvotecompare);
   return tad;
 }
 
@@ -23,18 +25,22 @@ TAD_community load(TAD_community com, char* dump_path){
   char* pos = (char*) myconcat(dump_path, "/Posts.xml");
   xmlDocPtr pos2 = xmlParseFile(pos);
 
-  char* us = (char*) myconcat(dump_path,"/exemplo.xml");
-
+  char* us = (char*) myconcat(dump_path,"/Users.xml");
   xmlDocPtr us2 = xmlParseFile(us);
 
-  postsInfo(pos2, com->Posts, com->Hdates);
+  char* vt = (char*) myconcat(dump_path,"/Votes.xml");
+  xmlDocPtr vt2 = xmlParseFile(vt);
 
+  postsInfo(pos2, com->Posts, com->Hdates);
   userInfo(us2, com->Users);
+  votesInfo(vt2,com->Votes);
 
   free(pos);
   free(us);
+  free(vt);
   xmlFreeDoc(pos2);
   xmlFreeDoc(us2);
+  xmlFreeDoc(vt2);
 
   return com;
 }

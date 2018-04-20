@@ -1,14 +1,5 @@
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-#include <libxml/xmlmemory.h>
-#include <libxml/parser.h>
-#include "estruturas.h"
 #include "parser.h"
-#include <stdlib.h>
-#include <string.h>
-#include <gmodule.h>
-
+#include "heap.h"
 
 char* myconcat(const char *s1, const char *s2){
     char *result = malloc(strlen(s1)+strlen(s2)+1);
@@ -122,6 +113,15 @@ int idpostcompare(gconstpointer id1, gconstpointer id2){ //sendo id2 o a colocar
   return key1-key2;
 }
 
+int idvotecompare(gconstpointer id1, gconstpointer id2){ //sendo id2 o a colocar
+  long key1 = getKey((Key) id1);
+  long key2 = getKey((Key) id2);
+
+  return key1-key2;
+}
+
+
+
 
 gint datacompare(gconstpointer data1, gconstpointer data2){ //sendo data1 o a colocar
   Date key1 = (Date) data1;
@@ -162,24 +162,22 @@ void userInfo (xmlDocPtr doc, GTree * arv_users) {
 			if ((!xmlStrcmp(cur->name, (const xmlChar *)"row"))) { //compara as tags
 
            long id = atol((char*) xmlGetProp(cur, (const xmlChar *) "Id")); //Procura o atributo Id
-           //printf("Id: %ld\n", id);
+    //       printf("Id: %ld\n", id);
 
            int rep = atoi((char*)xmlGetProp(cur, (const xmlChar *) "Reputation")); //Procura o atributo Reputation
-           //printf("Reputation: %d\n", rep);
+//           printf("Reputation: %d\n", rep);
 
            char* nome = (char*)xmlGetProp(cur, (const xmlChar *) "DisplayName"); //Procura o atributo DisplayName
-					 //printf("Display Name: %s\n", nome);
+	//				 printf("Display Name: %s\n", nome);
 
            char* bio = (char*) xmlGetProp(cur, (const xmlChar *) "AboutMe"); //Procura o atributo AboutMe					printf("About Me: %s\n", bio);
 
-           long posts[10];
-           GTree* arv_uposts = g_tree_new((GCompareFunc) datacompare);
-           User u = mycreateUser(id, rep, nome, bio, posts, arv_uposts);
+           User u = mycreateUser(id, rep, nome, bio);
 
            Key uid = createKey(getUserId(u));
-           //printf("1- %ld\n", getKey(uid));
+//           printf("1- %ld\n", getKey(uid));
            g_tree_insert(arv_users, uid, u);
-           //printf("4- %d\n", g_tree_nnodes(arv_users));
+  //         printf("4- %d\n", g_tree_nnodes(arv_users));
          }
 			cur = cur->next;
     }
@@ -259,16 +257,19 @@ void postsInfo(xmlDocPtr doc, GTree * arv_posts, GHashTable *datash) {
 
           long ownerid = atol((char*)xmlGetProp(cur, (const xmlChar *) "OwnerUserId"));
 
+          aux = (char*)xmlGetProp(cur,(const xmlChar *) "CommentCount");
+            int comcount = aux ? atoi(aux) : 0;
+
           char* title = (char*)xmlGetProp(cur, (const xmlChar *) "Title");
 
-          Post p = createPost(id,typeid,pid,score,vcount,date,ownerid,title);
+          Post p = createPost(id,typeid,pid,score,vcount,date,ownerid,comcount, title);
 
           Key key = createKey(id);
           Date dnova = (getPostDate(p));
 
           g_tree_insert(arv_posts, key, p);
 
-          inseredatas(datash, dnova , p);
+          inseredatas(datash, dnova, p);
 
 
           //ver ownerid, se ja tiver uma heap dele, fazer insert na u->heap
@@ -281,33 +282,34 @@ void postsInfo(xmlDocPtr doc, GTree * arv_posts, GHashTable *datash) {
 }
 
 
-void votesInfo(xmlDocPtr doc, xmlNodePtr cur) {
+void votesInfo(xmlDocPtr doc, GTree * arv_votes) {
 
-	xmlChar *uri;
+    xmlNodePtr cur = xmlDocGetRootElement(doc);
+    cur = cur->xmlChildrenNode;
 
-	//printf("Votes: \n");
 
-	cur = xmlDocGetRootElement(doc);
-	cur = cur->xmlChildrenNode;
 	while (cur != NULL) {
 
 			if ((!xmlStrcmp(cur->name, (const xmlChar *)"row"))) {
-		    uri = xmlGetProp(cur, (const xmlChar *) "Id");
-		//    printf("Id: %s\n", uri);
 
-			  uri = xmlGetProp(cur, (const xmlChar *) "PostId");
-			//   printf("Post ID: %s\n", uri);
+          long id = atol((char*)xmlGetProp(cur, (const xmlChar *) "Id"));
+  //     printf("Id: %ld\n", id);
 
-		    uri = xmlGetProp(cur, (const xmlChar *) "VoteTypeId");
-			 //  printf("Vote Type ID: %s\n", uri);
+			       long postid = atol((char*)xmlGetProp(cur, (const xmlChar *) "PostId"));
+//		   printf("Post ID: %ld\n", postid);
 
-				uri = xmlGetProp(cur, (const xmlChar *) "CreationDate");
-				//	printf("Creation Date: %s\n", uri);
-					xmlFree(uri);
-				}
+
+        Vote v = mycreateVote(id,postid);
+
+        Key key = createKey(getVoteId(v));
+
+        g_tree_insert(arv_votes, key, v);
+
+        }
 
 			cur = cur->next;
 	}
+    printf("2");
 }
 
 

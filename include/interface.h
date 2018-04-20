@@ -1,7 +1,21 @@
+#ifndef __INTERFACE_H__
+#define __INTERFACE_H__
+
 #include "date.h"
 #include "pair.h"
 #include "list.h"
 #include "user.h"
+#include "mypost.h"
+#include "myuser.h"
+#include "key.h"
+#include "heap.h"
+#include "parser.h"
+#include "interface.h"
+#include <stdlib.h>
+#include <stdio.h>
+#include <gmodule.h>
+#include <string.h>
+
 
 typedef struct TCD_community * TAD_community;
 
@@ -11,7 +25,7 @@ TAD_community init();
 TAD_community load(TAD_community com, char* dump_path);  //diretoria onde estarão os ficheiros do dump
 
 // query 1
-STR_pair info_from_post(TAD_community com, long id);  
+STR_pair info_from_post(TAD_community com, long id);
 
 // query 2
 LONG_list top_most_active(TAD_community com, int N);
@@ -44,3 +58,6 @@ long better_answer(TAD_community com, long id);
 LONG_list most_used_best_rep(TAD_community com, int N, Date begin, Date end);
 
 TAD_community clean(TAD_community com);
+
+
+#endif

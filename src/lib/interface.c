@@ -1,19 +1,12 @@
-#include "date.h"
-#include "pair.h"
-#include "list.h"
-#include "user.h"
-#include "estruturas.h"
-#include <gmodule.h>
-#include "parser.h"
 #include "interface.h"
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
+#include "mypost.h"
+#include "heap.h"
 
 struct TCD_community{
   GTree *Posts;
   GTree *Users;
   GHashTable* Hdates;
+  GTree *Votes;
 };
 
 TAD_community init(){
@@ -21,6 +14,7 @@ TAD_community init(){
   tad->Users = g_tree_new((GCompareFunc) idusercompare);
   tad->Posts = g_tree_new((GCompareFunc) idpostcompare);
   tad->Hdates = g_hash_table_new_full((GHashFunc) hash, (GEqualFunc) iguais, NULL,NULL);
+  tad->Votes = g_tree_new((GCompareFunc) idvotecompare);
   return tad;
 }
 
@@ -31,16 +25,30 @@ TAD_community load(TAD_community com, char* dump_path){
   char* pos = (char*) myconcat(dump_path, "/Posts.xml");
   xmlDocPtr pos2 = xmlParseFile(pos);
 
+<<<<<<< HEAD
   char* us = (char*) myconcat(dump_path,"/Users.xml");
 
+||||||| merged common ancestors
+  char* us = (char*) myconcat(dump_path,"/exemplo.xml");
+
+=======
+  char* us = (char*) myconcat(dump_path,"/Users.xml");
+>>>>>>> e915a2cd6056c1ef9cf54a7f6139518e4c70364b
   xmlDocPtr us2 = xmlParseFile(us);
 
-  postsInfo(pos2, com->Posts, com->Hdates);
+  char* vt = (char*) myconcat(dump_path,"/Votes.xml");
+  xmlDocPtr vt2 = xmlParseFile(vt);
 
+  postsInfo(pos2, com->Posts, com->Hdates);
   userInfo(us2, com->Users);
+  votesInfo(vt2,com->Votes);
 
   free(pos);
   free(us);
+  free(vt);
+  xmlFreeDoc(pos2);
+  xmlFreeDoc(us2);
+  xmlFreeDoc(vt2);
 
   return com;
 }
@@ -49,38 +57,32 @@ TAD_community load(TAD_community com, char* dump_path){
 // query 1
 /*
 STR_pair info_from_post(TAD_community com, long id){
-
   STR_pair ret = create_str_pair("Null","Null");
   printf("%ld\n",id);
+  Key kid = createKey(id);
+  Post p = (Post)g_tree_lookup(com->Posts,kid); //Procura o post com o id dado
 
-  Post p = (Post)g_tree_lookup(com->Posts, createKey(id)); //Procura o post com o id dado
-
-  if (getPostType(p) == 1 ) { //Verifica se é pergunta
-
-      User u = (User)g_tree_lookup(com->Users,createKey(getPostOwner(p))); //procura o user
-
+  if (getPostType(p) == 1 ){ //Verifica se é pergunta
+      Key kp = createKey(getPostOwner(p));
+      User u = (User)g_tree_lookup(com->Users,kp); //procura o user
       ret = create_str_pair(getPostTitulo(p),getUserName(u)); //Devolve o par com o titulo e o nick do autor
-
       free(u);
+      free(kp);
   }
 
-  if (getPostType(p) == 2) { //Verifica se é resposta
-
-    p = (Post)g_tree_lookup(com->Posts,createKey(getPid(p))); //Procura essa pergunta
-
+  if (getPostType(p) == 2){ //Verifica se é resposta
+    Key kp2 = createKey(getPid(p));
+    p = (Post)g_tree_lookup(com->Posts,kp2); //Procura essa pergunta
     User u = (User)g_tree_lookup(com->Users,createKey(getPostOwner(p))); //procura o user através do seu id
-
     ret = create_str_pair(getPostTitulo(p),getUserName(u)); //Devolve o par com o titulo da pergunta e quem fez a pergunta
-
     free(u);
+    free(kp2);
   }
 
   else ret = create_str_pair("","");
-
   printf("%s \n %s \n", get_fst_str(ret), get_snd_str(ret));
-
+  free(kid);
   free(p);
-
   return ret;
 }*/
 

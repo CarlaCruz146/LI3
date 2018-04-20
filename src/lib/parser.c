@@ -257,9 +257,12 @@ void postsInfo(xmlDocPtr doc, GTree * arv_posts, GHashTable *datash) {
 
           long ownerid = atol((char*)xmlGetProp(cur, (const xmlChar *) "OwnerUserId"));
 
+          aux = (char*)xmlGetProp(cur,(const xmlChar *) "CommentCount");
+            int comcount = aux ? atoi(aux) : 0;
+
           char* title = (char*)xmlGetProp(cur, (const xmlChar *) "Title");
 
-          Post p = createPost(id,typeid,pid,score,vcount,date,ownerid,title);
+          Post p = createPost(id,typeid,pid,score,vcount,date,ownerid,comcount, title);
 
           Key key = createKey(id);
           Date dnova = (getPostDate(p));

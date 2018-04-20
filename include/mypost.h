@@ -24,7 +24,7 @@ void insereArray(ArrayD a, Post p);
 void freeArray(ArrayD a);
 
 Post initPost();
-Post createPost(long id, int type, long pid, int score, int vcount, Date date, long owner, char* titulo);
+Post createPost(long id, int type, long pid, int score, int vcount, Date date, long owner,int numcom, char* titulo);
 long getPostId(Post p);
 int getPostType(Post p);
 long getPid(Post p);
@@ -32,6 +32,7 @@ int getPostScore(Post p);
 int getPostVCount(Post p);
 Date getPostDate(Post p);
 long getPostOwner(Post p);
+int getPostNumCom(Post p);
 char* getPostTitulo(Post p);
 void freePost(Post p);
 

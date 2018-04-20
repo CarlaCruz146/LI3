@@ -8,6 +8,7 @@ struct post{
   int vcount;
   Date date;
   long owner;
+  int numcom;
   char * titulo;
 };
 
@@ -76,7 +77,7 @@ Post initPost(){
   return p;
 }
 
-Post createPost(long id, int type, long pid, int score, int vcount, Date date, long owner, char* titulo){
+Post createPost(long id, int type, long pid, int score, int vcount, Date date, long owner, int numcom, char* titulo){
   Post p = malloc(sizeof(struct post));
   p->id = id;
   p->type = type;
@@ -85,6 +86,7 @@ Post createPost(long id, int type, long pid, int score, int vcount, Date date, l
   p->vcount = vcount;
   p->date = date;
   p->owner = owner;
+  p->numcom = numcom;
   p->titulo = mystrdup(titulo);
   return p;
 }
@@ -127,6 +129,11 @@ Date getPostDate(Post p){
 
 long getPostOwner(Post p){
   if(p) return p->owner;
+  return -1;
+}
+
+int getPostNumCom(Post p) {
+  if (p) return p->numcom;
   return -1;
 }
 

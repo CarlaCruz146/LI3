@@ -40,23 +40,32 @@ int main(int argc, char **argv){
   TAD_community tad = init();
 
 
-  clock_t t;
+  clock_t t0;
+  clock_t t1;
+  clock_t t3;
   char* path = "/home/pedro90/Desktop/LI3/Grupo51/src";
 
   //printf("ola3\n" );
-
+  t0 = clock();
   tad = load(tad,path);
+  t0= clock()- t0 ;
+  double a0 = ((double) t0)/CLOCKS_PER_SEC;
+  printf("LOAD: %f s \n",a0 );
   //printf("ola\n" );
 
   //srand(time(NULL));
+  t1 = clock();
   info_from_post(tad, rand() % 187277);
+  t1= clock()- t1;
+  double a1 = ((double) t1) /CLOCKS_PER_SEC *1000;
+  printf("Q1: %f ms \n",a1 );
 
   Date begin = createDate(1,1,2008);
   Date end = createDate(1,2,2020);
-  t=clock();
+  t3=clock();
   LONG_pair pair = total_posts(tad, begin, end);
-  t=clock()-t;
-  double a5 = ((double) t) / CLOCKS_PER_SEC *1000;
+  t3=clock()-t3;
+  double a5 = ((double) t3) / CLOCKS_PER_SEC *1000;
   printf("Q3:%f ms\n",a5 );
 
   long fst = get_fst_long(pair);
@@ -71,9 +80,9 @@ int main(int argc, char **argv){
   long id2 = 353333;
   printf("dsfs\n");
   Heap h = initHeap();
-  Post p1 = createPost(id1,1,-2,13,15,date,4534223,"ola");
+  Post p1 = createPost(id1,1,-2,13,15,date,4534223,0,"ola");
   printf("welele\n");
-  Post p2 = createPost(id2,2,13424,10,10,date2,2534342,"alo");
+  Post p2 = createPost(id2,2,13424,10,10,date2,2534342,0,"alo");
   printf("im a banana\n");
 
   heap_push(h, p1);

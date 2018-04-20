@@ -25,15 +25,7 @@ TAD_community load(TAD_community com, char* dump_path){
   char* pos = (char*) myconcat(dump_path, "/Posts.xml");
   xmlDocPtr pos2 = xmlParseFile(pos);
 
-<<<<<<< HEAD
   char* us = (char*) myconcat(dump_path,"/Users.xml");
-
-||||||| merged common ancestors
-  char* us = (char*) myconcat(dump_path,"/exemplo.xml");
-
-=======
-  char* us = (char*) myconcat(dump_path,"/Users.xml");
->>>>>>> e915a2cd6056c1ef9cf54a7f6139518e4c70364b
   xmlDocPtr us2 = xmlParseFile(us);
 
   char* vt = (char*) myconcat(dump_path,"/Votes.xml");

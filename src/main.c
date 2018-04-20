@@ -39,15 +39,6 @@ gboolean freePostaux(gpointer key, gpointer value, gpointer user_data){
 int main(int argc, char **argv){
   TAD_community tad = init();
 
-<<<<<<< HEAD
-  clock_t t,q;
-  char* path = "/home/carlacruz/Desktop/LI3/Grupo51/src";
-||||||| merged common ancestors
-  clock_t t;
-  char* path = "/home/carlacruz/Desktop/LI3/Grupo51/src";
-=======
->>>>>>> e915a2cd6056c1ef9cf54a7f6139518e4c70364b
-
   clock_t t0;
   clock_t t1;
   clock_t t3;
@@ -62,40 +53,21 @@ int main(int argc, char **argv){
   //printf("ola\n" );
 
   //srand(time(NULL));
-<<<<<<< HEAD
-  q = clock();
-  STR_pair str = info_from_post(tad, 219);
-  q = clock()-q;
-  double a1 = ((double) q) / CLOCKS_PER_SEC *1000;
-  printf("Q1:%f ms\n",a1 );
-  printf("%s & %s\n", get_fst_str(str),get_snd_str(str) );
-||||||| merged common ancestors
-  info_from_post(tad, rand() % 187277);
-=======
+
   t1 = clock();
   info_from_post(tad, rand() % 187277);
   t1= clock()- t1;
   double a1 = ((double) t1) /CLOCKS_PER_SEC *1000;
   printf("Q1: %f ms \n",a1 );
->>>>>>> e915a2cd6056c1ef9cf54a7f6139518e4c70364b
+
 
   Date begin = createDate(1,1,2008);
   Date end = createDate(1,2,2020);
   t3=clock();
   LONG_pair pair = total_posts(tad, begin, end);
-<<<<<<< HEAD
-  t=clock()-t;
-  double a3 = ((double) t) / CLOCKS_PER_SEC *1000;
-  printf("Q3:%f ms\n",a3 );
-||||||| merged common ancestors
-  t=clock()-t;
-  double a5 = ((double) t) / CLOCKS_PER_SEC *1000;
-  printf("Q3:%f ms\n",a5 );
-=======
   t3=clock()-t3;
   double a5 = ((double) t3) / CLOCKS_PER_SEC *1000;
   printf("Q3:%f ms\n",a5 );
->>>>>>> e915a2cd6056c1ef9cf54a7f6139518e4c70364b
 
   long fst = get_fst_long(pair);
   long snd = get_snd_long(pair);

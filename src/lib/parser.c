@@ -292,12 +292,9 @@ void votesInfo(xmlDocPtr doc, GTree * arv_votes) {
 
 			if ((!xmlStrcmp(cur->name, (const xmlChar *)"row"))) {
 
-          long id = atol((char*)xmlGetProp(cur, (const xmlChar *) "Id"));
-  //     printf("Id: %ld\n", id);
+        long id = atol((char*)xmlGetProp(cur, (const xmlChar *) "Id"));
 
-			       long postid = atol((char*)xmlGetProp(cur, (const xmlChar *) "PostId"));
-//		   printf("Post ID: %ld\n", postid);
-
+        long postid = atol((char*)xmlGetProp(cur, (const xmlChar *) "PostId"));
 
         Vote v = mycreateVote(id,postid);
 

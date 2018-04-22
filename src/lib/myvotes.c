@@ -27,6 +27,8 @@ Vote mycreateVote(long id, long postid){
   return NULL;
 }
 
-void myfreeVote(Vote v){
-  if (v) free(v);
+void myfreeVote(void *v){
+  Vote aux = (Vote) v;
+  if (aux)
+    free(aux);
 }

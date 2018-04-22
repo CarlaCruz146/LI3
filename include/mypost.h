@@ -14,6 +14,8 @@
 typedef struct post* Post;
 typedef struct arrayd *ArrayD;
 
+void destroyDate (void *d);
+
 ArrayD createArray(long comp);
 long getPer(ArrayD d);
 long getRes(ArrayD d);
@@ -21,7 +23,7 @@ long getSize(ArrayD d);
 long getUsed(ArrayD d);
 Post getInd (ArrayD d, int i);
 void insereArray(ArrayD a, Post p);
-void freeArray(ArrayD a);
+void freeArray(void *a);
 
 Post initPost();
 Post createPost(long id, int type, long pid, int score, int vcount, Date date, long owner,int numcom, char* titulo);
@@ -34,6 +36,6 @@ Date getPostDate(Post p);
 long getPostOwner(Post p);
 int getPostNumCom(Post p);
 char* getPostTitulo(Post p);
-void freePost(Post p);
+void freePost(void *p);
 
 #endif

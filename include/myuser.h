@@ -15,7 +15,6 @@ long getUserId(User u);
 int getUserReputacao(User u);
 char* getUserName(User u);
 char* mygetbio(User u);
-void myfreeUser(User u);
-
+void myfreeUser(void *u);
 
 #endif

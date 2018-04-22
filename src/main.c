@@ -25,16 +25,7 @@ gboolean iterator(gpointer key, gpointer value, gpointer user_data){
   return FALSE;
 }
 
-gboolean freePostaux(gpointer key, gpointer value, gpointer user_data){
-  Key k = (Key) key;
-  getKey(k);
-  Post p = (Post)value;
-  freePost(p);
-  free(k);
-  return FALSE;
-}
 */
-
 
 int main(int argc, char **argv){
   TAD_community tad = init();
@@ -42,7 +33,7 @@ int main(int argc, char **argv){
   clock_t t0;
   clock_t t1;
   clock_t t3;
-  char* path = "/home/pedro90/Desktop/LI3/Grupo51/src";
+  char* path = "/home/carlacruz/Desktop/LI3/Grupo51/src";
 
   //printf("ola3\n" );
   t0 = clock();
@@ -95,9 +86,6 @@ int main(int argc, char **argv){
 
   //g_tree_destroy(arv_users);
 
-
-
-  //xmlFreeDoc(pos2);
-  //xmlFreeDoc(us2);
+  clean(tad);
   return 0;
 }

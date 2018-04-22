@@ -16,6 +16,6 @@ typedef struct votes* Vote;
 long getVoteId(Vote v);
 long getVPostId(Vote v);
 Vote mycreateVote(long id, long postid);
-void myfreeVote(Vote v);
+void myfreeVote(void *v);
 
 #endif

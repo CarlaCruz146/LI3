@@ -20,6 +20,11 @@ struct arrayd{
   long per;
 };
 
+void destroyDate (void *d){
+  Date aux = (Date) d;
+  free_date(aux);
+}
+
 ArrayD createArray(long comp){
   ArrayD a = malloc (sizeof(struct arrayd));
   a->array = malloc(comp * sizeof(struct post));
@@ -67,9 +72,12 @@ void insereArray(ArrayD a, Post p){
   a->array[a->used++] = p;
 }
 
-void freeArray(ArrayD a){
-  free(a->array);
-  free(a);
+void freeArray(void *a){
+  ArrayD aux = (ArrayD) a;
+  if(aux){
+    free(aux->array);
+    free(aux);
+  }
 }
 
 Post initPost(){
@@ -142,10 +150,11 @@ char* getPostTitulo(Post p){
   return NULL;
 }
 
-void freePost(Post p){
-  if(p) {
-    free(p->date);
-    free(p->titulo);
-    free(p);
+void freePost(void *p){
+  Post aux = (Post) p;
+  if(aux) {
+    free(aux->date);
+    free(aux->titulo);
+    free(aux);
   }
 }

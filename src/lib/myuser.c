@@ -46,10 +46,11 @@ char* mygetbio(User u){
 }
 
 
-void myfreeUser(User u){
-  if (u){
-    free(u->nome);
-    free(u->bio);
-    free(u);
+void myfreeUser(void *u){
+  User aux = (User) u;
+  if (aux){
+    free(aux->nome);
+    free(aux->bio);
+    free(aux);
   }
 }

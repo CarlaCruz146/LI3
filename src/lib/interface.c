@@ -11,10 +11,10 @@ struct TCD_community{
 
 TAD_community init(){
   TAD_community tad = (TAD_community)malloc(sizeof(struct TCD_community));
-  tad->Users = g_tree_new((GCompareFunc) idusercompare);
-  tad->Posts = g_tree_new((GCompareFunc) idpostcompare);
-  tad->Hdates = g_hash_table_new_full((GHashFunc) hash, (GEqualFunc) iguais, NULL,NULL);
-  tad->Votes = g_tree_new((GCompareFunc) idvotecompare);
+  tad->Users = g_tree_new_full((GCompareDataFunc) idusercompare, NULL, &free, &myfreeUser);
+  tad->Posts = g_tree_new_full((GCompareDataFunc) idpostcompare, NULL, &free, &freePost);
+  tad->Hdates = g_hash_table_new_full((GHashFunc) hash, (GEqualFunc) iguais, &destroyDate, &freeArray);
+  tad->Votes = g_tree_new_full((GCompareDataFunc) idvotecompare, NULL, &free, &myfreeVote);
   return tad;
 }
 
@@ -46,43 +46,7 @@ TAD_community load(TAD_community com, char* dump_path){
 }
 
 
-// query 1
-/*
-STR_pair info_from_post(TAD_community com, long id){
-  STR_pair ret = create_str_pair("Null","Null");
-  printf("%ld\n",id);
-  Key kid = createKey(id);
-  Post p = (Post)g_tree_lookup(com->Posts,kid); //Procura o post com o id dado
-
-  if (getPostType(p) == 1 ){ //Verifica se é pergunta
-      Key kp = createKey(getPostOwner(p));
-      User u = (User)g_tree_lookup(com->Users,kp); //procura o user
-      ret = create_str_pair(getPostTitulo(p),getUserName(u)); //Devolve o par com o titulo e o nick do autor
-      free(u);
-      free(kp);
-  }
-
-  if (getPostType(p) == 2){ //Verifica se é resposta
-    Key kp2 = createKey(getPid(p));
-    p = (Post)g_tree_lookup(com->Posts,kp2); //Procura essa pergunta
-    User u = (User)g_tree_lookup(com->Users,createKey(getPostOwner(p))); //procura o user através do seu id
-    ret = create_str_pair(getPostTitulo(p),getUserName(u)); //Devolve o par com o titulo da pergunta e quem fez a pergunta
-    free(u);
-    free(kp2);
-  }
-
-  else ret = create_str_pair("","");
-  printf("%s \n %s \n", get_fst_str(ret), get_snd_str(ret));
-  free(kid);
-  free(p);
-  return ret;
-}*/
-
-
-
-
-
-
+//query 1
 STR_pair info_from_post(TAD_community com, long id){
   Key k = createKey(id);
   Post p = (Post)g_tree_lookup(com->Posts, k);
@@ -176,5 +140,12 @@ LONG_list better_answer(TAD_community com, int id);
 // query 11
 LONG_list most_used_best_rep(TAD_community com, int N, Date begin, Date end);
 
-TAD_community clean(TAD_community com);
 */
+
+TAD_community clean(TAD_community com){
+  g_tree_destroy(com->Users);
+  g_tree_destroy(com->Posts);
+  g_hash_table_destroy(com->Hdates);
+  g_tree_destroy(com->Votes);
+  return com;
+}

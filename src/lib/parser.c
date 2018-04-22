@@ -161,23 +161,29 @@ void userInfo (xmlDocPtr doc, GTree * arv_users) {
 	while (cur != NULL) { //Enquanto houver tags row's:
 			if ((!xmlStrcmp(cur->name, (const xmlChar *)"row"))) { //compara as tags
 
-           long id = atol((char*) xmlGetProp(cur, (const xmlChar *) "Id")); //Procura o atributo Id
-    //       printf("Id: %ld\n", id);
+           xmlChar* id1 = xmlGetProp(cur, (const xmlChar *) "Id"); //Procura o atributo Id
+           long id = atol((char*) id1);
 
-           int rep = atoi((char*)xmlGetProp(cur, (const xmlChar *) "Reputation")); //Procura o atributo Reputation
-//           printf("Reputation: %d\n", rep);
+           xmlChar* rep1 = xmlGetProp(cur, (const xmlChar *) "Reputation"); //Procura o atributo Reputation
+           int rep = atoi((char*) rep1);
 
-           char* nome = (char*)xmlGetProp(cur, (const xmlChar *) "DisplayName"); //Procura o atributo DisplayName
-	//				 printf("Display Name: %s\n", nome);
+           xmlChar* n = xmlGetProp(cur, (const xmlChar *) "DisplayName"); //Procura o atributo DisplayName
+           char* nome = ((char*) n);
 
-           char* bio = (char*) xmlGetProp(cur, (const xmlChar *) "AboutMe"); //Procura o atributo AboutMe					printf("About Me: %s\n", bio);
+           xmlChar* b = xmlGetProp(cur, (const xmlChar *) "AboutMe"); //Procura o atributo AboutMe
+           char* bio = ((char*) b);
 
            User u = mycreateUser(id, rep, nome, bio);
 
            Key uid = createKey(getUserId(u));
-//           printf("1- %ld\n", getKey(uid));
+
            g_tree_insert(arv_users, uid, u);
-  //         printf("4- %d\n", g_tree_nnodes(arv_users));
+
+           xmlFree(id1);
+           xmlFree(rep1);
+           xmlFree(n);
+           xmlFree(b);
+
          }
 			cur = cur->next;
     }
@@ -235,14 +241,18 @@ void postsInfo(xmlDocPtr doc, GTree * arv_posts, GHashTable *datash) {
 
 			if ((!xmlStrcmp(cur->name, (const xmlChar *)"row"))) {
 
-          long id = atol((char*)xmlGetProp(cur, (const xmlChar *) "Id"));
+          xmlChar* id1 = xmlGetProp(cur, (const xmlChar *) "Id");
+          long id = atol((char*) id1);
 
-		    	int typeid = atoi((char*)xmlGetProp(cur, (const xmlChar *) "PostTypeId"));
+          xmlChar* ti = xmlGetProp(cur, (const xmlChar *) "PostTypeId");
+		    	int typeid = atoi((char*) ti);
 
-          aux =(char*)xmlGetProp(cur, (const xmlChar *) "ParentId");
-            long pid = aux ? atol (aux) : -2;
+          xmlChar* pid1 = xmlGetProp(cur, (const xmlChar *) "ParentId");
+          aux =(char*) (pid1);
+          long pid = aux ? atol (aux) : -2;
 
-          char* cdate = (char*)xmlGetProp(cur, (const xmlChar *) "CreationDate");
+          xmlChar* cdate1 = xmlGetProp(cur, (const xmlChar *) "CreationDate");
+          char* cdate = (char*) cdate1;
 
           int year = atoi(getYear(cdate));
           int month = atoi(getMonth(cdate));
@@ -250,17 +260,22 @@ void postsInfo(xmlDocPtr doc, GTree * arv_posts, GHashTable *datash) {
 
           Date date = createDate(day,month-1,year);
 
-          int score = atoi((char*)xmlGetProp(cur, (const xmlChar *) "Score"));
+          xmlChar* score1 = xmlGetProp(cur, (const xmlChar *) "Score");
+          int score = atoi((char*) score1);
 
-          aux = (char*)xmlGetProp(cur, (const xmlChar *) "ViewCount");
+          xmlChar* vc = xmlGetProp(cur, (const xmlChar *) "ViewCount");
+          aux = (char*) vc ;
             int vcount = aux ? atoi(aux) : 0;
 
-          long ownerid = atol((char*)xmlGetProp(cur, (const xmlChar *) "OwnerUserId"));
+          xmlChar* oi = xmlGetProp(cur, (const xmlChar *) "OwnerUserId");
+          long ownerid = atol((char*) oi);
 
-          aux = (char*)xmlGetProp(cur,(const xmlChar *) "CommentCount");
+          xmlChar* cc = xmlGetProp(cur,(const xmlChar *) "CommentCount");
+          aux = (char*) cc;
             int comcount = aux ? atoi(aux) : 0;
 
-          char* title = (char*)xmlGetProp(cur, (const xmlChar *) "Title");
+          xmlChar* t = xmlGetProp(cur, (const xmlChar *) "Title");
+          char* title = (char*) t;
 
           Post p = createPost(id,typeid,pid,score,vcount,date,ownerid,comcount, title);
 
@@ -271,6 +286,15 @@ void postsInfo(xmlDocPtr doc, GTree * arv_posts, GHashTable *datash) {
 
           inseredatas(datash, dnova, p);
 
+          xmlFree(id1);
+          xmlFree(ti);
+          xmlFree(pid1);
+          xmlFree(cdate1);
+          xmlFree(score1);
+          xmlFree(vc);
+          xmlFree(oi);
+          xmlFree(cc);
+          xmlFree(t);
 
           //ver ownerid, se ja tiver uma heap dele, fazer insert na u->heap
           //caso contrario criar a heap
@@ -292,15 +316,20 @@ void votesInfo(xmlDocPtr doc, GTree * arv_votes) {
 
 			if ((!xmlStrcmp(cur->name, (const xmlChar *)"row"))) {
 
-        long id = atol((char*)xmlGetProp(cur, (const xmlChar *) "Id"));
+        xmlChar* id1 = xmlGetProp(cur, (const xmlChar *) "Id");
+        long id = atol((char*) id1);
 
-        long postid = atol((char*)xmlGetProp(cur, (const xmlChar *) "PostId"));
+        xmlChar* pi = xmlGetProp(cur, (const xmlChar *) "PostId");
+        long postid = atol((char*) pi);
 
         Vote v = mycreateVote(id,postid);
 
         Key key = createKey(getVoteId(v));
 
         g_tree_insert(arv_votes, key, v);
+
+        xmlFree(id1);
+        xmlFree(pi);
 
         }
 

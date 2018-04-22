@@ -15,3 +15,7 @@ Key createKey(long key){
 long getKey(Key k){
   return k->key;
 }
+
+void freekey (Key k){
+   free(k);
+}

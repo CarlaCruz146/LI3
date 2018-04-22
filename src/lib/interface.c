@@ -41,6 +41,7 @@ TAD_community load(TAD_community com, char* dump_path){
   xmlFreeDoc(pos2);
   xmlFreeDoc(us2);
   xmlFreeDoc(vt2);
+  xmlCleanupParser();
 
   return com;
 }
@@ -53,11 +54,13 @@ STR_pair info_from_post(TAD_community com, long id){
   Key pid,owner;
   User u;
   STR_pair res;
+  freekey(k);
 
   if(getPostType(p) == 1){
     owner = createKey(getPostOwner(p));
     u = g_tree_lookup(com->Users, owner);
     res = create_str_pair(getPostTitulo(p),getUserName(u));
+    freekey(owner);
     return res;
   }
   if(getPostType(p) == 2){
@@ -66,6 +69,8 @@ STR_pair info_from_post(TAD_community com, long id){
     owner = createKey(getPostOwner(p));
     u = g_tree_lookup(com->Users, owner);
     res = create_str_pair(getPostTitulo(p),getUserName(u));
+    freekey(pid);
+    freekey(owner);
     return res;
   }
   res = create_str_pair("","");
@@ -147,5 +152,6 @@ TAD_community clean(TAD_community com){
   g_tree_destroy(com->Posts);
   g_hash_table_destroy(com->Hdates);
   g_tree_destroy(com->Votes);
+  free(com);
   return com;
 }

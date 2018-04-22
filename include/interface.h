@@ -13,7 +13,7 @@
 #include "interface.h"
 #include <stdlib.h>
 #include <stdio.h>
-#include <gmodule.h>
+#include <glib.h>
 #include <string.h>
 
 

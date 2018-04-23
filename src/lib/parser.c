@@ -283,6 +283,7 @@ void postsInfo(xmlDocPtr doc, GTree * arv_posts, GHashTable *datash, GTree * arv
 
           Key kowner = createKey(ownerid);
           User u = (User)g_tree_lookup(arv_users, kowner);
+          printf("%ld\n", getUserId(u));
           heap_push(getUserHeap(u), p);
 
           Key key = createKey(id);

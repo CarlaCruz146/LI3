@@ -75,9 +75,10 @@ Post heap_pop(Heap heap) {
 }
 
 // n -> tamanho do array
-static Heap bubbleDown(Heap heap, int n){
+static Heap bubbleDown(Heap heap, int n, char ord){
     int i, m, r;
     i=0;
+    
     while(ESQUERDO(i) < n){
         if(DIREITO(i) < n){
           r = maisRecente(getPostDate(heap->posts[(ESQUERDO(i))]), getPostDate(heap->posts[(DIREITO(i))]));

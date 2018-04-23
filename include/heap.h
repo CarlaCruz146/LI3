@@ -8,8 +8,8 @@
 typedef struct heap *Heap;
 
 Heap initHeap();
-Heap heap_push(Heap heap, Post post);
-Post heap_pop(Heap heap);
+Heap heap_push(Heap heap, Post post, char ord);
+Post heap_pop(Heap heap, char ord);
 int heap_count(Heap heap);
 void heap_free(Heap heap);
 

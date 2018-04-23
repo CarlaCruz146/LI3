@@ -5,8 +5,8 @@
 #define DIREITO(i) 2*i + 2
 
 static Heap swap(Heap heap,int n1,int n2);
-static Heap bubbleDown(Heap heap,int n);
-static Heap bubbleUp(Heap heap,int i);
+static Heap bubbleDown(Heap heap,int n, char ord);
+static Heap bubbleUp(Heap heap,int i, char ord);
 
 struct heap {
     int tamanho;
@@ -45,68 +45,90 @@ Heap initHeap(){
 }
 
 
-Heap heap_push(Heap heap, Post post){
-//  int index;
-
-//    index = existe_heap(heap,id);
+Heap heap_push(Heap heap, Post post, char ord){
     if(heap->tamanho-1 == heap->pos) {
         heap->tamanho *= 2;
         heap->posts = realloc(heap->posts,heap->tamanho *sizeof(Post));
     }
-
-//    if(index == -1) {
-        heap->posts[heap->pos] = post;
-        heap = bubbleUp(heap,heap->pos);
-        heap->pos++;
-//    }
-return heap;
+    heap->posts[heap->pos] = post;
+    heap = bubbleUp(heap,heap->pos,ord);
+    heap->pos++;
+    return heap;
 }
 
 
-Post heap_pop(Heap heap) {
+Post heap_pop(Heap heap, char ord) {
     if(heap->pos==0) return 0;
     Post r = heap->posts[0];
     heap->pos--;
     heap->posts[0] = heap->posts[(heap->pos)];
 
-    heap = bubbleDown(heap,heap->pos);
+    heap = bubbleDown(heap,heap->pos,ord);
 
     return r;
 }
 
 // n -> tamanho do array
+// ord pode ser 'D' (data masi recente) ou 'S' (score mais alto)
 static Heap bubbleDown(Heap heap, int n, char ord){
     int i, m, r;
     i=0;
-    
-    while(ESQUERDO(i) < n){
-        if(DIREITO(i) < n){
-          r = maisRecente(getPostDate(heap->posts[(ESQUERDO(i))]), getPostDate(heap->posts[(DIREITO(i))]));
-          if (r <= 0) m = ESQUERDO(i);
-          else m = DIREITO(i);
-        }
-        else m = ESQUERDO(i);
+    if(ord == 'D'){
+      while(ESQUERDO(i) < n){
+          if(DIREITO(i) < n){
+            r = maisRecente(getPostDate(heap->posts[(ESQUERDO(i))]), getPostDate(heap->posts[(DIREITO(i))]));
+            if (r <= 0) m = ESQUERDO(i);
+            else m = DIREITO(i);
+          }
+          else m = ESQUERDO(i);
 
-        //Se a data do post de indice i(pai) for menos recente do que a data do post de indice m(um dos filhos), fazer swap
-        if(maisRecente(getPostDate(heap->posts[i]), getPostDate(heap->posts[m])) >= 0){
-            heap = swap(heap,i,m);
-            i = m;
+          //Se a data do post de indice i(pai) for menos recente do que a data do post de indice m(um dos filhos), fazer swap
+          if(maisRecente(getPostDate(heap->posts[i]), getPostDate(heap->posts[m])) >= 0){
+              heap = swap(heap,i,m);
+              i = m;
+          }
+          else return heap;
         }
-        else return heap;
+      return heap;
     }
-   return heap;
+    else{
+      while(ESQUERDO(i) < n){
+          if(DIREITO(i) < n){
+            r = (getPostScore(heap->posts[(ESQUERDO(i))])) - (getPostScore(heap->posts[(DIREITO(i))]));
+            if (r > 0) m = ESQUERDO(i);
+            else m = DIREITO(i);
+          }
+          else m = ESQUERDO(i);
+
+          //Se a data do post de indice i(pai) for menos recente do que a data do post de indice m(um dos filhos), fazer swap
+          if((getPostScore(heap->posts[i])) - (getPostScore(heap->posts[m])) < 0){
+              heap = swap(heap,i,m);
+              i = m;
+          }
+          else return heap;
+      }
+      return heap;
+    }
 }
 
 
-static Heap bubbleUp(Heap heap, int i){
-    Date dpai, di;
-    while(i > 0 && maisRecente((dpai = getPostDate(heap->posts[PAI(i)])), (di = getPostDate(heap->posts[i]))) == 1){
-        heap=swap(heap,i,PAI(i));
-        i = PAI(i);
-        free_date(dpai);
-        free_date(di);
+static Heap bubbleUp(Heap heap, int i, char ord){
+    if(ord == 'D'){
+      Date dpai, di; //filho é mais recente ou seja, score do filho é maior
+      while(i > 0 && maisRecente((dpai = getPostDate(heap->posts[PAI(i)])), (di = getPostDate(heap->posts[i]))) == 1){
+          heap=swap(heap,i,PAI(i));
+          i = PAI(i);
+          free_date(dpai);
+          free_date(di);
+      }
+      return heap;
+    } else {
+        while(i > 0 && (getPostScore(heap->posts[PAI(i)]) - (getPostScore(heap->posts[i]))) < 0){
+            heap=swap(heap,i,PAI(i));
+            i = PAI(i);
+        }
+        return heap;
     }
-    return heap;
 }
 
 

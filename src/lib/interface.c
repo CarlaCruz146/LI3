@@ -76,7 +76,7 @@ STR_pair info_from_post(TAD_community com, long id){
 Date cenas(TAD_community com){
   Key kowner = createKey(7);
   User u = g_tree_lookup(com->Users, kowner);
-  Post p = heap_pop(getUserHeap(u));
+  Post p = heap_pop(getUserHeap(u),'D');
   Date date = getPostDate(p);
   return date;
 }
@@ -136,7 +136,7 @@ USER get_user_info(TAD_community com, long id){
   char *bio = mygetUserBio(u);
   Heap uposts = getUserHeap(u);
   for(i=0; i<10; i++){
-    post_history[i] = getPostId(heap_pop(uposts));
+    post_history[i] = getPostId(heap_pop(uposts,'D'));
   }
   USER user = create_user(bio,post_history);
   free(kid);

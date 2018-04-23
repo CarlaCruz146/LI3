@@ -284,7 +284,9 @@ void postsInfo(xmlDocPtr doc, GTree * arv_posts, GHashTable *datash, GTree * arv
           Key kowner = createKey(ownerid);
           User u = (User)g_tree_lookup(arv_users, kowner);
           printf("%ld\n", getUserId(u));
-          heap_push(getUserHeap(u), p);
+          Heap h = getUserHeap(u);
+          heap_push(h, p, 'D');
+          heap_push(h, p, 'S');
 
           Key key = createKey(id);
           Date dnova = (getPostDate(p));

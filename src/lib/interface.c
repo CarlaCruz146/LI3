@@ -1,6 +1,4 @@
 #include "interface.h"
-#include "mypost.h"
-#include "heap.h"
 
 struct TCD_community{
   GTree *Posts;
@@ -21,28 +19,26 @@ TAD_community init(){
 
 // query 0
 TAD_community load(TAD_community com, char* dump_path){
+  char* us = (char*) myconcat(dump_path,"/Users.xml");
+  xmlDocPtr us2 = xmlParseFile(us);
+  userInfo(us2, com->Users);
+  free(us);
+  xmlFreeDoc(us2);
 
   char* pos = (char*) myconcat(dump_path, "/Posts.xml");
   xmlDocPtr pos2 = xmlParseFile(pos);
-
-  char* us = (char*) myconcat(dump_path,"/Users.xml");
-  xmlDocPtr us2 = xmlParseFile(us);
-
-  char* vt = (char*) myconcat(dump_path,"/Votes.xml");
-  xmlDocPtr vt2 = xmlParseFile(vt);
-
-  postsInfo(pos2, com->Posts, com->Hdates);
-  userInfo(us2, com->Users);
-  votesInfo(vt2,com->Votes);
-
+  postsInfo(pos2, com->Posts, com->Hdates, com->Users);
   free(pos);
-  free(us);
-  free(vt);
   xmlFreeDoc(pos2);
-  xmlFreeDoc(us2);
-  xmlFreeDoc(vt2);
-  xmlCleanupParser();
 
+/*
+  char* vt = (char*) myconcat(dump_path,"/exemplo3.xml");
+  xmlDocPtr vt2 = xmlParseFile(vt);
+  votesInfo(vt2,com->Votes);
+  printf("olaaaaa\n");
+  free(vt);
+  xmlFreeDoc(vt2);
+*/
   return com;
 }
 
@@ -77,6 +73,13 @@ STR_pair info_from_post(TAD_community com, long id){
   return res;
 }
 
+Date cenas(TAD_community com){
+  Key kowner = createKey(7);
+  User u = g_tree_lookup(com->Users, kowner);
+  Post p = heap_pop(getUserHeap(u));
+  Date date = getPostDate(p);
+  return date;
+}
 
 static int date_equal(Date begin, Date end){
   int d,m,a,r;
@@ -152,6 +155,5 @@ TAD_community clean(TAD_community com){
   g_tree_destroy(com->Posts);
   g_hash_table_destroy(com->Hdates);
   g_tree_destroy(com->Votes);
-  free(com);
   return com;
 }

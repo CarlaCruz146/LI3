@@ -5,22 +5,27 @@ struct userint{
   int reputacao;
   char* nome;
   char* bio;
-  //Heap uposts;
+  Heap uposts;
 };
 
 
-User mycreateUser(long id, int reputacao, char* nome, char* bio){
+User mycreateUser(long id, int reputacao, char* nome, char* bio, Heap uposts){
   if(id>=-1){
     User u = malloc(sizeof(struct userint));
     u->id = id;
     u->reputacao = reputacao;
     u->nome = mystrdup(nome);
     u->bio = mystrdup(bio);
+    u->uposts = uposts;
     return u;
   }
   return NULL;
 }
 
+Heap getUserHeap(User u){
+  if(u) return u->uposts;
+  return NULL;
+}
 
 long getUserId(User u){
   if(u) return u->id;

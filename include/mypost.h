@@ -5,10 +5,8 @@
 #include <stdlib.h>
 #include <time.h>
 #include <stdio.h>
-#include <assert.h>
 #include "common.h"
 #include "date.h"
-#include "parser.h"
 #include <gmodule.h>
 
 typedef struct post* Post;

@@ -30,28 +30,24 @@ gboolean iterator(gpointer key, gpointer value, gpointer user_data){
 int main(int argc, char **argv){
   TAD_community tad = init();
 
-//  clock_t t0;
+  clock_t t0;
 //  clock_t t1;
 //  clock_t t3;
-  char* path = "/home/carlacruz/Desktop/LI3/Grupo51/src";
+  char* path = "/home/nikes/li3/Grupo51/src";
+  load(tad,path);
 
-  //printf("ola3\n" );
-//  t0 = clock();
-  tad = load(tad,path);
+  t0 = clock();
+  Date shit = cenas(tad);
 
-//  t0= clock()- t0 ;
-//  double a0 = ((double) t0)/CLOCKS_PER_SEC;
-//  printf("LOAD: %f s \n",a0 );
-  //printf("ola\n" );
-
+  t0 = clock() - t0;
+  double a1 = ((double) t0) /CLOCKS_PER_SEC *1000;
+  printf("Q1: %f ms \n",a1 );
   //srand(time(NULL));
-
 //  t1 = clock();
 //  info_from_post(tad, rand() % 187277);
 //  t1= clock()- t1;
 //  double a1 = ((double) t1) /CLOCKS_PER_SEC *1000;
 //  printf("Q1: %f ms \n",a1 );
-
 
   //Date begin = createDate(1,1,2008);
 //  Date end = createDate(1,2,2020);
@@ -65,13 +61,14 @@ int main(int argc, char **argv){
 //  long snd = get_snd_long(pair);
   //printf("Perguntas: %ld e Respostas: %ld\n", fst,snd );
   //printf("%s e %s\n", get_fst_str(pair), get_snd_str(pair)  );
-//
+
   //Date date = createDate(29,3,1998);
   //Date date2 = createDate(14,8,2018);
   //long id1 = 13424533;
   //long id2 = 353333;
-//  printf("dsfs\n");
-  //Heap h = initHeap();
+
+
+
   //Post p1 = createPost(id1,1,-2,13,15,date,4534223,0,"ola");
   //printf("welele\n");
   //Post p2 = createPost(id2,2,13424,10,10,date2,2534342,0,"alo");
@@ -83,7 +80,8 @@ int main(int argc, char **argv){
   //printf("%ld\n", getPostId(post));
 
 
-  clean(tad);
+  tad = clean(tad);
+  free(tad);
 //free_date(begin);
 //  free_date(end);
 //  free_date(date);

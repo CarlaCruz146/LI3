@@ -13,6 +13,7 @@
 #include "myuser.h"
 #include "mypost.h"
 #include "myvotes.h"
+#include "heap.h"
 #include <gmodule.h>
 
 char* myconcat(const char *s1, const char *s2);
@@ -31,7 +32,7 @@ int idvotecompare(gconstpointer id1, gconstpointer id2);
 
 void userInfo (xmlDocPtr doc, GTree * arv_users);
 
-void postsInfo(xmlDocPtr doc, GTree * arv_posts, GHashTable *datash);
+void postsInfo(xmlDocPtr doc, GTree * arv_posts, GHashTable *datash, GTree * arv_users);
 
 void votesInfo (xmlDocPtr doc, GTree * arv_votes);
 

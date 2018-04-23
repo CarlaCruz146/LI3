@@ -1,5 +1,4 @@
 #include "heap.h"
-#include "mypost.h"
 
 #define PAI(i) (i-1)/2
 #define ESQUERDO(i) 2*i + 1

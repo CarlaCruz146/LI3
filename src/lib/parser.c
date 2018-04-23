@@ -1,5 +1,4 @@
 #include "parser.h"
-#include "heap.h"
 
 char* myconcat(const char *s1, const char *s2){
     char *result = malloc(strlen(s1)+strlen(s2)+1);
@@ -173,7 +172,9 @@ void userInfo (xmlDocPtr doc, GTree * arv_users) {
            xmlChar* b = xmlGetProp(cur, (const xmlChar *) "AboutMe"); //Procura o atributo AboutMe
            char* bio = ((char*) b);
 
-           User u = mycreateUser(id, rep, nome, bio);
+           Heap uposts = initHeap();
+
+           User u = mycreateUser(id, rep, nome, bio, uposts);
 
            Key uid = createKey(getUserId(u));
 
@@ -187,6 +188,7 @@ void userInfo (xmlDocPtr doc, GTree * arv_users) {
          }
 			cur = cur->next;
     }
+    xmlCleanupParser();
 }
 
 
@@ -232,7 +234,7 @@ void inseredatas(GHashTable *hdate, Date date, Post p){
   }
 }
 
-void postsInfo(xmlDocPtr doc, GTree * arv_posts, GHashTable *datash) {
+void postsInfo(xmlDocPtr doc, GTree * arv_posts, GHashTable *datash, GTree * arv_users) {
 	 xmlNodePtr cur = xmlDocGetRootElement(doc);
 	 cur = cur->xmlChildrenNode;
    char* aux;
@@ -258,7 +260,7 @@ void postsInfo(xmlDocPtr doc, GTree * arv_posts, GHashTable *datash) {
           int month = atoi(getMonth(cdate));
           int day = atoi(getDay(cdate));
 
-          Date date = createDate(day,month-1,year);
+          Date date = createDate(day,month,year);
 
           xmlChar* score1 = xmlGetProp(cur, (const xmlChar *) "Score");
           int score = atoi((char*) score1);
@@ -279,12 +281,18 @@ void postsInfo(xmlDocPtr doc, GTree * arv_posts, GHashTable *datash) {
 
           Post p = createPost(id,typeid,pid,score,vcount,date,ownerid,comcount, title);
 
+          Key kowner = createKey(ownerid);
+          User u = (User)g_tree_lookup(arv_users, kowner);
+          heap_push(getUserHeap(u), p);
+
           Key key = createKey(id);
           Date dnova = (getPostDate(p));
+
 
           g_tree_insert(arv_posts, key, p);
 
           inseredatas(datash, dnova, p);
+
 
           xmlFree(id1);
           xmlFree(ti);
@@ -303,6 +311,7 @@ void postsInfo(xmlDocPtr doc, GTree * arv_posts, GHashTable *datash) {
 				}
 			cur = cur->next;
 	}
+  xmlCleanupParser();
 }
 
 
@@ -335,7 +344,7 @@ void votesInfo(xmlDocPtr doc, GTree * arv_votes) {
 
 			cur = cur->next;
 	}
-    printf("2");
+    xmlCleanupParser();
 }
 
 

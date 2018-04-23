@@ -4,13 +4,9 @@
 #include "date.h"
 #include "pair.h"
 #include "list.h"
-#include "user.h"
-#include "mypost.h"
 #include "myuser.h"
+#include "mypost.h"
 #include "key.h"
-#include "heap.h"
-#include "parser.h"
-#include "interface.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <glib.h>
@@ -18,6 +14,7 @@
 
 
 typedef struct TCD_community * TAD_community;
+Date cenas(TAD_community com);
 
 TAD_community init();
 

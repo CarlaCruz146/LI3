@@ -139,6 +139,7 @@ USER get_user_info(TAD_community com, long id){
     post_history[i] = getPostId(heap_pop(uposts));
   }
   USER user = create_user(bio,post_history);
+  free(kid);
   return user;
 }
 
@@ -164,7 +165,6 @@ LONG_list most_used_best_rep(TAD_community com, int N, Date begin, Date end);
 */
 
 TAD_community clean(TAD_community com){
-  g_tree_destroy(com->Users);
   g_tree_destroy(com->Posts);
   g_hash_table_destroy(com->Hdates);
   g_tree_destroy(com->Votes);

@@ -56,6 +56,7 @@ void myfreeUser(void *u){
   if (aux){
     free(aux->nome);
     free(aux->bio);
+    heap_free(aux->uposts);
     free(aux);
   }
 }

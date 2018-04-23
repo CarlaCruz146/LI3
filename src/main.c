@@ -46,6 +46,7 @@ int main(int argc, char **argv){
   int i;
   for(i=0; i<10; i++)
     printf("%ld\n", posts[i]);
+  free_user(u);
   t0 = clock() - t0;
   double a1 = ((double) t0) /CLOCKS_PER_SEC *1000;
   printf("Q1: %f ms \n",a1 );

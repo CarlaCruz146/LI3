@@ -98,9 +98,12 @@ static Heap bubbleDown(Heap heap, int n){
 
 
 static Heap bubbleUp(Heap heap, int i){
-    while(i > 0 && maisRecente(getPostDate(heap->posts[PAI(i)]), getPostDate(heap->posts[i])) == 1){
+    Date dpai, di;
+    while(i > 0 && maisRecente((dpai = getPostDate(heap->posts[PAI(i)])), (di = getPostDate(heap->posts[i]))) == 1){
         heap=swap(heap,i,PAI(i));
         i = PAI(i);
+        free_date(dpai);
+        free_date(di);
     }
     return heap;
 }
@@ -119,9 +122,6 @@ int heap_count(Heap heap){
 }
 
 void heap_free(Heap heap){
-    int i;
-    for(i = 0; i < heap->pos; i++) {
-        freePost(heap->posts[i]);
-    }
+    free(heap->posts);
     free(heap);
 }

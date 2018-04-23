@@ -123,13 +123,26 @@ LONG_pair total_posts(TAD_community com, Date begin, Date end){
 
 
 
-/*
+
 // query 4
-LONG_list questions_with_tag(TAD_community com, char* tag, Date begin, Date end);
+//LONG_list questions_with_tag(TAD_community com, char* tag, Date begin, Date end);
 
 // query 5
-USER get_user_info(TAD_community com, long id);
+USER get_user_info(TAD_community com, long id){
+  int i;
+  long* post_history = malloc(10 * sizeof(long));
+  Key kid = createKey(id);
+  User u = (User)g_tree_lookup(com->Users,kid);
+  char *bio = mygetUserBio(u);
+  Heap uposts = getUserHeap(u);
+  for(i=0; i<10; i++){
+    post_history[i] = getPostId(heap_pop(uposts));
+  }
+  USER user = create_user(bio,post_history);
+  return user;
+}
 
+/*
 // query 6
 LONG_list most_voted_answers(TAD_community com, int N, Date begin, Date end);
 

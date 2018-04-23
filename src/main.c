@@ -36,9 +36,16 @@ int main(int argc, char **argv){
   char* path = "/home/nikes/li3/Grupo51/src";
   load(tad,path);
 
-  t0 = clock();
-  Date shit = cenas(tad);
 
+
+  t0 = clock();
+  USER u = get_user_info(tad, 10);
+  char* bio = get_bio(u);
+  printf("%s\n", bio);
+  long* posts = get_10_latest_posts(u);
+  int i;
+  for(i=0; i<10; i++)
+    printf("%ld\n", posts[i]);
   t0 = clock() - t0;
   double a1 = ((double) t0) /CLOCKS_PER_SEC *1000;
   printf("Q1: %f ms \n",a1 );

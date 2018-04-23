@@ -45,7 +45,7 @@ char* getUserName(User u){
 }
 
 
-char* mygetbio(User u){
+char* mygetUserBio(User u){
   if(u) return mystrdup(u->bio);
   return NULL;
 }

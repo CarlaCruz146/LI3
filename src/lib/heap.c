@@ -81,13 +81,13 @@ static Heap bubbleDown(Heap heap, int n){
     while(ESQUERDO(i) < n){
         if(DIREITO(i) < n){
           r = maisRecente(getPostDate(heap->posts[(ESQUERDO(i))]), getPostDate(heap->posts[(DIREITO(i))]));
-          if (r == -1) m = ESQUERDO(i);
+          if (r <= 0) m = ESQUERDO(i);
           else m = DIREITO(i);
         }
         else m = ESQUERDO(i);
 
         //Se a data do post de indice i(pai) for menos recente do que a data do post de indice m(um dos filhos), fazer swap
-        if(maisRecente(getPostDate(heap->posts[i]), getPostDate(heap->posts[m])) == 1){
+        if(maisRecente(getPostDate(heap->posts[i]), getPostDate(heap->posts[m])) >= 0){
             heap = swap(heap,i,m);
             i = m;
         }

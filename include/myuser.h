@@ -16,7 +16,7 @@ Heap getUserHeap(User u);
 long getUserId(User u);
 int getUserReputacao(User u);
 char* getUserName(User u);
-char* mygetbio(User u);
+char* mygetUserBio(User u);
 void myfreeUser(void *u);
 
 #endif

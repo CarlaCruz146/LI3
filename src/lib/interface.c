@@ -91,10 +91,14 @@ static int date_equal(Date begin, Date end){
 
   return r;
 }
-/*
+
+
 // query 2
-LONG_list top_most_active(TAD_community com, int N);
-*/
+//LONG_list top_most_active(TAD_community com, int N);
+//  g_tree_foreach(com->Users,(GTraverseFunc)nrposts,NULL);
+
+
+
 // query 3
 
 LONG_pair total_posts(TAD_community com, Date begin, Date end){

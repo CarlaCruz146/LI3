@@ -24,7 +24,7 @@ void insereArray(ArrayD a, Post p);
 void freeArray(void *a);
 
 Post initPost();
-Post createPost(long id, int type, long pid, int score, int vcount, Date date, long owner,int numcom, int nres, char* titulo);
+Post createPost(long id, int type, long pid, int score, int vcount, Date date, long owner,int numcom, int nres, char* titulo,char** tags);
 long getPostId(Post p);
 int getPostType(Post p);
 long getPid(Post p);

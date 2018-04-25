@@ -34,9 +34,11 @@ void userInfo (xmlDocPtr doc, GTree * arv_users);
 
 void postsInfo(xmlDocPtr doc, GTree * arv_posts, GHashTable *datash, GTree * arv_users);
 
-void votesInfo (xmlDocPtr doc, GTree * arv_votes);
-
 void parseDo(char *docname, char *docname2, char *docname3, GTree * arv_users, GTree * arv_posts);
+
+int count_tags(char* tags);
+
+char** takeTag(char* tags);
 
 
 #endif

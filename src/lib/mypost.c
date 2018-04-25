@@ -11,6 +11,7 @@ struct post{
   int numcom;
   int nres;
   char * titulo;
+  char** tag;
 };
 
 struct arrayd{
@@ -129,7 +130,7 @@ Post initPost(){
   *@brief   Função que com base nos parâmetros irá fazer a criação de um Post.
   *@param   Recebe um id, o type, o parent id, o score, o viewcount, a data de criação, o criador, o número de comentários, o número de respostas e o título.
 */
-Post createPost(long id, int type, long pid, int score, int vcount, Date date, long owner, int numcom, int nres, char* titulo){
+Post createPost(long id, int type, long pid, int score, int vcount, Date date, long owner, int numcom, int nres, char* titulo, char** tags){
   Post p = malloc(sizeof(struct post));
   p->id = id;
   p->type = type;
@@ -141,6 +142,7 @@ Post createPost(long id, int type, long pid, int score, int vcount, Date date, l
   p->numcom = numcom;
   p->nres = nres;
   p->titulo = mystrdup(titulo);
+  p->tag = tags;
   return p;
 }
 

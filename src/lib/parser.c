@@ -234,6 +234,44 @@ void inseredatas(GHashTable *hdate, Date date, Post p){
   }
 }
 
+int count_tags(char* tags){
+    int i, num = 0;
+    for(i = 0; tags[i] != '\0'; i++)
+        if(tags[i] == '<')
+            num++;
+    return num;
+}
+
+char** takeTag(char* tags){
+    if(!tags) return NULL;
+
+    int i, j, i_tag, i_list = 0;
+    int num_tags = count_tags(tags);
+    char** list = malloc((num_tags) * sizeof(char*));
+
+    for(i = 0; tags[i] != '\0'; i++){
+        if(tags[i] == '<'){
+            for(j = i+1; tags[j] != '>'; j++)
+                ;
+            i++;
+
+            char* tag = malloc((j - i + 1) * sizeof(char));
+            i_tag = 0;
+            for(; tags[i] != '>'; i++)
+                tag[i_tag++] = tags[i];
+
+            tag[i_tag] = '\0';
+            list[i_list++] = tag;
+        }
+    }
+    // Debug
+    for(i = 0; i < num_tags; i++)
+        printf("%s\n", list[i]);
+
+    return list;
+}
+
+
 void postsInfo(xmlDocPtr doc, GTree * arv_posts, GHashTable *datash, GTree * arv_users) {
 	 xmlNodePtr cur = xmlDocGetRootElement(doc);
 	 cur = cur->xmlChildrenNode;
@@ -279,9 +317,13 @@ void postsInfo(xmlDocPtr doc, GTree * arv_posts, GHashTable *datash, GTree * arv
           xmlChar* t = xmlGetProp(cur, (const xmlChar *) "Title");
           char* title = (char*) t;
 
+          char* tags =(char*) xmlGetProp(cur,(const xmlChar *) "Tags");
+          printf("%s\n",tags );
+          char** str = takeTag(tags);
+
           int nres = 0;
 
-          Post p = createPost(id,typeid,pid,score,vcount,date,ownerid,comcount, nres, title);
+          Post p = createPost(id,typeid,pid,score,vcount,date,ownerid,comcount, nres, title,str);
 
           Key kowner = createKey(ownerid);
           User u = (User)g_tree_lookup(arv_users, kowner);

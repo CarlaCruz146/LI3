@@ -247,14 +247,29 @@ LONG_list contains_word(TAD_community com, char* word, int N){
 
 
 
+gboolean pBuscaResposta(gpointer key, gpointer value, gpointer user_data){
+  Key k = (Key) key;
+  getKey(k);
+  Post p = (Post)value;
+  Heap h = (Heap) user_data;
+  if(getPostType(p) == 2){
+    if(strstr(getPostTitulo(p),getHeapPal(h)))
+      heap_push(h,p,'D');
+  }
+  return FALSE;
+}
 
 /*
 // query 9
 LONG_list both_participated(TAD_community com, long id1, long id2, int N);
 
-// query 10
-LONG_list better_answer(TAD_community com, int id);
+*/
 
+// query 10
+//long better_answer(TAD_community com, int id);
+
+
+/*
 // query 11
 LONG_list most_used_best_rep(TAD_community com, int N, Date begin, Date end);
 

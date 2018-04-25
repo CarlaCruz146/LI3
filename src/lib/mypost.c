@@ -222,13 +222,14 @@ int getPostNumCom(Post p) {
   return -1;
 }
 
+
 /**
-  *@brief   Função que retornará o número de respostas de um dado Post.
+  *@brief   Função que incrementa o número de respostas de um dado Post.
   *@param   Recebe um Post.
 */
 int getPostNRes(Post p) {
   if (p) return p->nres;
-  return -1;
+  else return -2;
 }
 
 /**
@@ -238,7 +239,6 @@ int getPostNRes(Post p) {
 void incPostNRes(Post p) {
   p->nres++;
 }
-
 
 /**
   *@brief   Função que retornará o título de um dado Post.

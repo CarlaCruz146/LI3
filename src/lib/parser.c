@@ -174,7 +174,7 @@ void userInfo (xmlDocPtr doc, GTree * arv_users) {
 
            Heap uposts = initHeap();
 
-           User u = mycreateUser(id, rep, nome, bio, uposts);
+           User u = mycreateUser(id, rep, nome, bio, 0, uposts);
 
            Key uid = createKey(getUserId(u));
 
@@ -279,11 +279,12 @@ void postsInfo(xmlDocPtr doc, GTree * arv_posts, GHashTable *datash, GTree * arv
           xmlChar* t = xmlGetProp(cur, (const xmlChar *) "Title");
           char* title = (char*) t;
 
-          Post p = createPost(id,typeid,pid,score,vcount,date,ownerid,comcount, title);
+          int nres = 0;
+
+          Post p = createPost(id,typeid,pid,score,vcount,date,ownerid,comcount, nres, title);
 
           Key kowner = createKey(ownerid);
           User u = (User)g_tree_lookup(arv_users, kowner);
-          printf("%ld\n", getUserId(u));
           Heap h = getUserHeap(u);
           heap_push(h, p, 'D');
           heap_push(h, p, 'S');
@@ -316,149 +317,3 @@ void postsInfo(xmlDocPtr doc, GTree * arv_posts, GHashTable *datash, GTree * arv
 	}
   xmlCleanupParser();
 }
-
-
-void votesInfo(xmlDocPtr doc, GTree * arv_votes) {
-
-    xmlNodePtr cur = xmlDocGetRootElement(doc);
-    cur = cur->xmlChildrenNode;
-
-
-	while (cur != NULL) {
-
-			if ((!xmlStrcmp(cur->name, (const xmlChar *)"row"))) {
-
-        xmlChar* id1 = xmlGetProp(cur, (const xmlChar *) "Id");
-        long id = atol((char*) id1);
-
-        xmlChar* pi = xmlGetProp(cur, (const xmlChar *) "PostId");
-        long postid = atol((char*) pi);
-
-        Vote v = mycreateVote(id,postid);
-
-        Key key = createKey(getVoteId(v));
-
-        g_tree_insert(arv_votes, key, v);
-
-        xmlFree(id1);
-        xmlFree(pi);
-
-        }
-
-			cur = cur->next;
-	}
-    xmlCleanupParser();
-}
-
-
-/*
-void parseDo(char *docname, char *docname2, char *docname3, GTree * arv_users, GTree * arv_posts) {
-
-	xmlDocPtr doc;
-	xmlNodePtr cur;
-
-	doc = xmlParseFile(docname);
-
-	if (!doc) {
-		fprintf(stderr,"Document not parsed successfully. \n");
-		return;
-	}
-
-	cur = xmlDocGetRootElement(doc);
-
-	if (cur == NULL) {
-		fprintf(stderr,"empty document\n");
-		xmlFreeDoc(doc);
-		return;
-	}
-	cur = cur->xmlChildrenNode;
-	if (!xmlStrcmp(cur->name, (const xmlChar *) "row")) {
-		fprintf(stderr,"document of the wrong type, root node != row ");
-		xmlFreeDoc(doc);
-		return;
-	}
-
-
-	xmlDocPtr doc2;
-	xmlNodePtr cur2;
-
-	doc2 = xmlParseFile(docname2);
-
-	if (!doc2) {
-		fprintf(stderr,"Document not parsed successfully. \n");
-		return;
-	}
-
-	cur2 = xmlDocGetRootElement(doc2);
-
-	if (cur2 == NULL) {
-		fprintf(stderr,"empty document\n");
-		xmlFreeDoc(doc2);
-		return;
-	}
-
-	cur2 = cur2->xmlChildrenNode;
-
-	if (!xmlStrcmp(cur2->name, (const xmlChar *) "row")) {
-		fprintf(stderr,"document of the wrong type, root node != row ");
-		xmlFreeDoc(doc2);
-		return;
-	}
-
-	xmlDocPtr doc3;
-	xmlNodePtr cur3;
-
-	doc3 = xmlParseFile(docname3);
-
-	if (!doc3) {
-		fprintf(stderr,"Document not parsed successfully. \n");
-		return;
-	}
-
-	cur3 = xmlDocGetRootElement(doc3);
-	if (cur3 == NULL) {
-		fprintf(stderr,"empty document\n");
-		xmlFreeDoc(doc3);
-		return;
-	}
-
-	cur3 = cur3->xmlChildrenNode;
-	if (!xmlStrcmp(cur3->name, (const xmlChar *) "row")) {
-		fprintf(stderr,"document of the wrong type, root node != row ");
-		xmlFreeDoc(doc3);
-		return;
-	}
-
-	userInfo (doc, arv_users);
-	xmlFreeDoc(doc);
-
-	postsInfo (doc2, arv_posts,hdate);
-	xmlFreeDoc(doc2);
-
-	votesInfo (doc3, cur3);
-	xmlFreeDoc(doc3);
-}
-
-
-
-
-int main (int argc, char **argv) {
-
-	char *docname;
-	char *docname2;
-	char *docname3;
-
-	if (argc <= 1) {
-		printf("Usage: %s docname\n", argv[0]);
-		return(0);
-	}
-
-	docname = argv[1]; //Para os users
-	docname2 = argv[2]; //Para os POSTS
-	docname3 = argv[3]; //Para os Votos
-
-	parseDo (docname, docname2,docname3);
-
-	return 1;
-}
-*/

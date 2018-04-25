@@ -11,6 +11,7 @@ static Heap bubbleUp(Heap heap,int i, char ord);
 struct heap {
     int tamanho;
     int pos;
+    char* pal;
     Post* posts;
 };
 
@@ -41,9 +42,23 @@ Heap initHeap(){
     heap->tamanho = 5;
     heap->pos = 0;
     heap->posts = malloc(5 * sizeof(Post));
+    heap->pal = NULL;
     return heap;
 }
 
+Heap initHeapPal(char* word){
+    Heap heap = malloc(sizeof(struct heap));
+    heap->tamanho = 5;
+    heap->pos = 0;
+    heap->posts = malloc(5 * sizeof(Post));
+    heap->pal = malloc(5 * sizeof(word));
+    heap->pal = word;
+    return heap;
+}
+
+char* getHeapPal(Heap h){
+  return h->pal;
+}
 
 Heap heap_push(Heap heap, Post post, char ord){
     if(heap->tamanho-1 == heap->pos) {
@@ -91,7 +106,7 @@ static Heap bubbleDown(Heap heap, int n, char ord){
         }
       return heap;
     }
-    else{
+    else if(ord == 'S'){
       while(ESQUERDO(i) < n){
           if(DIREITO(i) < n){
             r = (getPostScore(heap->posts[(ESQUERDO(i))])) - (getPostScore(heap->posts[(DIREITO(i))]));
@@ -102,6 +117,24 @@ static Heap bubbleDown(Heap heap, int n, char ord){
 
           //Se a data do post de indice i(pai) for menos recente do que a data do post de indice m(um dos filhos), fazer swap
           if((getPostScore(heap->posts[i])) - (getPostScore(heap->posts[m])) < 0){
+              heap = swap(heap,i,m);
+              i = m;
+          }
+          else return heap;
+      }
+      return heap;
+    }
+    else{
+      while(ESQUERDO(i) < n){
+          if(DIREITO(i) < n){
+            r = (getPostNRes(heap->posts[(ESQUERDO(i))])) - (getPostNRes(heap->posts[(DIREITO(i))]));
+            if (r > 0) m = ESQUERDO(i);
+            else m = DIREITO(i);
+          }
+          else m = ESQUERDO(i);
+
+          //Se a data do post de indice i(pai) for menos recente do que a data do post de indice m(um dos filhos), fazer swap
+          if((getPostNRes(heap->posts[i])) - (getPostNRes(heap->posts[m])) < 0){
               heap = swap(heap,i,m);
               i = m;
           }
@@ -122,12 +155,19 @@ static Heap bubbleUp(Heap heap, int i, char ord){
           free_date(di);
       }
       return heap;
-    } else {
+    } else if(ord == 'S'){
         while(i > 0 && (getPostScore(heap->posts[PAI(i)]) - (getPostScore(heap->posts[i]))) < 0){
             heap=swap(heap,i,PAI(i));
             i = PAI(i);
         }
         return heap;
+    }
+    else{
+      while(i > 0 && (getPostNRes(heap->posts[PAI(i)]) - (getPostNRes(heap->posts[i]))) < 0){
+          heap=swap(heap,i,PAI(i));
+          i = PAI(i);
+      }
+      return heap;
     }
 }
 

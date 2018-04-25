@@ -5,17 +5,19 @@ struct userint{
   int reputacao;
   char* nome;
   char* bio;
+  int nposts;
   Heap uposts;
 };
 
 
-User mycreateUser(long id, int reputacao, char* nome, char* bio, Heap uposts){
+User mycreateUser(long id, int reputacao, char* nome, char* bio, int nposts, Heap uposts){
   if(id>=-1){
     User u = malloc(sizeof(struct userint));
     u->id = id;
     u->reputacao = reputacao;
     u->nome = mystrdup(nome);
     u->bio = mystrdup(bio);
+    u->nposts = nposts;
     u->uposts = uposts;
     return u;
   }
@@ -50,6 +52,14 @@ char* mygetUserBio(User u){
   return NULL;
 }
 
+int getUserNPosts(User u){
+  if(u) return u->nposts;
+  return -1;
+}
+
+void incUserNPosts(User u){
+  u->nposts++;
+}
 
 void myfreeUser(void *u){
   User aux = (User) u;

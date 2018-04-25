@@ -7,6 +7,7 @@
 #include "myuser.h"
 #include "mypost.h"
 #include "key.h"
+#include "mypost.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <glib.h>
@@ -15,7 +16,7 @@
 
 typedef struct TCD_community * TAD_community;
 Date cenas(TAD_community com);
-
+void postRes(Post p, ArrayD array);
 TAD_community init();
 
 // query 0

@@ -4,7 +4,6 @@ struct TCD_community{
   GTree *Posts;
   GTree *Users;
   GHashTable* Hdates;
-  GTree *Votes;
 };
 
 TAD_community init(){
@@ -12,7 +11,6 @@ TAD_community init(){
   tad->Users = g_tree_new_full((GCompareDataFunc) idusercompare, NULL, &free, &myfreeUser);
   tad->Posts = g_tree_new_full((GCompareDataFunc) idpostcompare, NULL, &free, &freePost);
   tad->Hdates = g_hash_table_new_full((GHashFunc) hash, (GEqualFunc) iguais, &destroyDate, &freeArray);
-  tad->Votes = g_tree_new_full((GCompareDataFunc) idvotecompare, NULL, &free, &myfreeVote);
   return tad;
 }
 
@@ -31,14 +29,6 @@ TAD_community load(TAD_community com, char* dump_path){
   free(pos);
   xmlFreeDoc(pos2);
 
-/*
-  char* vt = (char*) myconcat(dump_path,"/exemplo3.xml");
-  xmlDocPtr vt2 = xmlParseFile(vt);
-  votesInfo(vt2,com->Votes);
-  printf("olaaaaa\n");
-  free(vt);
-  xmlFreeDoc(vt2);
-*/
   return com;
 }
 
@@ -100,7 +90,6 @@ static int date_equal(Date begin, Date end){
 
 
 // query 3
-
 LONG_pair total_posts(TAD_community com, Date begin, Date end){
   long fst = 0;
   long snd = 0;
@@ -147,16 +136,119 @@ USER get_user_info(TAD_community com, long id){
   return user;
 }
 
-/*
+
 // query 6
-LONG_list most_voted_answers(TAD_community com, int N, Date begin, Date end);
+LONG_list most_voted_answers(TAD_community com, int N, Date begin, Date end){
+  int i;
+  gpointer x;
+  ArrayD d;
+  LONG_list r = create_list(N);
+  Heap h = initHeap();
+  while(date_equal(begin,end) > 0){
+          x = g_hash_table_lookup(com->Hdates, begin);
+          d = (ArrayD) x;
+          if (d){
+            for(i=0; i<getUsed(d); i++){
+              if(getPostType(getInd(d,i)) == 2)
+                heap_push(h,getInd(d,i),'S');
+            }
+          }
+          begin = incrementaData(begin);
+    }
+    x = g_hash_table_lookup(com->Hdates, end);
+    d = (ArrayD) x;
+    if (d){
+      for(i=0; i<getUsed(d); i++){
+        if(getPostType(getInd(d,i)) == 2)
+          heap_push(h,getInd(d,i),'S');
+      }
+    }
+    for(i=0; i<N; i++){
+      Post p = heap_pop(h,'S');
+      set_list(r, i, getPostId(p));
+    }
+    return r;
+}
+
+
+
+
+void postRes(Post p, ArrayD array){
+  int i;
+  Post posti;
+  for(i=0; i<getUsed(array); i++){
+    posti = getInd(array,i);
+    if(getPostType(posti) == 2)
+      if(getPid(posti) == getPostId(p))
+        incPostNRes(p);
+  }
+}
+
 
 // query 7
-LONG_list most_answered_questions(TAD_community com, int N, Date begin, Date end);
+LONG_list most_answered_questions(TAD_community com, int N, Date begin, Date end){
+  int i;
+  gpointer x;
+  ArrayD d;
+  Heap h = initHeap();
+  LONG_list r = create_list(N);
+  while(date_equal(begin,end) > 0){
+    x = g_hash_table_lookup(com->Hdates, begin);
+    d = (ArrayD) x;
+    if (d){
+      for(i=0; i<getUsed(d); i++){
+        postRes(getInd(d,i),d);
+        heap_push(h,getInd(d,i),'R');
+      }
+    }
+    begin = incrementaData(begin);
+  }
+  x = g_hash_table_lookup(com->Hdates, end);
+  d = (ArrayD) x;
+  if (d){
+    for(i=0; i<getUsed(d); i++){
+      postRes(getInd(d,i),d);
+      heap_push(h,getInd(d,i),'R');
+    }
+  }
+  for(i=0; i<N; i++){
+    Post p = heap_pop(h,'R');
+    set_list(r, i, getPostId(p));
+  }
+  return r;
+}
+
+
+gboolean pContainsWord(gpointer key, gpointer value, gpointer user_data){
+  Key k = (Key) key;
+  getKey(k);
+  Post p = (Post)value;
+  Heap h = (Heap) user_data;
+  if(getPostType(p) == 1){
+    if(strstr(getPostTitulo(p),getHeapPal(h)))
+      heap_push(h,p,'D');
+  }
+  return FALSE;
+}
 
 // query 8
-LONG_list contains_word(TAD_community com, char* word, int N);
+LONG_list contains_word(TAD_community com, char* word, int N){
+  int i;
+  Post p;
+  LONG_list r = create_list(N);
+  Heap h = initHeapPal(word);
+  g_tree_foreach(com->Posts, (GTraverseFunc)pContainsWord, h);
+  for(i=0; i<N; i++){
+    p = heap_pop(h,'D');
+    set_list(r, i, getPostId(p));
+  }
+  return r;
+}
 
+
+
+
+/*
 // query 9
 LONG_list both_participated(TAD_community com, long id1, long id2, int N);
 
@@ -171,6 +263,5 @@ LONG_list most_used_best_rep(TAD_community com, int N, Date begin, Date end);
 TAD_community clean(TAD_community com){
   g_tree_destroy(com->Posts);
   g_hash_table_destroy(com->Hdates);
-  g_tree_destroy(com->Votes);
   return com;
 }

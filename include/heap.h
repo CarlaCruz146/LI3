@@ -8,6 +8,8 @@
 typedef struct heap *Heap;
 
 Heap initHeap();
+Heap initHeapPal(char* word);
+char* getHeapPal(Heap h);
 Heap heap_push(Heap heap, Post post, char ord);
 Post heap_pop(Heap heap, char ord);
 int heap_count(Heap heap);

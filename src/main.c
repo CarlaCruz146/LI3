@@ -14,29 +14,12 @@
 
 
 
-/*
-gboolean iterator(gpointer key, gpointer value, gpointer user_data){
-  Key k = (Key) key;
-  getKey(k);
-  printf("Key- %ld\n",getKey(k));
-  Post p = (Post)value;
-  printf("Pid %ld\n", getPostId(p));
-  printf("%ld\n", getPostOwner(p));
-  return FALSE;
-}
-
-*/
-
 int main(int argc, char **argv){
   TAD_community tad = init();
 
-  clock_t t0;
-//  clock_t t1;
-//  clock_t t3;
+  clock_t t0, t1, t2, t3;
   char* path = "/home/nikes/li3/Grupo51/src";
   load(tad,path);
-
-
 
   t0 = clock();
   USER u = get_user_info(tad, 10);
@@ -49,7 +32,34 @@ int main(int argc, char **argv){
   free_user(u);
   t0 = clock() - t0;
   double a1 = ((double) t0) /CLOCKS_PER_SEC *1000;
-  printf("Q1: %f ms \n",a1 );
+  printf("Q5: %f ms \n",a1 );
+
+  t1 = clock();
+  Date begin = createDate(13,10,2010);
+  Date end = createDate(13,10,2010);
+  LONG_list l = most_voted_answers(tad, 5, begin, end);
+  for(i=0; i<5; i++)
+    printf("%ld\n", get_list(l,i));
+  t1 = clock() - t1;
+  a1 = ((double) t1) /CLOCKS_PER_SEC *1000;
+  printf("Q6: %f ms \n",a1 );
+
+  t2 = clock();
+  Date begin2 = createDate(13,10,2010);
+  LONG_list l2 = most_answered_questions(tad, 1, begin2, begin2);
+  for(i=0; i<1; i++)
+    printf("%ld\n", get_list(l2,i));
+  t2 = clock() - t2;
+  a1 = ((double) t1) /CLOCKS_PER_SEC *1000;
+  printf("Q7: %f ms \n",a1 );
+
+  t3 = clock();
+  LONG_list l3 = contains_word(tad, "Nexus", 10);
+  for(i=0; i<10; i++)
+    printf("%ld\n", get_list(l3,i));
+  t3 = clock() - t3;
+  a1 = ((double) t1) /CLOCKS_PER_SEC *1000;
+  printf("Q8: %f ms \n",a1);
   //srand(time(NULL));
 //  t1 = clock();
 //  info_from_post(tad, rand() % 187277);

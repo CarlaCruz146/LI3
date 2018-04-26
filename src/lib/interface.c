@@ -75,11 +75,31 @@ static int date_equal(Date begin, Date end){
   return r;
 }
 
+static gboolean nrposts (gpointer key, gpointer value, gpointer user_data){
+  Key k = (Key) key;
+  long id = getKey(k);
+  User user = (User)value;
+  HeapU heap = (HeapU) user_data;
+
+  heap_pushU(heap, id, heap_count(getUserHeap(user)));
+
+  return FALSE;
+}
 
 // query 2
-//LONG_list top_most_active(TAD_community com, int N);
-//  g_tree_foreach(com->Users,(GTraverseFunc)nrposts,NULL);
-
+LONG_list top_most_active(TAD_community com, int N){
+  int i;
+  long id;
+  LONG_list res = create_list(N);
+  HeapU heap = initHeapU();
+  g_tree_foreach(com->Users,(GTraverseFunc)nrposts, heap);
+  for(i=0; i<N; i++){
+    id = heap_popU(heap);
+    set_list(res, i, id);
+  }
+  heap_freeU(heap);
+  return res;
+}
 
 
 // query 3

@@ -258,7 +258,7 @@ char* getPostTitulo(Post p){
 void freePost(void *p){
   Post aux = (Post) p;
   if(aux) {
-    free(aux->date);
+    free_date(aux->date);
     free(aux->titulo);
     free(aux);
   }

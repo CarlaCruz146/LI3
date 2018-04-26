@@ -5,9 +5,10 @@
 #include <stdlib.h>
 #include <time.h>
 #include <stdio.h>
+#include <gmodule.h>
 #include "common.h"
 #include "date.h"
-#include <gmodule.h>
+
 
 typedef struct post* Post;
 typedef struct arrayd *ArrayD;

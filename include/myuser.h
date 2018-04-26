@@ -4,10 +4,10 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <gmodule.h>
 #include "user.h"
 #include "parser.h"
 #include "heap.h"
-#include <gmodule.h>
 
 typedef struct userint* User;
 

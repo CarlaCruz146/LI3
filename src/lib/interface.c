@@ -63,13 +63,6 @@ STR_pair info_from_post(TAD_community com, long id){
   return res;
 }
 
-Date cenas(TAD_community com){
-  Key kowner = createKey(7);
-  User u = g_tree_lookup(com->Users, kowner);
-  Post p = heap_pop(getUserHeap(u),'D');
-  Date date = getPostDate(p);
-  return date;
-}
 
 static int date_equal(Date begin, Date end){
   int d,m,a,r;
@@ -173,7 +166,7 @@ LONG_list most_voted_answers(TAD_community com, int N, Date begin, Date end){
 
 
 
-void postRes(Post p, ArrayD array){
+static void postRes(Post p, ArrayD array){
   int i;
   Post posti;
   for(i=0; i<getUsed(array); i++){
@@ -219,7 +212,7 @@ LONG_list most_answered_questions(TAD_community com, int N, Date begin, Date end
 }
 
 
-gboolean pContainsWord(gpointer key, gpointer value, gpointer user_data){
+static gboolean pContainsWord(gpointer key, gpointer value, gpointer user_data){
   Key k = (Key) key;
   getKey(k);
   Post p = (Post)value;
@@ -247,7 +240,7 @@ LONG_list contains_word(TAD_community com, char* word, int N){
 
 
 
-gboolean pBuscaResposta(gpointer key, gpointer value, gpointer user_data){
+static gboolean pBuscaResposta(gpointer key, gpointer value, gpointer user_data){
   Key k = (Key) key;
   getKey(k);
   Post p = (Post)value;
@@ -265,9 +258,29 @@ LONG_list both_participated(TAD_community com, long id1, long id2, int N);
 
 */
 
-// query 10
-//long better_answer(TAD_community com, int id);
 
+static double calcMedia(TAD_community tad, long id){
+  Post p = (Post)g_tree_lookup(tad->Posts,createKey(id));
+  int sc = getPostScore(p);
+  int com = getPostNumCom(p);
+  User u = (User)g_tree_lookup(tad->Users,createKey(getPostOwner(p)));
+  int rep = getUserRep(u);
+
+  double media = (0.65 * sc) + (0.25 * rep) + (0.1 * com);
+
+  return media;
+}
+
+// query 10
+long better_answer(TAD_community com, long id){
+  Post p;
+  ResPost r = malloc(sizeof(struct respostas));
+  r->pid = createKey(id);
+  r->h = initHeap();
+  g_tree_foreach(com->Posts, (GTraverseFunc)pBuscaResposta, r);
+  p = heap_pop(r->h,'M');
+  return getPostId(p);
+}
 
 /*
 // query 11

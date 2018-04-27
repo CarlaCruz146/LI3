@@ -30,11 +30,11 @@ HeapU heap_pushU(HeapU heap, long id,long qnt){
         heap->ids = realloc(heap->ids,sizeof(long)*heap->tamanho);
         heap->qnt = realloc(heap->qnt,sizeof(long)*heap->tamanho);
     }
-    heap->ids[heap->pos] = id;
-    heap->qnt[heap->pos] = qnt;
-    heap = bubbleUpU(heap);
-    heap->pos++;
-    return heap;
+  heap->ids[heap->pos] = id;
+  heap->qnt[heap->pos] = qnt;
+  heap = bubbleUpU(heap);
+  heap->pos++;
+  return heap;
 }
 
 
@@ -91,6 +91,11 @@ static void swapU(HeapU heap,int n1,int n2) {
     heap->qnt[n1] = heap->qnt[n2];
     heap->ids[n2] = id;
     heap->qnt[n2] = qnt;
+}
+
+
+int heap_countU(HeapU heap){
+    return heap->pos;
 }
 
 void heap_freeU(HeapU heap){

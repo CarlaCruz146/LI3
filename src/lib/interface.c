@@ -3,8 +3,16 @@
 struct TCD_community{
   GTree *Posts;
   GTree *Users;
-  GHashTable* Hdates;
+  GHashTable *Hdates;
 };
+
+typedef struct respostas{
+  HeapU h;
+  Key pid;
+  Key
+} *ResPost;
+
+
 
 TAD_community init(){
   TAD_community tad = (TAD_community)malloc(sizeof(struct TCD_community));
@@ -231,7 +239,7 @@ LONG_list most_answered_questions(TAD_community com, int N, Date begin, Date end
   return r;
 }
 
-
+//insere numa heap (ordenada por ordem cronologica inversa) todos os posts que contêm no seu titulo uma dada palavra
 static gboolean pContainsWord(gpointer key, gpointer value, gpointer user_data){
   Key k = (Key) key;
   getKey(k);
@@ -260,17 +268,7 @@ LONG_list contains_word(TAD_community com, char* word, int N){
 
 
 
-static gboolean pBuscaResposta(gpointer key, gpointer value, gpointer user_data){
-  Key k = (Key) key;
-  getKey(k);
-  Post p = (Post)value;
-  Heap h = (Heap) user_data;
-  if(getPostType(p) == 2){
-    if(strstr(getPostTitulo(p),getHeapPal(h)))
-      heap_push(h,p,'D');
-  }
-  return FALSE;
-}
+
 
 /*
 // query 9
@@ -278,17 +276,28 @@ LONG_list both_participated(TAD_community com, long id1, long id2, int N);
 
 */
 
-
-static double calcMedia(TAD_community tad, long id){
+/*
+static long calcMedia(TAD_community tad, long id){
   Post p = (Post)g_tree_lookup(tad->Posts,createKey(id));
   int sc = getPostScore(p);
   int com = getPostNumCom(p);
   User u = (User)g_tree_lookup(tad->Users,createKey(getPostOwner(p)));
   int rep = getUserRep(u);
 
-  double media = (0.65 * sc) + (0.25 * rep) + (0.1 * com);
+  long media = (0.65 * sc) + (0.25 * rep) + (0.1 * com);
 
   return media;
+}
+
+static gboolean pBuscaResposta(gpointer key, gpointer value, gpointer user_data){
+  Key k = (Key) key;
+  getKey(k);
+  Post p = (Post)value;
+  ResPost r = (ResPost) user_data;
+  if(getPostType(p) == 2 && (getPid(p) == r->pid)){
+    heap_pushU(r->h,getPostId(p),calcMedia());
+  }
+  return FALSE;
 }
 
 // query 10
@@ -298,10 +307,11 @@ long better_answer(TAD_community com, long id){
   r->pid = createKey(id);
   r->h = initHeap();
   g_tree_foreach(com->Posts, (GTraverseFunc)pBuscaResposta, r);
-  p = heap_pop(r->h,'M');
+  p = heap_pop(r->h);
   return getPostId(p);
 }
 
+*/
 /*
 // query 11
 LONG_list most_used_best_rep(TAD_community com, int N, Date begin, Date end);

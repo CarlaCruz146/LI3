@@ -25,16 +25,16 @@ HeapU initHeapU(){
 }
 
 HeapU heap_pushU(HeapU heap, long id,long qnt){
-    if(heap->tamanho-1 == heap->pos) {
-        heap->tamanho *= 2;
-        heap->ids = realloc(heap->ids,heap->tamanho *sizeof(long));
-        heap->qnt = realloc(heap->qnt,heap->tamanho *sizeof(long));
-    }
-    heap->ids[heap->pos] = id;
-    heap->qnt[heap->pos] = qnt;
-    heap = bubbleUpU(heap);
-    heap->pos++;
-    return heap;
+  if(heap->tamanho-1 == heap->pos) {
+      heap->tamanho *= 2;
+      heap->ids = realloc(heap->ids,heap->tamanho *sizeof(long));
+      heap->qnt = realloc(heap->qnt,heap->tamanho *sizeof(long));
+  }
+  heap->ids[heap->pos] = id;
+  heap->qnt[heap->pos] = qnt;
+  heap = bubbleUpU(heap);
+  heap->pos++;
+  return heap;
 }
 
 
@@ -85,10 +85,10 @@ static HeapU bubbleUpU(HeapU heap){
 
 static HeapU swapU(HeapU heap,int n1,int n2) {
     long id = heap->ids[(n1)];
-    long qnt = heap->qnt[(n1)];
     heap->ids[(n1)] = heap->ids[(n2)];
-    heap->qnt[(n1)] = heap->qnt[(n2)];
     heap->ids[(n2)] = id;
+    long qnt = heap->qnt[(n1)];
+    heap->qnt[(n1)] = heap->qnt[(n2)];
     heap->qnt[(n2)] = qnt;
     return heap;
 }

@@ -60,7 +60,17 @@ int main(int argc, char **argv){
   t3 = clock() - t3;
   a1 = ((double) t1) /CLOCKS_PER_SEC *1000;
   printf("Q8: %f ms \n",a1);
+
+/*
+  t4 = clock();
+  LONG_list l4 = top_most_active(tad,10);
+  for(i=0; i<10; i++)
+    printf("%ld\n", get_list(l4,i));
+  t4 = clock() - t4;
+  a1 = ((double) t1) /CLOCKS_PER_SEC *1000;
+  printf("Q2: %f ms \n",a1);
   //srand(time(NULL));
+  */
 //  t1 = clock();
 //  info_from_post(tad, rand() % 187277);
 //  t1= clock()- t1;

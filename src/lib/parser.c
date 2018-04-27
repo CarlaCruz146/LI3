@@ -265,8 +265,8 @@ char** takeTag(char* tags){
         }
     }
     // Debug
-    for(i = 0; i < num_tags; i++)
-        printf("%s\n", list[i]);
+    //for(i = 0; i < num_tags; i++)
+    //    printf("%s\n", list[i]);
 
     return list;
 }
@@ -318,7 +318,7 @@ void postsInfo(xmlDocPtr doc, GTree * arv_posts, GHashTable *datash, GTree * arv
           char* title = (char*) t;
 
           char* tags =(char*) xmlGetProp(cur,(const xmlChar *) "Tags");
-          printf("%s\n",tags );
+          //printf("%s\n",tags );
           char** str = takeTag(tags);
 
           int nres = 0;

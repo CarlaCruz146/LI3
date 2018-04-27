@@ -265,8 +265,8 @@ char** takeTag(char* tags){
         }
     }
     // Debug
-    for(i = 0; i < num_tags; i++)
-        printf("%s\n", list[i]);
+    //for(i = 0; i < num_tags; i++)
+    //    printf("%s\n", list[i]);
 
     return list;
 }
@@ -318,7 +318,7 @@ void postsInfo(xmlDocPtr doc, GTree * arv_posts, GHashTable *datash, GTree * arv
           char* title = (char*) t;
 
           char* tags =(char*) xmlGetProp(cur,(const xmlChar *) "Tags");
-          printf("%s\n",tags );
+          //printf("%s\n",tags );
           char** str = takeTag(tags);
 
           int nres = 0;
@@ -329,7 +329,6 @@ void postsInfo(xmlDocPtr doc, GTree * arv_posts, GHashTable *datash, GTree * arv
           User u = (User)g_tree_lookup(arv_users, kowner);
           Heap h = getUserHeap(u);
           heap_push(h, p, 'D');
-          heap_push(h, p, 'S');
 
           Key key = createKey(id);
           Date dnova = (getPostDate(p));

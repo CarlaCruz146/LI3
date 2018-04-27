@@ -184,6 +184,15 @@ int heap_count(Heap heap){
     return heap->pos;
 }
 
+int cont_RP (Heap heap){
+  int i,count;
+  for(i=0; i< heap->pos; i++){
+    if(getPostType(heap->posts[i]) == 1 || getPostType(heap->posts[i]) == 2)
+      count++;
+  }
+  return count;
+}
+
 void heap_free(Heap heap){
     free(heap->posts);
     free(heap);

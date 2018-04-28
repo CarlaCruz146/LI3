@@ -14,6 +14,7 @@ Heap heap_push(Heap heap, Post post, char ord);
 Post heap_pop(Heap heap, char ord);
 int heap_count(Heap heap);
 int cont_RP (Heap heap);
+Post getIndP(Heap h, int i);
 void heap_free(Heap heap);
 
 #endif

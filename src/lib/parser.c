@@ -216,7 +216,7 @@ char* getDay(char* d){
 void inseredatas(GHashTable *hdate, Date date, Post p){
   gpointer x = g_hash_table_lookup(hdate, date);
   if( x == NULL){
-    ArrayD a = createArray(2);
+    ArrayD a = createArray(1);
     insereArray(a,p);
     g_hash_table_insert(hdate,date,a);
   }
@@ -321,7 +321,7 @@ void postsInfo(xmlDocPtr doc, GTree * arv_posts, GHashTable *datash, GTree * arv
           int ntags = nTags(str);
 
           int nres = 0;
-          
+
           Key kowner = createKey(ownerid);
           User u = (User)g_tree_lookup(arv_users, kowner);
           int ownerRep = getUserRep(u);

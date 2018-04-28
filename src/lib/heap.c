@@ -260,6 +260,19 @@ int cont_RP (Heap heap){
   return count;
 }
 
+
+/**
+ * @brief  Retorna o Post que se encontrada num indice i de uma dada heap.
+ * @param  Heap heap.
+ * @param  int i.
+ *return   Post na posição i da heap.
+ */
+Post getIndP(Heap h, int i){
+  if (h)
+    return (h->posts[i]);
+  else return NULL;
+}
+
 /**
   *@brief   Liberta a memória alocada por uma Heap.
   *@param   void* apontador para a heap a limpar da memória.

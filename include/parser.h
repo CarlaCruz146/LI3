@@ -13,22 +13,22 @@
 #include "heap.h"
 
 
-gint hash (gconstpointer a);
+gint hash (gconstpointer);
 
-Date incrementaData (Date data);
+Date incrementaData (Date);
 
-gboolean iguais (gconstpointer a, gconstpointer b);
+gboolean iguais (gconstpointer, gconstpointer);
 
-int idusercompare(gconstpointer id1, gconstpointer id2);
+int idusercompare(gconstpointer, gconstpointer);
 
-int idpostcompare(gconstpointer id1, gconstpointer id2);
+int idpostcompare(gconstpointer, gconstpointer);
 
-void userInfo (xmlDocPtr doc, GTree * arv_users);
+void userInfo (xmlDocPtr, GTree*);
 
-void postsInfo(xmlDocPtr doc, GTree * arv_posts, GHashTable *datash, GTree * arv_users);
+void postsInfo(xmlDocPtr, GTree*, GHashTable*, GTree*);
 
-int count_tags(char* tags);
+int count_tags(char*);
 
-char** takeTag(char* tags);
+char** takeTag(char*);
 
 #endif

@@ -1,3 +1,8 @@
+/**
+ * @file key.c
+ * @brief Ficheiro que contem a implementação de Keys. Uma Key é um apontador para um long.
+ */
+
 #include "key.h"
 #include <stdlib.h>
 
@@ -6,8 +11,9 @@ struct key{
 };
 
 /**
-  *@brief   Função que alloca memória para essa key, criando-a.
-  *@param   Um long que irá originar uma Key a partir do mesmo.
+  *@brief   Converte um long numa Key.
+  *@param   long a ser convertido.
+  *@return  Key criada.
 */
 Key createKey(long key){
   Key k = malloc(sizeof(struct key));
@@ -16,16 +22,17 @@ Key createKey(long key){
 }
 
 /**
-  *@brief   Função que devolve o valor da Key.
-  *@param   Recebe uma Key.
+  *@brief   Converte uma Key num long.
+  *@param   Key a ser convertida.
+  *@return  long.
 */
 long getKey(Key k){
   return k->key;
 }
 
 /**
-  *@brief   Função que liberta a memória anteriormente alocada para a criação da Key.
-  *@param   Recebe a key a libertar.
+  *@brief   Liberta a memória alocada por uma Key.
+  *@param   Key a ser libertada.
 */
 void freekey (Key k){
    free(k);

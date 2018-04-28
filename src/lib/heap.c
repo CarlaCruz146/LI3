@@ -1,12 +1,13 @@
+/**
+ * @file heap.c
+ * @brief Ficheiro que contém a implementação de Max Heap's de Posts.
+ */
+
 #include "heap.h"
 
 #define PAI(i) (i-1)/2
 #define ESQUERDO(i) 2*i + 1
 #define DIREITO(i) 2*i + 2
-
-static Heap swap(Heap heap,int n1,int n2);
-static Heap bubbleDown(Heap heap,int n, char ord);
-static Heap bubbleUp(Heap heap,int i, char ord);
 
 struct heap {
     int tamanho;
@@ -15,8 +16,39 @@ struct heap {
     Post* posts;
 };
 
+/**
+ * @brief Compara duas datas.
+ * @param Date data1.
+ * @param Date data2.
+ * @return int resultado da comparação (-1 se data1 for a mais recente, 1 se data2 for a mais recente ou 0 se forem iguais).
+ */
+static int maisRecente(Date date1, Date date2);
+
+/**
+ * @brief Troca dois elementos da heap.
+ * @param int posição do primeiro elemento.
+ * @param int posição do segundo elemento.
+ * @return Heap alterada.
+ */
+static Heap swap(Heap heap,int n1,int n2);
+
+/**
+ * @brief Realiza o bubble down da heap.
+ * @param Heap heap a alterar.
+ * @return Heap alterada.
+ */
+static Heap bubbleDown(Heap heap,int n, char ord);
+
+/**
+ * @brief Realiza o bubble up da heap.
+ * @param Heap heap a alterar.
+ * @return Heap alterada.
+ */
+static Heap bubbleUp(Heap heap,int i, char ord);
+
+
 //Função devolve -1 se a primeira data for mais recente e 1 se a segunda data for a mais recente
-int maisRecente(Date date1, Date date2){
+static int maisRecente(Date date1, Date date2){
   int y1 = get_year(date1);
   int m1 = get_month(date1);
   int d1 = get_day(date1);
@@ -37,6 +69,10 @@ int maisRecente(Date date1, Date date2){
   return 0;
 }
 
+/**
+ * @brief Inicia uma nova heap de posts.
+ * @return Heap inicializada.
+ */
 Heap initHeap(){
     Heap heap = malloc(sizeof(struct heap));
     heap->tamanho = 5;
@@ -46,6 +82,11 @@ Heap initHeap(){
     return heap;
 }
 
+/**
+ * @brief  Inicia uma nova heap de posts que guarda adicionalmente uma dada palavra.
+ * @param  char* palavra.
+ * @return Heap inicializada.
+ */
 Heap initHeapPal(char* word){
     Heap heap = malloc(sizeof(struct heap));
     heap->tamanho = 5;
@@ -56,10 +97,22 @@ Heap initHeapPal(char* word){
     return heap;
 }
 
+/**
+ * @brief  Devolve a palavra guardada na heap.
+ * @param  Heap heap.
+ * @return char* palavra.
+ */
 char* getHeapPal(Heap h){
   return h->pal;
 }
 
+/**
+ * @brief  Insere um post na heap tendo como referência o parâmetro da ordenação.
+ * @param  Heap heap.
+ * @param  Post post.
+ * @param  char caracter que determina a ordenação (D-Data do post, S-Score do post, R-Número de respostas do post, M-Média ponderada da classificação do post).
+ * @return Heap com o novo Post adicionado.
+ */
 Heap heap_push(Heap heap, Post post, char ord){
     if(heap->tamanho-1 == heap->pos) {
         heap->tamanho *= 2;
@@ -71,7 +124,12 @@ Heap heap_push(Heap heap, Post post, char ord){
     return heap;
 }
 
-
+/**
+ * @brief Retorna o "maior" post segundo a ordenação dada.
+ * @param Heap heap de todos os posts.
+ * @param char ordenação segundo a qual a Heap se ordena.
+ * @return Post removido.
+ */
 Post heap_pop(Heap heap, char ord) {
     if(heap->pos==0) return 0;
     Post r = heap->posts[0];
@@ -179,11 +237,20 @@ static Heap swap(Heap heap,int n1,int n2) {
     return heap;
 }
 
-
+/**
+ * @brief  Retorna o número de posts que uma dada heap contém.
+ * @param  Heap heap.
+ * @return int número de Posts na heap.
+ */
 int heap_count(Heap heap){
     return heap->pos;
 }
 
+/**
+ * @brief  Retorna o número de perguntas e respostas que uma dada heap de posts contém.
+ * @param  Heap heap.
+ * @return int número de posts na heap.
+ */
 int cont_RP (Heap heap){
   int i,count;
   for(i=0; i< heap->pos; i++){
@@ -193,6 +260,10 @@ int cont_RP (Heap heap){
   return count;
 }
 
+/**
+  *@brief   Liberta a memória alocada por uma Heap.
+  *@param   void* apontador para a heap a limpar da memória.
+*/
 void heap_free(Heap heap){
     free(heap->posts);
     free(heap);

@@ -1,12 +1,13 @@
+/**
+ * @file heapU.c
+ * @brief Ficheiro que contém a implementação de Max Heap's.
+ */
+
 #include "heapU.h"
 
 #define PAI(i) (i-1)/2
 #define ESQUERDO(i) 2*i + 1
 #define DIREITO(i) 2*i + 2
-
-static void swapU(HeapU heap,int n1,int n2);
-static HeapU bubbleDownU(HeapU heap);
-static HeapU bubbleUpU(HeapU heap);
 
 struct heapu {
     long tamanho;
@@ -15,6 +16,32 @@ struct heapu {
     long* ids;
 };
 
+/**
+ * @brief Troca dois elementos da heap.
+ * @param int posição do primeiro elemento.
+ * @param int posição do segundo elemento.
+ * @return HeapU alterada.
+ */
+static void swapU(HeapU heap,int n1,int n2);
+
+/**
+ * @brief Realiza o bubble down da Heap.
+ * @param HeapU heap a alterar.
+ * @return HeapU alterada.
+ */
+static HeapU bubbleDownU(HeapU heap);
+
+/**
+ * @brief Realiza o bubble up da heap.
+ * @param HeapU heap a alterar.
+ * @return HeapU alterada.
+ */
+static HeapU bubbleUpU(HeapU heap);
+
+/**
+ * @brief Inicia uma nova Heap.
+ * @return Nova HeapU nula.
+ */
 HeapU initHeapU(){
     HeapU heap = malloc(sizeof(struct heapu));
     heap->tamanho = 5;
@@ -24,6 +51,13 @@ HeapU initHeapU(){
     return heap;
 }
 
+/**
+ * @brief  Insere na Heap tendo como referência a quantidade.
+ * @param  HeapU onde se insere.
+ * @param  long id do elemento.
+ * @param  long quantidade do elemento.
+ * @return HeapU com o novo elemento adicionado.
+ */
 HeapU heap_pushU(HeapU heap, long id,long qnt){
     if(heap->tamanho == heap->pos) {
         heap->tamanho *= 2;
@@ -37,11 +71,14 @@ HeapU heap_pushU(HeapU heap, long id,long qnt){
   return heap;
 }
 
-
-long heap_popU(HeapU heap,long* k) {
+/**
+ * @brief Retorna o maior elemento da Heap.
+ * @param HeapU da qual se retira o elemento.
+ * @return Id do elemento removido.
+ */
+long heap_popU(HeapU heap) {
     if(heap->pos==0) return 0;
     long r = heap->ids[0];
-    *k = heap->qnt[0];
     heap->pos--;
     heap->qnt[0] = heap->qnt[(heap->pos)];
     heap->ids[0] = heap->ids[(heap->pos)];
@@ -93,11 +130,19 @@ static void swapU(HeapU heap,int n1,int n2) {
     heap->qnt[n2] = qnt;
 }
 
-
+/**
+ * @brief  Retorna o número de elementos de uma Heap.
+ * @param  HeapU heap.
+ * @return Número de elementos da heap.
+ */
 int heap_countU(HeapU heap){
     return heap->pos;
 }
 
+/**
+  *@brief   Liberta a memória alocada por uma HeapU.
+  *@param   void* apontador para a HeapU a limpar da memória.
+*/
 void heap_freeU(HeapU heap){
     free(heap->qnt);
     free(heap->ids);

@@ -1,5 +1,5 @@
-#ifndef __POSTS_H__
-#define __POSTS_H__
+#ifndef __MYPOST_H__
+#define __MYPOST_H__
 
 #include <string.h>
 #include <stdlib.h>
@@ -25,7 +25,10 @@ void insereArray(ArrayD a, Post p);
 void freeArray(void *a);
 
 Post initPost();
-Post createPost(long id, int type, long pid, int score, int vcount, Date date, long owner,int numcom, int nres, char* titulo,char** tags);
+Post createPost(long, int, long, int, int, Date, long, int, int, int, char*, char**, int);
+int getPostNTags(Post p);
+char** getPostTags(Post p);
+double calcMedia(Post p);
 long getPostId(Post p);
 int getPostType(Post p);
 long getPid(Post p);
@@ -33,6 +36,7 @@ int getPostScore(Post p);
 int getPostVCount(Post p);
 Date getPostDate(Post p);
 long getPostOwner(Post p);
+int getPostOwnerRep(Post p);
 int getPostNumCom(Post p);
 int getPostNRes(Post p);
 void incPostNRes(Post p);

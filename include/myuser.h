@@ -14,9 +14,11 @@ typedef struct userint* User;
 User mycreateUser(long id, int reputacao, char* nome, char* bio, int nposts, Heap uposts);
 Heap getUserHeap(User u);
 long getUserId(User u);
-int getUserReputacao(User u);
+int getUserRep(User u);
 char* getUserName(User u);
 char* mygetUserBio(User u);
+int getUserNPosts(User u);
+void incUserNPosts(User u);
 void myfreeUser(void *u);
 
 #endif

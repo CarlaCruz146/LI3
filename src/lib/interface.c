@@ -11,6 +11,8 @@ typedef struct respostas{
   Key parent;
 } *ResPost;
 
+
+static char* myconcat(const char *s1, const char *s2);
 static ResPost initResPost(long pid);
 static int date_equal(Date begin, Date end);
 static gboolean nrposts (gpointer key, gpointer value, gpointer user_data);
@@ -19,6 +21,12 @@ static void postRes(Post p, ArrayD array);
 static gboolean pContainsWord(gpointer key, gpointer value, gpointer user_data);
 static gboolean getScCom(gpointer key, gpointer value, gpointer user_data);
 
+static char* myconcat(const char *s1, const char *s2){
+    char *result = malloc(strlen(s1)+strlen(s2)+1);
+    strcpy(result, s1);
+    strcat(result, s2);
+    return result;
+}
 
 static ResPost initResPost(long pid){
   ResPost res = (ResPost)malloc(sizeof(struct respostas));

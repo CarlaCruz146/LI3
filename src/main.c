@@ -22,23 +22,23 @@ int main(int argc, char **argv){
   char* path = "/home/nikes/li3/Grupo51/src";
   load(tad,path);
 
-  t2 = clock();
-  LONG_list l2 = top_most_active(tad, 10);
-  for(i=0; i<10; i++)
-    printf("%ld\n", get_list(l2,i));
-  t2 = clock() - t2;
-  double a1 = ((double) t2) /CLOCKS_PER_SEC *1000;
-  printf("Q2: %f ms \n",a1);
-
-
   t1 = clock();
   STR_pair q1 = info_from_post(tad, 1);
   char* c1 = get_fst_str(q1);
   char* c2 = get_fst_str(q1);
   printf("%s %s\n", c1, c2);
   t1 = clock() - t1;
-  a1 = ((double) t1) /CLOCKS_PER_SEC *1000;
+  double a1 = ((double) t1) /CLOCKS_PER_SEC *1000;
   printf("Q1: %f ms \n",a1 );
+
+  t2 = clock();
+  LONG_list l2 = top_most_active(tad, 10);
+  for(i=0; i<10; i++)
+  printf("%ld\n", get_list(l2,i));
+  t2 = clock() - t2;
+  a1 = ((double) t2) /CLOCKS_PER_SEC *1000;
+  printf("Q2: %f ms \n",a1);
+
 
   t3 = clock();
   Date d1 = createDate(15,7,2000);

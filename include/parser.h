@@ -12,7 +12,6 @@
 #include "mypost.h"
 #include "heap.h"
 
-char* myconcat(const char *s1, const char *s2);
 
 gint hash (gconstpointer a);
 

@@ -13,7 +13,7 @@ struct post{
   int vcount;
   Date date;
   long owner;
-  int ownerRep
+  int ownerRep;
   int numcom;
   int nres;
   char * titulo;

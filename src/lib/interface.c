@@ -108,13 +108,12 @@ static gboolean nrposts (gpointer key, gpointer value, gpointer user_data){
 LONG_list top_most_active(TAD_community com, int N){
   int i;
   long id;
-  long key;
   LONG_list res = create_list(N);
   HeapU heap = initHeapU();
   g_tree_foreach(com->Users,(GTraverseFunc)nrposts, heap);
 
   for(i=0; i<N; i++){
-    id = heap_popU(heap,&key);
+    id = heap_popU(heap);
     set_list(res, i, id);
   }
   heap_freeU(heap);

@@ -247,7 +247,7 @@ char** takeTag(char* tags){
 
     int i, j, i_tag, i_list = 0;
     int num_tags = count_tags(tags);
-    char** list = malloc((num_tags) * sizeof(char*));
+    char** list = malloc((num_tags + 1) * sizeof(char*));
 
     for(i = 0; tags[i] != '\0'; i++){
         if(tags[i] == '<'){
@@ -264,11 +264,17 @@ char** takeTag(char* tags){
             list[i_list++] = tag;
         }
     }
-    // Debug
-    //for(i = 0; i < num_tags; i++)
-    //    printf("%s\n", list[i]);
-
+    list[i_list] = NULL;
     return list;
+}
+
+int nTags(char** list){
+    if(list == NULL) return 0;
+
+    int i, num = 0;
+    for(i = 0; list[i]; i++)
+        num++;
+    return num;
 }
 
 
@@ -312,32 +318,32 @@ void postsInfo(xmlDocPtr doc, GTree * arv_posts, GHashTable *datash, GTree * arv
 
           xmlChar* cc = xmlGetProp(cur,(const xmlChar *) "CommentCount");
           aux = (char*) cc;
-            int comcount = aux ? atoi(aux) : 0;
+          int comcount = aux ? atoi(aux) : 0;
 
           xmlChar* t = xmlGetProp(cur, (const xmlChar *) "Title");
           char* title = (char*) t;
 
           char* tags =(char*) xmlGetProp(cur,(const xmlChar *) "Tags");
-          //printf("%s\n",tags );
           char** str = takeTag(tags);
+          int ntags = nTags(str);
 
           int nres = 0;
-
-          Post p = createPost(id,typeid,pid,score,vcount,date,ownerid,comcount, nres, title,str);
-
+          
           Key kowner = createKey(ownerid);
           User u = (User)g_tree_lookup(arv_users, kowner);
+          int ownerRep = getUserRep(u);
+
+          Post p = createPost(id,typeid,pid,score,vcount,date,ownerid,ownerRep,comcount, nres, title, str, ntags);
+
           Heap h = getUserHeap(u);
           heap_push(h, p, 'D');
 
           Key key = createKey(id);
           Date dnova = (getPostDate(p));
 
-
           g_tree_insert(arv_posts, key, p);
 
           inseredatas(datash, dnova, p);
-
 
           xmlFree(id1);
           xmlFree(ti);
@@ -348,11 +354,6 @@ void postsInfo(xmlDocPtr doc, GTree * arv_posts, GHashTable *datash, GTree * arv
           xmlFree(oi);
           xmlFree(cc);
           xmlFree(t);
-
-          //ver ownerid, se ja tiver uma heap dele, fazer insert na u->heap
-          //caso contrario criar a heap
-          //g_tree_insert(arv_uposts, key, )
-
 				}
 			cur = cur->next;
 	}

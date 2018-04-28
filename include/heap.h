@@ -13,6 +13,7 @@ char* getHeapPal(Heap h);
 Heap heap_push(Heap heap, Post post, char ord);
 Post heap_pop(Heap heap, char ord);
 int heap_count(Heap heap);
+int cont_RP (Heap heap);
 void heap_free(Heap heap);
 
 #endif

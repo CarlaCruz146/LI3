@@ -252,7 +252,7 @@ int heap_count(Heap heap){
  * @return int número de posts na heap.
  */
 int cont_RP (Heap heap){
-  int i,count;
+  int i,count = 0;
   for(i=0; i< heap->pos; i++){
     if(getPostType(heap->posts[i]) == 1 || getPostType(heap->posts[i]) == 2)
       count++;

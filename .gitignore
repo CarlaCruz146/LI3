@@ -1,3 +1,5 @@
 src/Posts.xml
 src/Users.xml
 src/ex.xml
+src/makefile2graph
+src/obj/lib/*.o

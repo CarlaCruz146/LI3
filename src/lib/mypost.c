@@ -9,7 +9,7 @@ struct post{
   long id;
   int type; // 1 ou 2 (pergunta ou resposta)
   long pid;
-  int score;
+  int score; //zjkdfjlks
   int vcount;
   Date date;
   long owner;

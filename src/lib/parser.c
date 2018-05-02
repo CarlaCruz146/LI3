@@ -113,8 +113,6 @@ int idvotecompare(gconstpointer id1, gconstpointer id2){ //sendo id2 o a colocar
 }
 
 
-
-
 gint datacompare(gconstpointer data1, gconstpointer data2){ //sendo data1 o a colocar
   Date key1 = (Date) data1;
   Date key2 = (Date) data2;
@@ -305,6 +303,10 @@ void postsInfo(xmlDocPtr doc, GTree * arv_posts, GHashTable *datash, GTree * arv
           xmlChar* vc = xmlGetProp(cur, (const xmlChar *) "ViewCount");
           aux = (char*) vc ;
             int vcount = aux ? atoi(aux) : 0;
+          
+          xmlChar* ac = xmlGetProp(cur, (const xmlChar *) "AnswerCount");
+          aux = (char*) ac ;
+            int nres = aux ? atoi(aux) : 0;
 
           xmlChar* oi = xmlGetProp(cur, (const xmlChar *) "OwnerUserId");
           long ownerid = atol((char*) oi);
@@ -319,8 +321,6 @@ void postsInfo(xmlDocPtr doc, GTree * arv_posts, GHashTable *datash, GTree * arv
           char* tags =(char*) xmlGetProp(cur,(const xmlChar *) "Tags");
           char** str = takeTag(tags);
           int ntags = nTags(str);
-
-          int nres = 0;
 
           Key kowner = createKey(ownerid);
           User u = (User)g_tree_lookup(arv_users, kowner);

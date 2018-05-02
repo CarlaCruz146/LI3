@@ -12,14 +12,63 @@ typedef struct respostas{
 } *ResPost;
 
 
+/**
+  *@brief   Função que concatena duas strings.
+  *@param   char* string 1.
+  *@param   char* string 2.
+  *return   char* string resultante.
+*/
 static char* myconcat(const char *s1, const char *s2);
+
+/**
+  *@brief   Retorna uma estrutura ResPost inicializada.
+  *@param   long id de uma pergunta.
+  *return   ResPost estrutura inicializada.
+*/
 static ResPost initResPost(long pid);
+
+/**
+  *@brief   Compara duas datas.
+  *@param   long id de uma pergunta.
+  *return   int 1 se as datas forem diferentes e 0 se forem iguais.
+*/
 static int date_equal(Date begin, Date end);
+
+/**
+  *@brief   Para todos os Users, insere os seus IDs numa heap e ordena-os segundo o número de posts do User correspondente ao ID.
+  *@param   gpointer ID do User.
+  *@param   gpointer User.
+  *@param   gpointer HeapU.
+  *return   gboolean True quando itera por todos os Users.
+*/
 static gboolean nrposts (gpointer key, gpointer value, gpointer user_data);
+
+/**
+  *@brief   Verifica se uma dada tag se encontra no array de tags de um dado Post.  *@param   gpointer ID do User.
+  *@param   Post post.
+  *@param   char* tag a procurar.
+  *return   int 1 se ela existir, 0 se não existir.
+*/
 static int existeTag(Post p, char* tag);
-static void postRes(Post p, ArrayD array);
+
+/**
+  *@brief   Insere todos os Posts numa heap (ordenada por ordem cronologica inversa) todos os posts que contêm no seu titulo uma dada palavra.
+  *@param   gpointer ID do Post.
+  *@param   gpointer Post.
+  *@param   gpointer Heap.
+  *return   gboolean True quando itera na totalidade a árvore os Posts.
+*/
 static gboolean pContainsWord(gpointer key, gpointer value, gpointer user_data);
+
+/**
+  *@brief   Para todos os Posts de tipo resposta, insere-os numa heap e ordena-os segundo a classificação média do post.
+  *@param   gpointer ID do Post.
+  *@param   gpointer Post.
+  *@param   gpointer estrutura ResPost.
+  *return   gboolean True quando itera por todos os Posts.
+*/
 static gboolean getScCom(gpointer key, gpointer value, gpointer user_data);
+
 
 static char* myconcat(const char *s1, const char *s2){
     char *result = malloc(strlen(s1)+strlen(s2)+1);
@@ -274,17 +323,6 @@ LONG_list most_voted_answers(TAD_community com, int N, Date begin, Date end){
 }
 
 
-static void postRes(Post p, ArrayD array){
-  int i;
-  Post posti;
-  for(i=0; i<getUsed(array); i++){
-    posti = getInd(array,i);
-    if(getPostType(posti) == 2)
-      if(getPid(posti) == getPostId(p))
-        incPostNRes(p);
-  }
-}
-
 
 // query 7
 LONG_list most_answered_questions(TAD_community com, int N, Date begin, Date end){
@@ -298,7 +336,6 @@ LONG_list most_answered_questions(TAD_community com, int N, Date begin, Date end
     d = (ArrayD) x;
     if (d){
       for(i=0; i<getUsed(d); i++){
-        postRes(getInd(d,i),d);
         heap_push(h,getInd(d,i),'R');
       }
     }
@@ -308,16 +345,17 @@ LONG_list most_answered_questions(TAD_community com, int N, Date begin, Date end
   d = (ArrayD) x;
   if (d){
     for(i=0; i<getUsed(d); i++){
-      postRes(getInd(d,i),d);
       heap_push(h,getInd(d,i),'R');
     }
   }
   for(i=0; i<N; i++){
     Post p = heap_pop(h,'R');
+    printf("ID:%ld NRES:%d\n", getPostId(p), getPostNRes(p));
     set_list(r, i, getPostId(p));
   }
   return r;
 }
+
 
 //insere numa heap (ordenada por ordem cronologica inversa) todos os posts que contêm no seu titulo uma dada palavra
 static gboolean pContainsWord(gpointer key, gpointer value, gpointer user_data){

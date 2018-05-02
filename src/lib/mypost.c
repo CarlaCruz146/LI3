@@ -9,7 +9,7 @@ struct post{
   long id;
   int type; // 1 ou 2 (pergunta ou resposta)
   long pid;
-  int score; //zjkdfjlks
+  int score; 
   int vcount;
   Date date;
   long owner;
@@ -300,13 +300,6 @@ int getPostNRes(Post p) {
   else return -2;
 }
 
-/**
-  *@brief   Incrementa o número de respostas de um dado Post.
-  *@param   Post post.
-*/
-void incPostNRes(Post p) {
-  p->nres++;
-}
 
 /**
   *@brief   Retorna o título de um dado Post.

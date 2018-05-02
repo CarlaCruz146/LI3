@@ -84,9 +84,10 @@ int main(int argc, char **argv){
   free_date(end);
 
   t7 = clock();
-  Date begin2 = createDate(13,10,2010);
-  LONG_list l7 = most_answered_questions(tad, 1, begin2, begin2);
-  for(i=0; i<1; i++)
+  Date begin2 = createDate(1,8,2014);
+  Date end2 = createDate(11,8,2014);
+  LONG_list l7 = most_answered_questions(tad, 10, begin2, end2);
+  for(i=0; i<10; i++)
     printf("%ld\n", get_list(l7,i));
   t7 = clock() - t7;
   a1 = ((double) t7) /CLOCKS_PER_SEC *1000;

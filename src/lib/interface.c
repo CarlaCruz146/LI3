@@ -116,13 +116,18 @@ STR_pair info_from_post(TAD_community com, long id){
   Key pid,owner;
   User u;
   STR_pair res;
+  char* tit,*name;
   freekey(k);
 
   if(getPostType(p) == 1){
     owner = createKey(getPostOwner(p));
     u = g_tree_lookup(com->Users, owner);
-    res = create_str_pair(getPostTitulo(p),getUserName(u));
+    tit = getPostTitulo(p);
+    name = getUserName(u);
+    res = create_str_pair(tit,name);
     freekey(owner);
+    free(tit);
+    free(name);
     return res;
   }
   if(getPostType(p) == 2){
@@ -130,9 +135,13 @@ STR_pair info_from_post(TAD_community com, long id){
     p = g_tree_lookup(com->Posts, pid);
     owner = createKey(getPostOwner(p));
     u = g_tree_lookup(com->Users, owner);
-    res = create_str_pair(getPostTitulo(p),getUserName(u));
+    tit = getPostTitulo(p);
+    name = getUserName(u);
+    res = create_str_pair(tit,name);
     freekey(pid);
     freekey(owner);
+    free(tit);
+    free(name);
     return res;
   }
   res = create_str_pair("","");
@@ -200,6 +209,8 @@ LONG_pair total_posts(TAD_community com, Date begin, Date end){
     snd += getRes(d);
   }
   LONG_pair pair = create_long_pair(fst,snd);
+  free_date(begin);
+  free_date(end);
   return pair;
 }
 
@@ -212,6 +223,9 @@ static int existeTag(Post p, char* tag){
         if(strcmp(tag, tags[i]) == 0)
             c = 1;
     }
+    for(i=0; i<ntags;i++)
+      free(tags[i]);
+    free(tags);  
 
     return c;
 }
@@ -268,6 +282,9 @@ LONG_list questions_with_tag(TAD_community com, char* tag, Date begin, Date end)
       set_list(r, i, getPostId(p));
       printf("%ld\n", get_list(r,i));
     }
+    free_date(begin);
+    free_date(end);
+    free(tag);
     return r;
 }
 
@@ -319,6 +336,9 @@ LONG_list most_voted_answers(TAD_community com, int N, Date begin, Date end){
       Post p = heap_pop(h,'S');
       set_list(r, i, getPostId(p));
     }
+    free_date(begin);
+    free_date(end);
+    heap_free(h);
     return r;
 }
 
@@ -353,6 +373,9 @@ LONG_list most_answered_questions(TAD_community com, int N, Date begin, Date end
     printf("ID:%ld NRES:%d\n", getPostId(p), getPostNRes(p));
     set_list(r, i, getPostId(p));
   }
+  free_date(begin);
+  free_date(end);
+  heap_free(h);
   return r;
 }
 
@@ -363,10 +386,12 @@ static gboolean pContainsWord(gpointer key, gpointer value, gpointer user_data){
   getKey(k);
   Post p = (Post)value;
   Heap h = (Heap) user_data;
+  char* tit = getPostTitulo(p);
   if(getPostType(p) == 1){
-    if(strstr(getPostTitulo(p),getHeapPal(h)))
+    if(strstr(tit,getHeapPal(h)))
       heap_push(h,p,'D');
   }
+  free(tit);
   return FALSE;
 }
 
@@ -381,6 +406,7 @@ LONG_list contains_word(TAD_community com, char* word, int N){
     p = heap_pop(h,'D');
     set_list(r, i, getPostId(p));
   }
+ // heap_free(h);
   return r;
 }
 
@@ -390,8 +416,12 @@ LONG_list both_participated(TAD_community com, long id1, long id2, int N){
   Post p,p1,p2,p3;
   LONG_list r = create_list(N);
   Heap heap = initHeap();
-  User u1 = (User) g_tree_lookup(com->Users,createKey(id1));
-  User u2 = (User) g_tree_lookup(com->Users,createKey(id2));
+  Key k1 = createKey(id1);
+  Key k2 = createKey(id2);
+  User u1 = (User) g_tree_lookup(com->Users,k1);
+  User u2 = (User) g_tree_lookup(com->Users,k2);
+  freekey(k1);
+  freekey(k2);
   Heap h1 = getUserHeap(u1);
   Heap h2 = getUserHeap(u2);
   for(i=0; i< heap_count(h1); i++){
@@ -401,7 +431,9 @@ LONG_list both_participated(TAD_community com, long id1, long id2, int N){
           if(getPostType(p1) == 2 && getPostType(p2) == 1 && getPostId(p2) == getPid(p1))
               if(p2) heap = heap_push(heap,p2,'D');
           if(getPostType(p1) == 2 && getPostType(p2) == 2 && getPid(p2) == getPid(p1)){
-              p3 = (Post) g_tree_lookup(com->Posts,createKey(getPid(p1)));
+              Key k3 = createKey(getPid(p1));
+              p3 = (Post) g_tree_lookup(com->Posts,k3);
+              freekey(k3);
               if(p3) heap = heap_push(heap,p3,'D');
           }
           if(getPostType(p1) == 1 && getPostType(p2) == 2 && getPid(p2) == getPostId(p1))
@@ -412,6 +444,7 @@ LONG_list both_participated(TAD_community com, long id1, long id2, int N){
     p = heap_pop(heap,'D');
     set_list(r, i, getPostId(p));
   }
+  heap_free(heap);
   return r;
 }
 
@@ -445,5 +478,5 @@ TAD_community clean(TAD_community com){
   g_tree_destroy(com->Posts);
   g_hash_table_destroy(com->Hdates);
   g_tree_destroy(com->Users);
-  return com;
+  return com;   
 }

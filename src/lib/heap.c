@@ -55,7 +55,8 @@ static int maisRecente(Date date1, Date date2){
   int y2 = get_year(date2);
   int m2 = get_month(date2);
   int d2 = get_day(date2);
-
+  free_date(date1);
+  free_date(date2);
   if(y1 > y2) return -1;
   if(y2 > y1) return 1;
   if(y1 == y2){
@@ -207,11 +208,11 @@ static Heap bubbleUp(Heap heap, int i, char ord){
     if(ord == 'D'){
       Date dpai, di; //filho é mais recente ou seja, score do filho é maior
       while(i > 0 && maisRecente((dpai = getPostDate(heap->posts[PAI(i)])), (di = getPostDate(heap->posts[i]))) == 1){
-          heap=swap(heap,i,PAI(i));
+          heap=swap(heap,i,PAI(i)); 
           i = PAI(i);
-          free_date(dpai);
-          free_date(di);
-      }
+          //free_date(dpai);
+          //free_date(di);
+      } 
       return heap;
     } else if(ord == 'S'){
         while(i > 0 && (getPostScore(heap->posts[PAI(i)]) - (getPostScore(heap->posts[i]))) < 0){
@@ -279,5 +280,6 @@ Post getIndP(Heap h, int i){
 */
 void heap_free(Heap heap){
     free(heap->posts);
+    free(heap->pal);
     free(heap);
 }

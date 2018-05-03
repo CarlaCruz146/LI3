@@ -318,16 +318,22 @@ void postsInfo(xmlDocPtr doc, GTree * arv_posts, GHashTable *datash, GTree * arv
           xmlChar* t = xmlGetProp(cur, (const xmlChar *) "Title");
           char* title = (char*) t;
 
-          char* tags =(char*) xmlGetProp(cur,(const xmlChar *) "Tags");
+          xmlChar* aux = xmlGetProp(cur,(const xmlChar *) "Tags");
+          char* tags =(char*) aux;
           char** str = takeTag(tags);
           int ntags = nTags(str);
+
+          for(int i=0; i<ntags; i++)
+              free(str[i]);
+          free(str);
 
           Key kowner = createKey(ownerid);
           User u = (User)g_tree_lookup(arv_users, kowner);
           int ownerRep = getUserRep(u);
+          freekey(kowner);
 
           Post p = createPost(id,typeid,pid,score,vcount,date,ownerid,ownerRep,comcount, nres, title, str, ntags);
-
+          
           Heap h = getUserHeap(u);
           heap_push(h, p, 'D');
 
@@ -345,8 +351,10 @@ void postsInfo(xmlDocPtr doc, GTree * arv_posts, GHashTable *datash, GTree * arv
           xmlFree(score1);
           xmlFree(vc);
           xmlFree(oi);
+          xmlFree(ac);
           xmlFree(cc);
           xmlFree(t);
+          xmlFree(aux);
 				}
 			cur = cur->next;
 	}

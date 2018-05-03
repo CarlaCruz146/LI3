@@ -37,3 +37,4 @@ long getKey(Key k){
 void freekey (Key k){
    free(k);
 }
+

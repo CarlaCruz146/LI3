@@ -171,7 +171,7 @@ Post createPost(long id, int type, long pid, int score, int vcount, Date date, l
     p->numcom = numcom;
     p->nres = nres;
     p->titulo = mystrdup(titulo);
-    p->tag = tags;
+    p->tag = mystrdups(tags);
     p->ntags = ntags;
     return p;
 }
@@ -191,7 +191,8 @@ int getPostNTags(Post p){
   *@return  char** array das tags contidas nesse Post.
 */
 char** getPostTags(Post p){
-    return p->tag;
+    if(p) return mystrdups(p->tag);
+    return NULL;
 }
 
 /**
@@ -308,6 +309,18 @@ int getPostNRes(Post p) {
 */
 char* getPostTitulo(Post p){
   if(p) return mystrdup(p->titulo);
+  return NULL;
+}
+
+/**
+  *@brief   Retorna a Tag de um determinado índice.
+  *@param   Post post.
+  *@param   int índice.
+  *@return  char* Tag da posição index.
+*/
+char* getTagI(Post p,int index){
+  if(p)
+      return mystrdup(p->tag[index]);
   return NULL;
 }
 

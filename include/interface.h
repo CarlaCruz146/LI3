@@ -4,8 +4,10 @@
 #include "date.h"
 #include "pair.h"
 #include "list.h"
+#include "arrayT.h"
 #include "myuser.h"
 #include "mypost.h"
+#include "mytags.h"
 #include "key.h"
 #include "heapU.h"
 #include <stdlib.h>

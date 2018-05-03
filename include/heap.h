@@ -9,6 +9,7 @@ typedef struct heap *Heap;
 
 Heap initHeap();
 Heap initHeapPal(char* word);
+int maisRecente(Date date1, Date date2);
 char* getHeapPal(Heap h);
 Heap heap_push(Heap heap, Post post, char ord);
 Post heap_pop(Heap heap, char ord);

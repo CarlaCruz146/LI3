@@ -105,13 +105,11 @@ int idpostcompare(gconstpointer id1, gconstpointer id2){ //sendo id2 o a colocar
   return key1-key2;
 }
 
-int idvotecompare(gconstpointer id1, gconstpointer id2){ //sendo id2 o a colocar
+int idtagcompare(gconstpointer id1, gconstpointer id2){ //sendo id2 o a colocar
   long key1 = getKey((Key) id1);
   long key2 = getKey((Key) id2);
-
   return key1-key2;
 }
-
 
 gint datacompare(gconstpointer data1, gconstpointer data2){ //sendo data1 o a colocar
   Date key1 = (Date) data1;
@@ -359,4 +357,33 @@ void postsInfo(xmlDocPtr doc, GTree * arv_posts, GHashTable *datash, GTree * arv
 			cur = cur->next;
 	}
   xmlCleanupParser();
+}
+
+void tagsInfo (xmlDocPtr doc, GTree * arv_tags) {
+
+	xmlNodePtr cur = xmlDocGetRootElement(doc); // Acede à raíz do documento: "<tags>"
+	cur = cur->xmlChildrenNode; // Vai para o filho: tag <row>
+
+	while (cur != NULL) { //Enquanto houver tags row's:
+			if ((!xmlStrcmp(cur->name, (const xmlChar *)"row"))) { //compara as tags
+
+           xmlChar* id1 = xmlGetProp(cur, (const xmlChar *) "Id"); //Procura o atributo Id
+           long id = atol((char*) id1);
+
+           xmlChar* name1 = xmlGetProp(cur, (const xmlChar *) "TagName"); //Procura o atributo TagName
+           char* name =  (char*) name1;
+
+
+           Tag t = createTag(id, name);
+
+           Key uid = createKey(getTagId(t));
+
+           g_tree_insert(arv_tags, uid, t);
+
+           xmlFree(id1);
+           xmlFree(name1);
+         }
+			cur = cur->next;
+    }
+    xmlCleanupParser();
 }

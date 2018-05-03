@@ -22,7 +22,7 @@ struct heap {
  * @param Date data2.
  * @return int resultado da comparação (-1 se data1 for a mais recente, 1 se data2 for a mais recente ou 0 se forem iguais).
  */
-static int maisRecente(Date date1, Date date2);
+ int maisRecente(Date date1, Date date2);
 
 /**
  * @brief Troca dois elementos da heap.
@@ -48,7 +48,7 @@ static Heap bubbleUp(Heap heap,int i, char ord);
 
 
 //Função devolve -1 se a primeira data for mais recente e 1 se a segunda data for a mais recente
-static int maisRecente(Date date1, Date date2){
+int maisRecente(Date date1, Date date2){
   int y1 = get_year(date1);
   int m1 = get_month(date1);
   int d1 = get_day(date1);
@@ -268,10 +268,11 @@ int cont_RP (Heap heap){
  * @param  int i.
  *return   Post na posição i da heap.
  */
+
 Post getIndP(Heap h, int i){
-  if (h)
-    return (h->posts[i]);
-  else return NULL;
+    if (h)
+        return (h->posts[i]);
+    else return NULL;
 }
 
 /**

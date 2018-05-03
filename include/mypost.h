@@ -41,6 +41,7 @@ int getPostNumCom(Post);
 int getPostNRes(Post);
 void incPostNRes(Post);
 char* getPostTitulo(Post);
+char* getTagI(Post p,int index);
 void freePost(void*);
 
 #endif

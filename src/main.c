@@ -16,14 +16,16 @@
 // ver query 4,5,8,10
 
 int main(int argc, char **argv){
+  printf("ola");
   TAD_community tad = init();
 
-  int i;
-  clock_t t1, t2, t3, t6, t7, t9;//t4, t5,t8, t10;
-  char* path = "/home/carlacruz/Desktop/LI3/Grupo51/src";
+//  int i;
+ // clock_t t1, t2, t3, t6, t7, t9;//t4, t5,t8, t10;
+  char* path = "/home/pedro90/Desktop/LI3/Grupo51/src";
+  
   load(tad,path);
-
-  t1 = clock();
+/*
+ // t1 = clock();
   STR_pair q1 = info_from_post(tad, 1);
   char* c1 = get_fst_str(q1);
   char* c2 = get_fst_str(q1);
@@ -55,7 +57,7 @@ int main(int argc, char **argv){
   a1 = ((double) t3) /CLOCKS_PER_SEC *1000;
   printf("Q3: %f ms \n",a1 );
   free_long_pair(par);
-/*
+*//*
   t4 = clock();
   Date data1 = createDate(4,5,2014);
   Date data2 = createDate(4,6,2014);
@@ -82,7 +84,7 @@ int main(int argc, char **argv){
     free(posts[i]);
   free(posts);
   free(bio) ; 
-*/
+*//*
   t6 = clock();
   Date begin = createDate(13,10,2010);
   Date end = createDate(13,10,2010);
@@ -116,7 +118,7 @@ int main(int argc, char **argv){
   printf("Q8: %f ms \n",a1);
   free_list(l8);
 */
-
+/*
   t9 = clock();
   LONG_list l9 =  both_participated(tad, 1465, 16575, 13);
   for(i=0; i<13; i++)
@@ -125,7 +127,7 @@ int main(int argc, char **argv){
   a1 = ((double) t9) /CLOCKS_PER_SEC *1000;
   printf("Q9: %f ms \n",a1);
   free_list(l9); 
-
+*/
 
 /*
   t10 = clock();

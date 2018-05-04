@@ -359,20 +359,27 @@ LONG_list questions_with_tag(TAD_community com, char* tag, Date begin, Date end)
         for(pi=0; pi<n; pi++){
             if(strcmp(tag,tags[pi]) == 0 && t==0){
                 heap_push(h,p,'D');
+                printf("Deixa arder\n");
                 t = 1;
             }
          }
     }
     c = heap_count(h);
+                printf("Deixa arder-2\n");
     r = create_list(c);
+                printf("Deixa arder-3 - %d\n",c);
     for(i=0; i<c; i++){
+      printf("I: %d\n", i);
       Post p = heap_pop(h,'D');
+      printf("I: %d pop feito \n",i);
       set_list(r, i, getPostId(p));
       printf("%ld\n", get_list(r,i));
     }
-    free_date(begin);
-    free_date(end);
-    free(tag);
+    printf("asdada\n");
+    //free_date(begin);
+    //free_date(end);
+    //free(tag);
+    printf("sada\n");
     return r;
 }
 
@@ -619,8 +626,14 @@ static ATNum get_allTags(TAD_community com,ATNum pairs,LONG_list ll, Date begin,
       p = getIndP(posts,j);     //Pega no post
       d = getPostDate(p);
       if((maisRecente (begin,d)== 1 || maisRecente (begin,d) == 0 ) && (maisRecente (d,end)==1 || maisRecente (d,end) == 0)){ //compara se a data está nesse intervalo
-        int numtags = getPostNTags(p);   //vê o nº de tags do post
-        for(k = 0; k < numtags;k++){    //Percorre as tags todas
+        int numtags =getPostNTags(p);
+   //vê o nº de tags do post
+       // printf("NTAGS: %d\n",getPostTag(p));
+        printf("NÚMERO DE TAGS: %d\n",numtags);
+
+        for(k = 0; k < numtags;k++){
+              //Percorre as tags todas
+              printf("%d - %s\n", k, getTagI(p,k) );
           aux = getTagI(p,k);
           if(aux) {
             c=checkT(pairs,aux);      //Verifica se determinada tag já está no array de pares
@@ -670,8 +683,7 @@ LONG_list most_used_best_rep(TAD_community com, int N, Date begin, Date end){
     set_duplos_pos(dup,i);
     g_tree_foreach(com->Tags,(GTraverseFunc)tags_tree,dup);
   }
-  free_date(begin);
-  free_date(end);
+ 
   return tagsmu;
 }
 

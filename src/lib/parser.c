@@ -317,13 +317,9 @@ void postsInfo(xmlDocPtr doc, GTree * arv_posts, GHashTable *datash, GTree * arv
           char* title = (char*) t;
 
           xmlChar* aux = xmlGetProp(cur,(const xmlChar *) "Tags");
-          char* tags =(char*) aux;
+          char* tags =aux ? (char*) aux : NULL;
           char** str = takeTag(tags);
           int ntags = nTags(str);
-
-          for(int i=0; i<ntags; i++)
-              free(str[i]);
-          free(str);
 
           Key kowner = createKey(ownerid);
           User u = (User)g_tree_lookup(arv_users, kowner);
@@ -331,16 +327,24 @@ void postsInfo(xmlDocPtr doc, GTree * arv_posts, GHashTable *datash, GTree * arv
           freekey(kowner);
 
           Post p = createPost(id,typeid,pid,score,vcount,date,ownerid,ownerRep,comcount, nres, title, str, ntags);
-          
+          //printf("tranquilo\n");
           Heap h = getUserHeap(u);
+         // printf("Vai arder?\n");
           heap_push(h, p, 'D');
+        //  printf("ardeeeeu\n");
 
           Key key = createKey(id);
+      //    printf("key\n");
           Date dnova = (getPostDate(p));
+    //      printf("date\n");
 
           g_tree_insert(arv_posts, key, p);
-
+  //printf("insert\n");
           inseredatas(datash, dnova, p);
+//printf("insere data\n");
+          for(int i=0; i<ntags; i++)
+              free(str[i]);
+          free(str);
 
           xmlFree(id1);
           xmlFree(ti);

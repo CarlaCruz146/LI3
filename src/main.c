@@ -19,8 +19,8 @@ int main(int argc, char **argv){
   printf("ola");
   TAD_community tad = init();
 
-  int i;
-  clock_t t11;//, t2, t3, t6, t7, t9;//t4, t5,t8, t10;
+  //int i;
+  clock_t t5;//, t2, t3, t6, t7, t9;//t4, t5,t8, t10;
   char* path = "/home/carlacruz/Desktop/LI3/Grupo51/src";
   
   load(tad,path);
@@ -66,25 +66,25 @@ int main(int argc, char **argv){
   a1 = ((double) t4) /CLOCKS_PER_SEC *1000;
   printf("Q4: %f ms \n",a1 );
   free_list(l3);
-
+*/
 
 
   t5 = clock();
   USER u = get_user_info(tad, 10);
-  char* bio = get_bio(u);
+  /*char* bio = get_bio(u);
   printf("%s\n", bio);
   long* posts = get_10_latest_posts(u);
   for(i=0; i<10; i++)
-    printf("%ld\n", posts[i]);
+    printf("%ld\n", posts[i]);*/
   t5 = clock() - t5;
-  a1 = ((double) t5) /CLOCKS_PER_SEC *1000;
+  double a1 = ((double) t5) /CLOCKS_PER_SEC *1000;
   printf("Q5: %f ms \n",a1 );
-  free_user(u);
+  free_user(u);/*
   for(i=0;i<10;i++)
     free(posts[i]);
   free(posts);
-  free(bio) ; 
-*//*
+  free(bio) ; */
+/*
   t6 = clock();
   Date begin = createDate(13,10,2010);
   Date end = createDate(13,10,2010);
@@ -139,7 +139,7 @@ int main(int argc, char **argv){
   printf("Q10: %f ms \n",a1);
 
 */
-
+/*
 Date begin = createDate(15,7,2000);
 Date end = createDate(3,10,2020);
 t11 = clock();
@@ -150,7 +150,7 @@ t11 = clock() - t11;
 double a1 = ((double) t11) /CLOCKS_PER_SEC *1000;
 printf("11: %f ms \n",a1);
 free_list(l11); 
-
+*/
 tad = clean(tad);
 free(tad);
 

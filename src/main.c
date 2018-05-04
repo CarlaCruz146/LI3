@@ -16,17 +16,14 @@
 // ver query 4,5,8,10
 
 int main(){
-  printf("ola\n");
   TAD_community tad = init();
-printf("deu init\n");
   int i;
-  clock_t t11,t1, t2, t3, t6, t7, t9,t4, t5,t8, t10;
-  char* path = "/home/nikes/LI/LI3/Grupo51/src";
+  clock_t t11, t3;//, t4, t5, t6, t7, t8, t9, t10;
+  char* path = "/home/carlacruz/Desktop/LI3/Grupo51/src";
   
   load(tad,path);
-  printf("deu load\n");
-
- t1 = clock();
+/*
+  t1 = clock();
   STR_pair q1 = info_from_post(tad, 1);
   char* c1 = get_fst_str(q1);
   char* c2 = get_fst_str(q1);
@@ -46,19 +43,20 @@ printf("deu init\n");
   a1 = ((double) t2) /CLOCKS_PER_SEC *1000;
   printf("Q2: %f ms \n",a1);
   free_list(l2);
+*/
 
-  t3 = clock();
-  Date d1 = createDate(15,7,2000);
-  Date d2 = createDate(3,10,2020);  
-  LONG_pair par = total_posts(tad, d1, d2);
-  long s1 = get_fst_long(par);
-  long s2 = get_fst_long(par);
-  printf("%ld %ld\n", s1, s2);
-  t3 = clock() - t3;
-  a1 = ((double) t3) /CLOCKS_PER_SEC *1000;
-  printf("Q3: %f ms \n",a1 );
-  free_long_pair(par);
+  t3 =clock();
+  Date begin = createDate(1,1,2000);
+  Date end = createDate(1,1,2021);
+  LONG_pair pair = total_posts(tad, begin, end);
+  t3 =clock()-t3;
+  long fst = get_fst_long(pair);
+  long snd = get_snd_long(pair);
+  printf("Perguntas: %ld e Respostas: %ld\n", fst,snd );
+  double a1 = ((double) t3) / CLOCKS_PER_SEC *1000;
+  printf("Q3:%f ms\n",a1 );
 
+/*
   t4 = clock();
   Date data1 = createDate(1,1,2014);
   Date data2 = createDate(31,1,2014);
@@ -67,7 +65,6 @@ printf("deu init\n");
   a1 = ((double) t4) /CLOCKS_PER_SEC *1000;
   printf("Q4: %f ms \n",a1 );
   free_list(l3);
-
 
 
   t5 = clock();
@@ -129,17 +126,18 @@ printf("deu init\n");
   t10 = clock() - t10;
   a1 = ((double) t10) /CLOCKS_PER_SEC *1000;
   printf("Q10: %f ms \n",a1);
-
-   begin = createDate(15,7,2000);
-   end = createDate(3,10,2020);
+*/
+  begin = createDate(15,7,2000);
+  end = createDate(3,10,2020);
   t11 = clock();
   LONG_list l11 = most_used_best_rep(tad,6,begin,end);
   for(i = 0;  i < 6; i++)
     printf("%ld\n",get_list(l11,i));
   t11 = clock() - t11;
   a1 = ((double) t11) /CLOCKS_PER_SEC *1000;
-  printf("11: %f ms \n",a1);
-  free_list(l11); 
+  printf("Q11: %f ms \n",a1);
+  free_list(l11);
+  
 
   tad = clean(tad);
   free(tad);

@@ -278,7 +278,8 @@ LONG_list top_most_active(TAD_community com, int N){
 // query 3
 LONG_pair total_posts(TAD_community com, Date begin, Date end){
   long fst = 0;
-  long snd = 0;
+  long snd = 0; 
+  //long r = 0;
   gpointer x;
   ArrayD d;
   while(date_equal(begin,end) > 0){
@@ -295,10 +296,8 @@ LONG_pair total_posts(TAD_community com, Date begin, Date end){
   if (d){
     fst += getPer(d);
     snd += getRes(d);
-  }
+  } 
   LONG_pair pair = create_long_pair(fst,snd);
-  free_date(begin);
-  free_date(end);
   return pair;
 }
 
@@ -351,8 +350,11 @@ LONG_list questions_with_tag(TAD_community com, char* tag, Date begin, Date end)
     c = heap_count(h);
     printf("%d",c);
     r = create_list(c);
+                printf("Deixa arder-3 - %d\n",c);
     for(i=0; i<c; i++){
+      printf("I: %d\n", i);
       Post p = heap_pop(h,'D');
+      printf("I: %d pop feito \n",i);
       set_list(r, i, getPostId(p));
       printf("--- %ld\n", get_list(r,i));
     }

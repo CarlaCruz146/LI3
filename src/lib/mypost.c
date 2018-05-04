@@ -59,7 +59,7 @@ ArrayD createArray(long comp){
 */
 long getPer(ArrayD d){
   if(d) return d->per;
-  else return -1;
+  return -1;
 }
 
 /**
@@ -69,7 +69,7 @@ long getPer(ArrayD d){
 */
 long getRes(ArrayD d){
   if(d) return d->res;
-  else return -1;
+  return -1;
 }
 
 /**

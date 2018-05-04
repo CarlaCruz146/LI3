@@ -211,7 +211,7 @@ char* getDay(char* d){
 
 void inseredatas(GHashTable *hdate, Date date, Post p){
   gpointer x = g_hash_table_lookup(hdate, date);
-  if( x == NULL){
+  if( !x){
     ArrayD a = createArray(1);
     insereArray(a,p);
     g_hash_table_insert(hdate,date,a);
@@ -271,7 +271,6 @@ void postsInfo(xmlDocPtr doc, GTree * arv_posts, GHashTable *datash, GTree * arv
 	 xmlNodePtr cur = xmlDocGetRootElement(doc);
 	 cur = cur->xmlChildrenNode;
    char* aux;
-
 	 while (cur != NULL) {
 
 			if ((!xmlStrcmp(cur->name, (const xmlChar *)"row"))) {
@@ -327,25 +326,24 @@ void postsInfo(xmlDocPtr doc, GTree * arv_posts, GHashTable *datash, GTree * arv
           freekey(kowner);
 
           Post p = createPost(id,typeid,pid,score,vcount,date,ownerid,ownerRep,comcount, nres, title, str, ntags);
-          //printf("tranquilo\n");
+
           Heap h = getUserHeap(u);
-         // printf("Vai arder?\n");
+
           heap_push(h, p, 'D');
-        //  printf("ardeeeeu\n");
 
           Key key = createKey(id);
-      //    printf("key\n");
+
           Date dnova = (getPostDate(p));
-    //      printf("date\n");
 
           g_tree_insert(arv_posts, key, p);
-  //printf("insert\n");
+
           inseredatas(datash, dnova, p);
-//printf("insere data\n");
+
+/*
           for(int i=0; i<ntags; i++)
               free(str[i]);
           free(str);
-
+*/
           xmlFree(id1);
           xmlFree(ti);
           xmlFree(pid1);

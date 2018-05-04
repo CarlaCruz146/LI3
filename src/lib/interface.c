@@ -297,8 +297,6 @@ LONG_pair total_posts(TAD_community com, Date begin, Date end){
     snd += getRes(d);
   }
   LONG_pair pair = create_long_pair(fst,snd);
-  free_date(begin);
-  free_date(end);
   return pair;
 }
 
@@ -629,11 +627,11 @@ static ATNum get_allTags(TAD_community com,ATNum pairs,LONG_list ll, Date begin,
         int numtags =getPostNTags(p);
    //vê o nº de tags do post
        // printf("NTAGS: %d\n",getPostTag(p));
-        printf("NÚMERO DE TAGS: %d\n",numtags);
+       // printf("NÚMERO DE TAGS: %d\n",numtags);
 
         for(k = 0; k < numtags;k++){
               //Percorre as tags todas
-              printf("%d - %s\n", k, getTagI(p,k) );
+             // printf("%d - %s\n", k, getTagI(p,k) );
           aux = getTagI(p,k);
           if(aux) {
             c=checkT(pairs,aux);      //Verifica se determinada tag já está no array de pares

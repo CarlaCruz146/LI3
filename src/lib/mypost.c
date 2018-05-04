@@ -171,7 +171,7 @@ Post createPost(long id, int type, long pid, int score, int vcount, Date date, l
     p->numcom = numcom;
     p->nres = nres;
     p->titulo = mystrdup(titulo);
-    p->tag = mystrdups(tags);
+    p->tag= mystrdups(tags);
     p->ntags = ntags;
     return p;
 }
@@ -182,7 +182,9 @@ Post createPost(long id, int type, long pid, int score, int vcount, Date date, l
   *@return  int número de tags contidas nesse Post.
 */
 int getPostNTags(Post p){
-    return p->ntags;
+    if(p)
+      return p->ntags;
+    return 0;
 }
 
 /**
@@ -191,7 +193,7 @@ int getPostNTags(Post p){
   *@return  char** array das tags contidas nesse Post.
 */
 char** getPostTags(Post p){
-    if(p) return mystrdups(p->tag);
+    if(p) return (p->tag);
     return NULL;
 }
 

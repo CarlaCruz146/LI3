@@ -308,20 +308,16 @@ static int existeTag(Post p, char* tag){
     char** tags = getPostTags(p);
     int ntags = getPostNTags(p);
     for(i=0; i<ntags && c == 0; i++){
+        printf("TAG %d: %s POST %ld\n", i, tags[i], getPostId(p));
         if(strcmp(tag, tags[i]) == 0)
             c = 1;
     }
-    for(i=0; i<ntags;i++)
-      free(tags[i]);
-    free(tags);  
-
     return c;
 }
 
 // query 4
 LONG_list questions_with_tag(TAD_community com, char* tag, Date begin, Date end){
-    int i, pi, n, c, t=0;
-    char** tags;
+    int i, c;
     gpointer x;
     ArrayD d;
     LONG_list r;
@@ -337,7 +333,6 @@ LONG_list questions_with_tag(TAD_community com, char* tag, Date begin, Date end)
                 int cenas = existeTag(p,tag);
                 if(cenas == 1)
                     heap_push(h,p,'D');
-
                 }
             }
         }
@@ -348,31 +343,19 @@ LONG_list questions_with_tag(TAD_community com, char* tag, Date begin, Date end)
     if (d){
       for(i=0; i<getUsed(d); i++){
         p = getInd(d,i);
+        printf("%ld\n",getPostId(p));
         if(existeTag(p,tag) == 1)
           heap_push(h,p,'D');
         }
     }
-    for(i=0; i<getUsed(d); i++){
-        p = getInd(d,i);
-        n = getPostNTags(p);
-        tags = getPostTags(p);
-        for(pi=0; pi<n; pi++){
-            if(strcmp(tag,tags[pi]) == 0 && t==0){
-                heap_push(h,p,'D');
-                t = 1;
-            }
-         }
-    }
     c = heap_count(h);
+    printf("%d",c);
     r = create_list(c);
     for(i=0; i<c; i++){
       Post p = heap_pop(h,'D');
       set_list(r, i, getPostId(p));
-      printf("%ld\n", get_list(r,i));
+      printf("--- %ld\n", get_list(r,i));
     }
-    free_date(begin);
-    free_date(end);
-    free(tag);
     return r;
 }
 
@@ -619,8 +602,11 @@ static ATNum get_allTags(TAD_community com,ATNum pairs,LONG_list ll, Date begin,
       p = getIndP(posts,j);     //Pega no post
       d = getPostDate(p);
       if((maisRecente (begin,d)== 1 || maisRecente (begin,d) == 0 ) && (maisRecente (d,end)==1 || maisRecente (d,end) == 0)){ //compara se a data está nesse intervalo
-        int numtags = getPostNTags(p);   //vê o nº de tags do post
-        for(k = 0; k < numtags;k++){    //Percorre as tags todas
+        int numtags =getPostNTags(p);
+   //vê o nº de tags do post
+
+        for(k = 0; k < numtags;k++){
+          //Percorre asx tags todas
           aux = getTagI(p,k);
           if(aux) {
             c=checkT(pairs,aux);      //Verifica se determinada tag já está no array de pares
@@ -670,8 +656,7 @@ LONG_list most_used_best_rep(TAD_community com, int N, Date begin, Date end){
     set_duplos_pos(dup,i);
     g_tree_foreach(com->Tags,(GTraverseFunc)tags_tree,dup);
   }
-  free_date(begin);
-  free_date(end);
+ 
   return tagsmu;
 }
 

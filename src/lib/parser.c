@@ -19,7 +19,7 @@ Date incrementaData (Date data){
   free_date(data);
   Date newd;
 
-  if (month1 == 0 || month1 == 2 || month1 == 4 || month1 == 6 || month1 == 7 || month1 == 9){
+  if (month1 == 1 || month1 == 3 || month1 == 5 || month1 == 7 || month1 == 8 || month1 == 10){
     if (day1 == 31){
       dayn = 1;
       monthn++;
@@ -30,7 +30,7 @@ Date incrementaData (Date data){
     newd = createDate(dayn,monthn,yearn);
     return newd;
   }
-  if (month1 == 1){
+  if (month1 == 2){
     if ((year1 % 4) == 0){
       if (day1==29){
           dayn = 1;
@@ -45,7 +45,7 @@ Date incrementaData (Date data){
     newd = createDate(dayn,monthn,yearn);
     return newd;
   }
-  if (month1 == 3 || month1 == 5 || month1 == 8 || month1 == 10){
+  if (month1 == 4 || month1 == 6 || month1 == 9 || month1 == 11){
     if (day1 == 30){
       dayn = 1;
       monthn++;
@@ -56,10 +56,10 @@ Date incrementaData (Date data){
     newd = createDate(dayn,monthn,yearn);
     return newd;
   }
-  if (month1 == 11){
+  if (month1 == 12){
     if (day1 == 31){
       dayn = 1;
-      monthn = 0;
+      monthn = 1;
       yearn++;
     }
     else{
@@ -317,13 +317,9 @@ void postsInfo(xmlDocPtr doc, GTree * arv_posts, GHashTable *datash, GTree * arv
           char* title = (char*) t;
 
           xmlChar* aux = xmlGetProp(cur,(const xmlChar *) "Tags");
-          char* tags =(char*) aux;
+          char* tags =aux ? (char*) aux : NULL;
           char** str = takeTag(tags);
           int ntags = nTags(str);
-
-          for(int i=0; i<ntags; i++)
-              free(str[i]);
-          free(str);
 
           Key kowner = createKey(ownerid);
           User u = (User)g_tree_lookup(arv_users, kowner);
@@ -331,16 +327,24 @@ void postsInfo(xmlDocPtr doc, GTree * arv_posts, GHashTable *datash, GTree * arv
           freekey(kowner);
 
           Post p = createPost(id,typeid,pid,score,vcount,date,ownerid,ownerRep,comcount, nres, title, str, ntags);
-          
+          //printf("tranquilo\n");
           Heap h = getUserHeap(u);
+         // printf("Vai arder?\n");
           heap_push(h, p, 'D');
+        //  printf("ardeeeeu\n");
 
           Key key = createKey(id);
+      //    printf("key\n");
           Date dnova = (getPostDate(p));
+    //      printf("date\n");
 
           g_tree_insert(arv_posts, key, p);
-
+  //printf("insert\n");
           inseredatas(datash, dnova, p);
+//printf("insere data\n");
+          for(int i=0; i<ntags; i++)
+              free(str[i]);
+          free(str);
 
           xmlFree(id1);
           xmlFree(ti);

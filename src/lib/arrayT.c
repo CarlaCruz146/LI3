@@ -88,8 +88,8 @@ long get_atnum_size(ATNum pares) {
 }
 
 ATNum init_atnum(long N){
-  ATNum a = malloc (sizeof(ATNum));
-  a->tags = malloc(N * sizeof(TNum));
+  ATNum a = malloc (sizeof(struct arraytagnum));
+  a->tags = malloc(N * sizeof(struct arraytagnum));
   a->size = N;
   a->used = 0;
   int i;

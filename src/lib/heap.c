@@ -104,7 +104,7 @@ Heap initHeapPal(char* word){
  * @return char* palavra.
  */
 char* getHeapPal(Heap h){
-  return h->pal;
+  return mystrdup(h->pal);
 }
 
 /**

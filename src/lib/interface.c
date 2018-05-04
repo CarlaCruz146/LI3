@@ -670,6 +670,8 @@ LONG_list most_used_best_rep(TAD_community com, int N, Date begin, Date end){
     set_duplos_pos(dup,i);
     g_tree_foreach(com->Tags,(GTraverseFunc)tags_tree,dup);
   }
+  free_date(begin);
+  free_date(end);
   return tagsmu;
 }
 

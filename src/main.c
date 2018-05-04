@@ -19,9 +19,9 @@ int main(int argc, char **argv){
   printf("ola");
   TAD_community tad = init();
 
-//  int i;
- // clock_t t1, t2, t3, t6, t7, t9;//t4, t5,t8, t10;
-  char* path = "/home/pedro90/Desktop/LI3/Grupo51/src";
+  int i;
+  clock_t t11;//, t2, t3, t6, t7, t9;//t4, t5,t8, t10;
+  char* path = "/home/carlacruz/Desktop/LI3/Grupo51/src";
   
   load(tad,path);
 /*
@@ -107,6 +107,7 @@ int main(int argc, char **argv){
   a1 = ((double) t7) /CLOCKS_PER_SEC *1000;
   printf("Q7: %f ms \n",a1 );
   free_list(l7);
+  */
 /*
 
   t8 = clock();
@@ -138,8 +139,20 @@ int main(int argc, char **argv){
   printf("Q10: %f ms \n",a1);
 
 */
-  tad = clean(tad);
-  free(tad);
 
-  return 0;
+Date begin = createDate(15,7,2000);
+Date end = createDate(3,10,2020);
+t11 = clock();
+LONG_list l11 = most_used_best_rep(tad,90,begin,end);
+  for(i = 0;  i < 90; i++)
+    printf("%ld\n",get_list(l11,i));
+t11 = clock() - t11;
+double a1 = ((double) t11) /CLOCKS_PER_SEC *1000;
+printf("11: %f ms \n",a1);
+free_list(l11); 
+
+tad = clean(tad);
+free(tad);
+
+return 0;
 }

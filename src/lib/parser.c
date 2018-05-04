@@ -19,7 +19,7 @@ Date incrementaData (Date data){
   free_date(data);
   Date newd;
 
-  if (month1 == 0 || month1 == 2 || month1 == 4 || month1 == 6 || month1 == 7 || month1 == 9){
+  if (month1 == 1 || month1 == 3 || month1 == 5 || month1 == 7 || month1 == 8 || month1 == 10){
     if (day1 == 31){
       dayn = 1;
       monthn++;
@@ -30,7 +30,7 @@ Date incrementaData (Date data){
     newd = createDate(dayn,monthn,yearn);
     return newd;
   }
-  if (month1 == 1){
+  if (month1 == 2){
     if ((year1 % 4) == 0){
       if (day1==29){
           dayn = 1;
@@ -45,7 +45,7 @@ Date incrementaData (Date data){
     newd = createDate(dayn,monthn,yearn);
     return newd;
   }
-  if (month1 == 3 || month1 == 5 || month1 == 8 || month1 == 10){
+  if (month1 == 4 || month1 == 6 || month1 == 9 || month1 == 11){
     if (day1 == 30){
       dayn = 1;
       monthn++;
@@ -56,10 +56,10 @@ Date incrementaData (Date data){
     newd = createDate(dayn,monthn,yearn);
     return newd;
   }
-  if (month1 == 11){
+  if (month1 == 12){
     if (day1 == 31){
       dayn = 1;
-      monthn = 0;
+      monthn = 1;
       yearn++;
     }
     else{

@@ -47,17 +47,17 @@ int main(){
   free_list(l2);
 */
 
-  Date begin = createDate(1,1,1999);
-  Date end = createDate(1,1,2030);
   t3 =clock();
+  Date begin = createDate(1,1,2000);
+  Date end = createDate(1,1,2021);
   LONG_pair pair = total_posts(tad, begin, end);
   t3 =clock()-t3;
-  double a1 = ((double) t3) / CLOCKS_PER_SEC *1000;
-  printf("Q3:%f ms\n",a1 );
-
   long fst = get_fst_long(pair);
   long snd = get_snd_long(pair);
   printf("Perguntas: %ld e Respostas: %ld\n", fst,snd );
+  double a1 = ((double) t3) / CLOCKS_PER_SEC *1000;
+  printf("Q3:%f ms\n",a1 );
+
 /*
 
   t4 = clock();

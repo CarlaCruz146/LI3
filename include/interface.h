@@ -10,6 +10,7 @@
 #include "mytags.h"
 #include "key.h"
 #include "heapU.h"
+#include "util.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <glib.h>

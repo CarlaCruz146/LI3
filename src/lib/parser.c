@@ -142,7 +142,6 @@ gint datacompare(gconstpointer data1, gconstpointer data2){ //sendo data1 o a co
 
 
 void userInfo (xmlDocPtr doc, GTree * arv_users) {
-
 	xmlNodePtr cur = xmlDocGetRootElement(doc); // Acede à raíz do documento: "<users>"
 	cur = cur->xmlChildrenNode; // Vai para o filho: tag <row>
 
@@ -181,7 +180,7 @@ void userInfo (xmlDocPtr doc, GTree * arv_users) {
 }
 
 
-char* getYear(char* d){
+static char* getYear(char* d){
     int i=0;
     while(d[i]!='-')
       i++;
@@ -189,7 +188,7 @@ char* getYear(char* d){
     return d;
   }
 
-char* getMonth(char* d){
+static char* getMonth(char* d){
     int j, w=0;
     for(j=0;j<5;j++)
       ;
@@ -199,7 +198,7 @@ char* getMonth(char* d){
     return d;
 }
 
-char* getDay(char* d){
+static char* getDay(char* d){
     int a, b=0;
     for(a=0;a<8;a++)
       ;
@@ -209,7 +208,8 @@ char* getDay(char* d){
     return d;
 }
 
-void inseredatas(GHashTable *hdate, Date date, Post p){
+
+static void inseredatas(GHashTable *hdate, Date date, Post p){
   gpointer x = g_hash_table_lookup(hdate, date);
   if( !x){
     ArrayD a = createArray(1);
@@ -360,8 +360,9 @@ void postsInfo(xmlDocPtr doc, GTree * arv_posts, GHashTable *datash, GTree * arv
   xmlCleanupParser();
 }
 
-void tagsInfo (xmlDocPtr doc, GTree * arv_tags) {
 
+
+void tagsInfo (xmlDocPtr doc, GTree * arv_tags) {
 	xmlNodePtr cur = xmlDocGetRootElement(doc); // Acede à raíz do documento: "<tags>"
 	cur = cur->xmlChildrenNode; // Vai para o filho: tag <row>
 

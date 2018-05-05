@@ -7,42 +7,6 @@ struct TCD_community{
   GTree *Tags;
 };
 
-typedef struct respostas{
-  Heap h;
-  Key parent;
-} *ResPost;
-
-typedef struct duplo{
-  LONG_list ll;
-  TNum tnum;
-  int pos;
-} *Duplos;
-
-/**
-  *@brief   Função que inicializa uma LONG_list.
-  *@param   int tamanho da LONG_list.
-  *return   LONG_list criada e inicializada.
-*/
-static LONG_list init_ll(int N);
-
-/**
-  *@brief   Função que inicializa um duplos.
-  *@param   int tamanho da LONG_list do duplos.
-  *return   Duplos inicializado
-*/
-static Duplos initDuplos(int N);
-
-static void set_duplos_pos(Duplos dup, int i);
-
-static Duplos set_duplos_tnum(Duplos dup, TNum tn);
-
-static Duplos insere_Duplos(LONG_list ll, TNum tn,int N, int i);
-
-static LONG_list get_duplos_ll(Duplos dup);
-
-static TNum get_duplos_tnum(Duplos dup);
-
-static int get_duplos_pos(Duplos dup);
 
 static gboolean user_heap (gpointer key, gpointer value,gpointer user_data);
 static LONG_list topN (TAD_community com ,int N);
@@ -59,12 +23,6 @@ static gboolean tags_tree (gpointer key, gpointer value,gpointer user_data);
 */
 static char* myconcat(const char *s1, const char *s2);
 
-/**
-  *@brief   Retorna uma estrutura ResPost inicializada.
-  *@param   long id de uma pergunta.
-  *return   ResPost estrutura inicializada.
-*/
-static ResPost initResPost(long pid);
 
 /**
   *@brief   Compara duas datas.
@@ -114,55 +72,6 @@ static char* myconcat(const char *s1, const char *s2){
     strcpy(result, s1);
     strcat(result, s2);
     return result;
-}
-
-static ResPost initResPost(long pid){
-  ResPost res = (ResPost)malloc(sizeof(struct respostas));
-  res->h = initHeap();
-  res->parent = createKey(pid);
-  return res;
-}
-
-static Duplos initDuplos(int N){
-  Duplos res = (Duplos)malloc(sizeof(struct duplo));
-  res->ll = init_ll(N);
-  res->tnum = create_tnum_pair(NULL,0);
-  res->pos = -1;
-  return res;
-}
-
-static void set_duplos_pos(Duplos dup, int i){
-  dup->pos = i;
-}
-
-static Duplos set_duplos_tnum(Duplos dup, TNum tn){
-  if(dup)
-    dup->tnum = tn;
-  return dup;
-}
-
-static Duplos insere_Duplos(LONG_list ll, TNum tn,int N, int i){
-  Duplos res = initDuplos(N);
-  res->ll = ll;
-  res->tnum = tn;
-  res->pos = i;
-  return res;
-}
-
-static LONG_list get_duplos_ll(Duplos dup){
-  if(dup)
-    return dup->ll;
-  return NULL;
-}
-
-static TNum get_duplos_tnum(Duplos dup){
-  if(dup) return dup->tnum;
-  return NULL;
-}
-
-static int get_duplos_pos(Duplos dup){
-  if (dup) return dup->pos;
-  return -1;
 }
 
 TAD_community init(){
@@ -309,7 +218,6 @@ static int existeTag(Post p, char* tag){
     char** tags = getPostTags(p);
     int ntags = getPostNTags(p);
     for(i=0; i<ntags && c == 0; i++){
-        printf("TAG %d: %s POST %ld\n", i, tags[i], getPostId(p));
         if(strcmp(tag, tags[i]) == 0)
             c = 1;
     }
@@ -344,21 +252,15 @@ LONG_list questions_with_tag(TAD_community com, char* tag, Date begin, Date end)
     if (d){
       for(i=0; i<getUsed(d); i++){
         p = getInd(d,i);
-        printf("%ld\n",getPostId(p));
         if(existeTag(p,tag) == 1)
           heap_push(h,p,'D');
         }
     }
     c = heap_count(h);
-    printf("%d",c);
     r = create_list(c);
-                printf("Deixa arder-3 - %d\n",c);
     for(i=0; i<c; i++){
-      printf("I: %d\n", i);
       Post p = heap_pop(h,'D');
-      printf("I: %d pop feito \n",i);
       set_list(r, i, getPostId(p));
-      printf("--- %ld\n", get_list(r,i));
     }
     return r;
 }
@@ -445,7 +347,6 @@ LONG_list most_answered_questions(TAD_community com, int N, Date begin, Date end
   }
   for(i=0; i<N; i++){
     Post p = heap_pop(h,'R');
-    printf("ID:%ld NRES:%d\n", getPostId(p), getPostNRes(p));
     set_list(r, i, getPostId(p));
   }
   free_date(begin);
@@ -527,9 +428,9 @@ LONG_list both_participated(TAD_community com, long id1, long id2, int N){
 static gboolean getScCom(gpointer key, gpointer value, gpointer user_data){
   Post p = (Post)value;
   ResPost r = (ResPost) user_data;
-  long pid = getKey(r->parent);
+  long pid = getKey(getResPostParent(r));
   if(getPostType(p) == 2 && getPid(p) == pid){
-    heap_push(r->h,p,'M');
+    heap_push(getResPostHeap(r),p,'M');
   }
   return FALSE;
 }
@@ -539,20 +440,10 @@ long better_answer(TAD_community com, long id){
   Post p;
   ResPost r = initResPost(id);
   g_tree_foreach(com->Posts, (GTraverseFunc)getScCom, r);
-  p = heap_pop(r->h,'M');
+  p = heap_pop(getResPostHeap(r),'M');
   return getPostId(p);
 }
 
-
-static LONG_list init_ll(int N){
-  LONG_list ll = create_list(N);
-  int i = 0;
-  while(i < N) {
-    set_list(ll,i,-2);
-    i++;
-  }
-  return ll;
-}
 
 static gboolean user_heap (gpointer key, gpointer value,gpointer user_data){
   User u = (User) value;

@@ -43,6 +43,12 @@ Heap getResPostHeap(ResPost r){
     return r->h;
 }
 
+void freeResPost(ResPost r){
+  heap_free(r->h);
+  freekey(r->parent);
+  free(r);
+}
+
 /**
   *@brief   Função que inicializa uma LONG_list.
   *@param   int tamanho da LONG_list.

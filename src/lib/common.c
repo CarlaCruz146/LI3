@@ -25,5 +25,6 @@ char** mystrdups(char** s) {
        n[i]= mystrdup(s[i]);
        i++;
     }
+    n[i] = NULL;
     return n;
 }

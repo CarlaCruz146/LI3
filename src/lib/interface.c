@@ -280,6 +280,7 @@ LONG_list questions_with_tag(TAD_community com, char* tag, Date begin, Date end)
       Post p = heap_pop(h,'D');
       set_list(r, i, getPostId(p));
     }
+    heap_free(h);
     return r;
 }
 
@@ -434,7 +435,7 @@ LONG_list contains_word(TAD_community com, char* word, int N){
     p = heap_pop(h,'D');
     set_list(r, i, getPostId(p));
   }
- // heap_free(h);
+  heap_free(h);
   return r;
 }
 
@@ -506,6 +507,7 @@ long better_answer(TAD_community com, long id){
   ResPost r = initResPost(id);
   g_tree_foreach(com->Posts, (GTraverseFunc)getScCom, r);
   p = heap_pop(getResPostHeap(r),'M');
+  freeResPost(r);
   return getPostId(p);
 }
 
@@ -527,6 +529,7 @@ static LONG_list topN(TAD_community com ,int N){
   for(int i = 0; i < N; i++) {
     set_list(ll,i,heap_popU(us));
   }
+  heap_freeU(us);
   return ll;
 }
 
@@ -625,8 +628,8 @@ LONG_list most_used_best_rep(TAD_community com, int N, Date begin, Date end){
     set_duplos_tnum(dup,aux);
     set_duplos_pos(dup,i);
     g_tree_foreach(com->Tags,(GTraverseFunc)tags_tree,dup);
+    free_tnum(aux);
   }
- 
   return tagsmu;
 }
 

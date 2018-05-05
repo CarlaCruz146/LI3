@@ -193,7 +193,7 @@ int getPostNTags(Post p){
   *@return  char** array das tags contidas nesse Post.
 */
 char** getPostTags(Post p){
-    if(p) return (p->tag);
+    if(p) return mystrdups(p->tag);
     return NULL;
 }
 

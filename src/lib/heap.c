@@ -92,7 +92,7 @@ Heap initHeapPal(char* word){
     heap->pos = 0;
     heap->posts = malloc(5 * sizeof(Post));
     heap->pal = malloc(5 * sizeof(word));
-    heap->pal = word;
+    heap->pal = mystrdup(word);
     return heap;
 }
 
@@ -204,12 +204,18 @@ static Heap bubbleDown(Heap heap, int n, char ord){
 
 static Heap bubbleUp(Heap heap, int i, char ord){
     if(ord == 'D'){
-      Date dpai ;//= getPostDate(heap->posts[PAI(i)]);
-      Date di ;//= getPostDate(heap->posts[i]); //filho é mais recente ou seja, score do filho é maior
+      Date dpai = NULL;
+      Date di = NULL; //filho é mais recente ou seja, score do filho é maior
       while(i > 0 && maisRecente(dpai = getPostDate(heap->posts[PAI(i)]), di = getPostDate(heap->posts[i])) == 1){
+          free_date(dpai);
+          free_date(di);
           heap=swap(heap,i,PAI(i)); 
           i = PAI(i);
       } 
+      if(i>0){
+          free_date(dpai);
+          free_date(di);
+      }
       return heap;
     } else if(ord == 'S'){
         while(i > 0 && (getPostScore(heap->posts[PAI(i)]) - (getPostScore(heap->posts[i]))) < 0){
@@ -277,6 +283,11 @@ Post getIndP(Heap h, int i){
   *@param   void* apontador para a heap a limpar da memória.
 */
 void heap_free(Heap heap){
+    free(heap->posts);
+    free(heap);
+}
+
+void heapPal_free(Heap heap){
     free(heap->posts);
     free(heap->pal);
     free(heap);

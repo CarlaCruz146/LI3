@@ -18,9 +18,10 @@ int main(){
   TAD_community tad = init();
   int i;
   clock_t t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11;
-  char* path = "/home/carlacruz/Desktop/LI3/Grupo51/src";
+  char* path = "/home/nikes/LI/LI3/Grupo51/src";
   
   load(tad,path);
+
 
   t1 = clock();
   STR_pair q1 = info_from_post(tad, 1);

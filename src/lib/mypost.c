@@ -348,6 +348,9 @@ void freePost(void *p){
   if(aux) {
     free_date(aux->date);
     free(aux->titulo);
+    for(int i=0; i<aux->ntags; i++)
+        free(aux->tag[i]);
+    free(aux->tag);
     free(aux);
   }
 }

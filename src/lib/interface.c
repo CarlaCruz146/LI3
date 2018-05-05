@@ -297,6 +297,8 @@ LONG_pair total_posts(TAD_community com, Date begin, Date end){
     fst += getPer(d);
     snd += getRes(d);
   } 
+  free_date(begin);
+  free_date(end);
   LONG_pair pair = create_long_pair(fst,snd);
   return pair;
 }

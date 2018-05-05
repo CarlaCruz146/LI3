@@ -17,8 +17,8 @@
 
 int main(){
   TAD_community tad = init();
-  int i;
-  clock_t t11, t3;//, t4, t5, t6, t7, t8, t9, t10;
+  //int i;
+//clock_t t1;//, t4, t5, t6, t7, t8, t9, t10;
   char* path = "/home/carlacruz/Desktop/LI3/Grupo51/src";
   
   load(tad,path);
@@ -34,6 +34,8 @@ int main(){
   free_str_pair(q1);
   free(c1);
   free(c2);
+*/
+/*
 
   t2 = clock();
   LONG_list l2 = top_most_active(tad, 12);
@@ -44,7 +46,7 @@ int main(){
   printf("Q2: %f ms \n",a1);
   free_list(l2);
 */
-
+/*
   t3 =clock();
   Date begin = createDate(1,1,2000);
   Date end = createDate(1,1,2021);
@@ -55,7 +57,7 @@ int main(){
   printf("Perguntas: %ld e Respostas: %ld\n", fst,snd );
   double a1 = ((double) t3) / CLOCKS_PER_SEC *1000;
   printf("Q3:%f ms\n",a1 );
-
+*/
 /*
   t4 = clock();
   Date data1 = createDate(1,1,2014);
@@ -126,7 +128,7 @@ int main(){
   t10 = clock() - t10;
   a1 = ((double) t10) /CLOCKS_PER_SEC *1000;
   printf("Q10: %f ms \n",a1);
-*/
+*//*
   begin = createDate(15,7,2000);
   end = createDate(3,10,2020);
   t11 = clock();
@@ -137,7 +139,7 @@ int main(){
   a1 = ((double) t11) /CLOCKS_PER_SEC *1000;
   printf("Q11: %f ms \n",a1);
   free_list(l11);
-  
+  */
 
   tad = clean(tad);
   free(tad);

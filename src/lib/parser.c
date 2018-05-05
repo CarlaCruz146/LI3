@@ -330,19 +330,13 @@ void postsInfo(xmlDocPtr doc, GTree * arv_posts, GHashTable *datash, GTree * arv
           Heap h = getUserHeap(u);
 
           heap_push(h, p, 'D');
-        //  printf("ardeeeeu\n");
 
           Key key = createKey(id);
           Date dnova = (getPostDate(p));
-    //      printf("date\n");
 
           g_tree_insert(arv_posts, key, p);
-  //printf("insert\n");
+
           inseredatas(datash, dnova, p);
-//printf("insere data\n");
-          for(int i=0; i<ntags; i++)
-              free(str[i]);
-          free(str);
 
 /*
           for(int i=0; i<ntags; i++)

@@ -206,13 +206,16 @@ static Heap bubbleDown(Heap heap, int n, char ord){
 
 static Heap bubbleUp(Heap heap, int i, char ord){
     if(ord == 'D'){
-      Date dpai, di; //filho é mais recente ou seja, score do filho é maior
-      while(i > 0 && maisRecente((dpai = getPostDate(heap->posts[PAI(i)])), (di = getPostDate(heap->posts[i]))) == 1){
+      Date dpai = getPostDate(heap->posts[PAI(i)]);
+      Date di = getPostDate(heap->posts[i]); //filho é mais recente ou seja, score do filho é maior
+      while(i > 0 && maisRecente(dpai, di) == 1){
           heap=swap(heap,i,PAI(i)); 
           i = PAI(i);
-          //free_date(dpai);
-          //free_date(di);
+          dpai = getPostDate(heap->posts[PAI(i)]);
+          di = getPostDate(heap->posts[i]);
       } 
+      free_date(dpai);
+      free_date(di);
       return heap;
     } else if(ord == 'S'){
         while(i > 0 && (getPostScore(heap->posts[PAI(i)]) - (getPostScore(heap->posts[i]))) < 0){

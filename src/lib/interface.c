@@ -485,7 +485,7 @@ return -1;
 static ATNum get_allTags(TAD_community com,ATNum pairs,LONG_list ll, Date begin, Date end){
   User u = NULL; Heap posts = NULL;
   Post p = NULL; TNum new = create_tnum_pair(NULL, 0);
-  Date d;
+  //Date d;
   int tam = get_ll_size(ll);
   int i,j,k,t = 0,c;
   char* aux;
@@ -495,11 +495,11 @@ static ATNum get_allTags(TAD_community com,ATNum pairs,LONG_list ll, Date begin,
     t = heap_count(posts);    //conta o numero total de posts
     for(j = 0; j < t; j++){     //Percorre a àrvore com todos os posts desse men
       p = getIndP(posts,j);     //Pega no post
-      d = getPostDate(p);
+      Date d = getPostDate(p);
       if((maisRecente (begin,d)== 1 || maisRecente (begin,d) == 0 ) && (maisRecente (d,end)==1 || maisRecente (d,end) == 0)){ //compara se a data está nesse intervalo
         int numtags =getPostNTags(p);
    //vê o nº de tags do post
-
+        free_date(d);    
         for(k = 0; k < numtags;k++){
           //Percorre asx tags todas
           aux = getTagI(p,k);
@@ -518,6 +518,8 @@ static ATNum get_allTags(TAD_community com,ATNum pairs,LONG_list ll, Date begin,
       }
     }
   }
+  free_date(begin);
+  free_date(end);
   return pairs;
 }
 
@@ -559,5 +561,6 @@ TAD_community clean(TAD_community com){
   g_tree_destroy(com->Posts);
   g_hash_table_destroy(com->Hdates);
   g_tree_destroy(com->Users);
+  g_tree_destroy(com->Tags);
   return com;   
 }

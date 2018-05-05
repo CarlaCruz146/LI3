@@ -326,6 +326,11 @@ void postsInfo(xmlDocPtr doc, GTree * arv_posts, GHashTable *datash, GTree * arv
           freekey(kowner);
 
           Post p = createPost(id,typeid,pid,score,vcount,date,ownerid,ownerRep,comcount, nres, title, str, ntags);
+/*
+          for(int i=0; i<ntags; i++)
+              free(str[i]);
+          free(str);
+*/
 
           Heap h = getUserHeap(u);
 
@@ -338,11 +343,7 @@ void postsInfo(xmlDocPtr doc, GTree * arv_posts, GHashTable *datash, GTree * arv
 
           inseredatas(datash, dnova, p);
 
-/*
-          for(int i=0; i<ntags; i++)
-              free(str[i]);
-          free(str);
-*/
+
           xmlFree(id1);
           xmlFree(ti);
           xmlFree(pid1);

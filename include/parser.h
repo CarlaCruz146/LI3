@@ -18,6 +18,8 @@ gint hash (gconstpointer);
 
 Date incrementaData (Date);
 
+int date_equal(Date begin, Date end);
+
 gboolean iguais (gconstpointer, gconstpointer);
 
 int idusercompare(gconstpointer, gconstpointer);

@@ -110,3 +110,4 @@ int get_duplos_pos(Duplos dup){
   if (dup) return dup->pos;
   return -1;
 }
+

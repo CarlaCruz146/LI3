@@ -13,6 +13,7 @@ typedef struct duplo *Duplos;
 ResPost initResPost(long pid);
 Key getResPostParent(ResPost r);
 Heap getResPostHeap(ResPost r);
+void freeResPost(ResPost r);
 LONG_list init_ll(int N);
 Duplos initDuplos(int N);
 void set_duplos_pos(Duplos dup, int i);

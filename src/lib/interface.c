@@ -461,21 +461,25 @@ LONG_list both_participated(TAD_community com, long id1, long id2, int N){
   freekey(k2);
   Heap h1 = getUserHeap(u1);
   Heap h2 = getUserHeap(u2);
+  if(h1){
   for(i=0; i< heap_count(h1); i++){
       p1 = getIndP(h1,i);
-      for(j=0; j<heap_count(h2); j++){
-          p2 = getIndP(h2,j);
-          if(getPostType(p1) == 2 && getPostType(p2) == 1 && getPostId(p2) == getPid(p1))
-              if(p2) heap = heap_push(heap,p2,'D');
-          if(getPostType(p1) == 2 && getPostType(p2) == 2 && getPid(p2) == getPid(p1)){
-              Key k3 = createKey(getPid(p1));
-              p3 = (Post) g_tree_lookup(com->Posts,k3);
-              freekey(k3);
-              if(p3) heap = heap_push(heap,p3,'D');
-          }
-          if(getPostType(p1) == 1 && getPostType(p2) == 2 && getPid(p2) == getPostId(p1))
-              if(p1) heap = heap_push(heap,p1,'D');
+      if(h2){
+        for(j=0; j<heap_count(h2); j++){
+            p2 = getIndP(h2,j);
+            if(getPostType(p1) == 2 && getPostType(p2) == 1 && getPostId(p2) == getPid(p1))
+               if(p2) heap = heap_push(heap,p2,'D');
+            if(getPostType(p1) == 2 && getPostType(p2) == 2 && getPid(p2) == getPid(p1)){
+                Key k3 = createKey(getPid(p1));
+                p3 = (Post) g_tree_lookup(com->Posts,k3);
+                freekey(k3);
+                if(p3) heap = heap_push(heap,p3,'D');
+            }
+            if(getPostType(p1) == 1 && getPostType(p2) == 2 && getPid(p2) == getPostId(p1))
+                if(p1) heap = heap_push(heap,p1,'D');
+        }
       }
+  }
   }
   for(i=0; i<N; i++){
     p = heap_pop(heap,'D');

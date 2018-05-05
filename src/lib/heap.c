@@ -144,18 +144,26 @@ Post heap_pop(Heap heap, char ord) {
 // ord pode ser 'D' (data masi recente) ou 'S' (score mais alto)
 static Heap bubbleDown(Heap heap, int n, char ord){
     int i, m, r;
+    Date de = NULL;
+    Date dd = NULL;
+    Date d1 = NULL;
+    Date d2 = NULL;
     i=0;
     if(ord == 'D'){
       while(ESQUERDO(i) < n){
           if(DIREITO(i) < n){
-            r = maisRecente(getPostDate(heap->posts[(ESQUERDO(i))]), getPostDate(heap->posts[(DIREITO(i))]));
+            r = maisRecente((de =getPostDate(heap->posts[(ESQUERDO(i))])), (dd = getPostDate(heap->posts[(DIREITO(i))])));
+            free_date(de);
+            free_date(dd);
             if (r <= 0) m = ESQUERDO(i);
             else m = DIREITO(i);
           }
           else m = ESQUERDO(i);
 
           //Se a data do post de indice i(pai) for menos recente do que a data do post de indice m(um dos filhos), fazer swap
-          if(maisRecente(getPostDate(heap->posts[i]), getPostDate(heap->posts[m])) >= 0){
+          if(maisRecente((d1 = getPostDate(heap->posts[i])), (d2 = getPostDate(heap->posts[m]))) >= 0){
+              free_date(d1);
+              free_date(d2);
               heap = swap(heap,i,m);
               i = m;
           }

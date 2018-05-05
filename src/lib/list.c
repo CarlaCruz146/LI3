@@ -22,11 +22,6 @@ void set_list(LONG_list l, int index, long value) {
     l->list[index] = value;
 }
 
-int get_ll_size(LONG_list l){
-    if (l) return l->size;
-    return 0;
-}
-
 void free_list(LONG_list l) {
     if(l) {
         free(l->list);

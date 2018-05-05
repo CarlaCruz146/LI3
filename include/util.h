@@ -5,6 +5,7 @@
 #include "heap.h"
 #include "list.h"
 #include "key.h"
+#include "parser.h"
 
 
 typedef struct respostas *ResPost;
@@ -22,6 +23,7 @@ Duplos insere_Duplos(LONG_list ll, TNum tn,int N, int i);
 LONG_list get_duplos_ll(Duplos dup);
 TNum get_duplos_tnum(Duplos dup);
 int get_duplos_pos(Duplos dup);
+char** mystrdups(char** s);
 
 
 #endif

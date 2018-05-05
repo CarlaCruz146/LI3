@@ -7,11 +7,50 @@ struct TCD_community{
   GTree *Tags;
 };
 
-
+/**
+  *@brief   Para todos os Users introduz numa heap ordenada pela reputação.
+  *@param   gpointer ID do User.
+  *@param   gpointer User.
+  *@param   gpointer HeapU.
+  *return   gboolean True quando itera por todos os Users.
+*/
 static gboolean user_heap (gpointer key, gpointer value,gpointer user_data);
+
+/**
+  *@brief   Função que devolve uma LONG_list com os id's dos N users com mais reputação.
+  *@param   TAD_community estrutura com todos os dados úteis provenientes do xml.
+  *@param   int tamanho da LONG_list e do número de users.
+  *return   LONG_list preenchida com os id's.
+*/
 static LONG_list topN (TAD_community com ,int N);
+
+/**
+  *@brief   Função verifica se determinada tag está num array de pares Tag-Num (ATNum).
+  *@param   ATNum array de pares Tag-Num.
+  *@param   char* string com o nome da tag.
+  *return   int índice da posição da tag caso exista, ou -1 caso não exista.
+*/
 static int checkT(ATNum a, char* tag);
-static ATNum get_allTags(TAD_community com,ATNum pairs,LONG_list ll, Date begin, Date end);
+
+/**
+  *@brief   Função que obtém todas as tags de vários posts.
+  *@param   TAD_community estrutura com todos os dados úteis provenientes do xml.
+  *@param   ATNum array de pares Tag-Num.
+  *@param   LONG_list lista com os top N users.
+  *@param   int tamanho da LONG_list.
+  *@param   Date data de início.
+  *@param   Date data final.
+  *return   ATNum array de pares Tag-Num com todas as tags e seu número de ocorrências.
+*/
+static ATNum get_allTags(TAD_community com,ATNum pairs,LONG_list ll,int N, Date begin, Date end);
+
+/**
+  *@brief   Para cada Tag compara-a com a tag do par TNum.
+  *@param   gpointer ID da Tag.
+  *@param   gpointer Tag.
+  *@param   gpointer Duplos.
+  *return   gboolean True quando itera por todos as Tags.
+*/
 static gboolean tags_tree (gpointer key, gpointer value,gpointer user_data);
 
 /**
@@ -555,14 +594,13 @@ static int checkT(ATNum a, char* tag){
 return -1;
 }
 
-static ATNum get_allTags(TAD_community com,ATNum pairs,LONG_list ll, Date begin, Date end){
+static ATNum get_allTags(TAD_community com,ATNum pairs,LONG_list ll, int N, Date begin, Date end){
   User u = NULL; Heap posts = NULL;
   Post p = NULL; TNum new = create_tnum_pair(NULL, 0);
   //Date d;
-  int tam = get_ll_size(ll);
   int i,j,k,t = 0,c;
   char* aux;
-  for(i = 0; i < tam;i++){            //Percorre a long-list com os top N users
+  for(i = 0; i < N;i++){            //Percorre a long-list com os top N users
     u = g_tree_lookup(com->Users,createKey(get_list(ll,i)));      //procura o User da long list, na Àrvore dos users;
     posts = getUserHeap(u);     //vai buscar todos os posts desse gajo
     t = heap_count(posts);    //conta o numero total de posts
@@ -623,7 +661,7 @@ LONG_list most_used_best_rep(TAD_community com, int N, Date begin, Date end){
   LONG_list tagsmu = init_ll(N);
   ATNum tn = init_atnum(N);
   TNum aux = NULL;
-  tn = get_allTags(com,tn,ll,begin,end);
+  tn = get_allTags(com,tn,ll,N,begin,end);
   bubbleTNumSort(tn);
   Duplos dup = insere_Duplos(tagsmu, NULL ,N,0);
   int i;

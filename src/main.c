@@ -19,7 +19,7 @@ int main(){
   TAD_community tad = init();
   int i;
   clock_t t1, t2, t3, t6, t7, t9;//, t5, t6, t7, t8, t9, t10, t11;
-  char* path = "/home/carlacruz/Desktop/LI3/Grupo51/src";
+  char* path = "/home/pedro90/Desktop/dump exemplo/android";
   
   load(tad,path);
 

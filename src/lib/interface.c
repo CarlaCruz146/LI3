@@ -111,10 +111,10 @@ static char* myconcat(const char *s1, const char *s2){
 */
 TAD_community init(){
   TAD_community tad = (TAD_community)malloc(sizeof(struct TCD_community));
-  tad->Users = g_tree_new_full((GCompareDataFunc) idusercompare, NULL, &free, &myfreeUser);
-  tad->Posts = g_tree_new_full((GCompareDataFunc) idpostcompare, NULL, &free, &freePost);
-  tad->Hdates = g_hash_table_new_full((GHashFunc) hash, (GEqualFunc) iguais, &destroyDate, &freeArray);
-  tad->Tags = g_tree_new_full((GCompareDataFunc) idtagcompare,NULL,&free,&freeTag);
+  tad->Users = g_tree_new_full((GCompareDataFunc) idusercompare, NULL, free, myfreeUser);
+  tad->Posts = g_tree_new_full((GCompareDataFunc) idpostcompare, NULL, free, freePost);
+  tad->Hdates = g_hash_table_new_full((GHashFunc) hash, (GEqualFunc) iguais, destroyDate, freeArray);
+  tad->Tags = g_tree_new_full((GCompareDataFunc) idtagcompare,NULL, free, freeTag);
   return tad;
 }
 
@@ -309,7 +309,8 @@ LONG_list questions_with_tag(TAD_community com, char* tag, Date begin, Date end)
     if (d){
       for(i=0; i<getUsed(d); i++){
         p = getInd(d,i);
-        if(existeTag(p,tag) == 1)
+        int eta =existeTag(p,tag);
+        if(eta == 1)
           heap_push(h,p,'D');
         }
     }
@@ -319,6 +320,8 @@ LONG_list questions_with_tag(TAD_community com, char* tag, Date begin, Date end)
       Post p = heap_pop(h,'D');
       set_list(r, i, getPostId(p));
     }
+    free_date(begin);
+    free_date(end);
     heap_free(h);
     return r;
 }
@@ -342,6 +345,8 @@ USER get_user_info(TAD_community com, long id){
     post_history[i] = getPostId(heap_pop(uposts,'D'));
   }
   USER user = create_user(bio,post_history);
+  free(bio);
+  free(post_history);
   free(kid);
   return user;
 }
@@ -672,6 +677,8 @@ LONG_list most_used_best_rep(TAD_community com, int N, Date begin, Date end){
     g_tree_foreach(com->Tags,(GTraverseFunc)tags_tree,dup);
     free_tnum(aux);
   }
+  free_date(begin);
+  free_date(end);
   return tagsmu;
 }
 

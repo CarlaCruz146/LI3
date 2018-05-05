@@ -167,7 +167,11 @@ static Heap bubbleDown(Heap heap, int n, char ord){
               heap = swap(heap,i,m);
               i = m;
           }
-          else return heap;
+          else{
+              free_date(d1);
+              free_date(d2); 
+              return heap;
+          }
         }
       return heap;
     }

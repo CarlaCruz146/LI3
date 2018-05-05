@@ -414,6 +414,11 @@ void postsInfo(xmlDocPtr doc, GTree * arv_posts, GHashTable *datash, GTree * arv
           freekey(kowner);
 
           Post p = createPost(id,typeid,pid,score,vcount,date,ownerid,ownerRep,comcount, nres, title, str, ntags);
+/*
+          for(int i=0; i<ntags; i++)
+              free(str[i]);
+          free(str);
+*/
 
           for(int i=0; i<ntags; i++)
               free(str[i]);

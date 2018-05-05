@@ -55,8 +55,6 @@ int maisRecente(Date date1, Date date2){
   int y2 = get_year(date2);
   int m2 = get_month(date2);
   int d2 = get_day(date2);
- // free_date(date1);
- // free_date(date2);
   if(y1 > y2) return -1;
   if(y2 > y1) return 1;
   if(y1 == y2){
@@ -206,9 +204,9 @@ static Heap bubbleDown(Heap heap, int n, char ord){
 
 static Heap bubbleUp(Heap heap, int i, char ord){
     if(ord == 'D'){
-      Date dpai; // = getPostDate(heap->posts[PAI(i)]);
-      Date di; // = getPostDate(heap->posts[i]); //filho é mais recente ou seja, score do filho é maior
-      while(i > 0 && maisRecente(dpai=getPostDate(heap->posts[PAI(i)]), di=getPostDate(heap->posts[i])) == 1){
+      Date dpai ;//= getPostDate(heap->posts[PAI(i)]);
+      Date di ;//= getPostDate(heap->posts[i]); //filho é mais recente ou seja, score do filho é maior
+      while(i > 0 && maisRecente(dpai = getPostDate(heap->posts[PAI(i)]), di = getPostDate(heap->posts[i])) == 1){
           heap=swap(heap,i,PAI(i)); 
           i = PAI(i);
       } 

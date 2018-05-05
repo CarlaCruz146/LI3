@@ -12,14 +12,13 @@
 #include "key.h"
 #include "heap.h"
 
-//VER SE NO GETHEAPPAL NAO E PARA FAZER A COPIA!
 // ver query 4,5,8,10
 
 int main(){
   TAD_community tad = init();
   int i;
   clock_t t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11;
-  char* path = "/home/nikes/LI/LI3/Grupo51/src";
+  char* path = "/home/carlacruz/Desktop/LI3/Grupo51/src";
   
   load(tad,path);
 
@@ -142,7 +141,6 @@ int main(){
   a1 = ((double) t11) /CLOCKS_PER_SEC *1000;
   printf("Q11: %f ms \n",a1);
   free_list(l11);
-  
 
   tad = clean(tad);
   free(tad);

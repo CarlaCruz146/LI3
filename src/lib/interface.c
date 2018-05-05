@@ -565,7 +565,7 @@ static ATNum get_allTags(TAD_community com,ATNum pairs,LONG_list ll, Date begin,
       if((maisRecente (begin,d)== 1 || maisRecente (begin,d) == 0 ) && (maisRecente (d,end)==1 || maisRecente (d,end) == 0)){ //compara se a data está nesse intervalo
         int numtags =getPostNTags(p);
    //vê o nº de tags do post
-        free_date(d);
+        free_date(d);    
         for(k = 0; k < numtags;k++){
           //Percorre asx tags todas
           aux = getTagI(p,k);

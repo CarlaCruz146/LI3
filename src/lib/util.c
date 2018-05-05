@@ -25,10 +25,20 @@ ResPost initResPost(long pid){
   return res;
 }
 
+/**
+  *@brief   Retorna o ID guardado na estrutura.
+  *@param   ResPost.
+  *return   Key ID.
+*/
 Key getResPostParent(ResPost r){
     return r->parent;
 }
 
+/**
+  *@brief   Retorna a heap guardada na estrutura.
+  *@param   ResPost.
+  *return   Heap.
+*/
 Heap getResPostHeap(ResPost r){
     return r->h;
 }
@@ -49,7 +59,7 @@ LONG_list init_ll(int N){
 }
 
 /**
-  *@brief   Função que inicializa um duplos.
+  *@brief   Função que inicializa a estrutura Duplos.
   *@param   int tamanho da LONG_list do duplos.
   *return   Duplos inicializado
 */

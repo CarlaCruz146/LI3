@@ -14,7 +14,6 @@ static int checkT(ATNum a, char* tag);
 static ATNum get_allTags(TAD_community com,ATNum pairs,LONG_list ll, Date begin, Date end);
 static gboolean tags_tree (gpointer key, gpointer value,gpointer user_data);
 
-
 /**
   *@brief   Função que concatena duas strings.
   *@param   char* string 1.
@@ -22,14 +21,6 @@ static gboolean tags_tree (gpointer key, gpointer value,gpointer user_data);
   *return   char* string resultante.
 */
 static char* myconcat(const char *s1, const char *s2);
-
-
-/**
-  *@brief   Compara duas datas.
-  *@param   long id de uma pergunta.
-  *return   int 1 se as datas forem diferentes e 0 se forem iguais.
-*/
-static int date_equal(Date begin, Date end);
 
 /**
   *@brief   Para todos os Users, insere os seus IDs numa heap e ordena-os segundo o número de posts do User correspondente ao ID.
@@ -74,6 +65,11 @@ static char* myconcat(const char *s1, const char *s2){
     return result;
 }
 
+
+/**
+  *@brief   Inicializa a estrutura TAD_community com as árvores dos Posts, Users e Tags e a tabela de Hash de Posts.
+  *return   Devolve a nova estrutura.
+*/
 TAD_community init(){
   TAD_community tad = (TAD_community)malloc(sizeof(struct TCD_community));
   tad->Users = g_tree_new_full((GCompareDataFunc) idusercompare, NULL, &free, &myfreeUser);
@@ -83,7 +79,13 @@ TAD_community init(){
   return tad;
 }
 
-// query 0
+//--- QUERY 0 ---//
+/**
+  *@brief   Faz o carregamento dos dados dos ficheiros .xml para as estruturas.
+  *@param   TAD_community estrutura que guarda toda a informação.
+  *@param   char* path onde se encontram os ficheiros .xml.
+  *return   TAD_community estrutura carregada com toda a informação útil.
+*/
 TAD_community load(TAD_community com, char* dump_path){
   char* us = (char*) myconcat(dump_path,"/Users.xml");
   xmlDocPtr us2 = xmlParseFile(us);
@@ -106,7 +108,13 @@ TAD_community load(TAD_community com, char* dump_path){
   return com;
 }
 
-//query 1
+//--- QUERY 1 ---//
+/**
+  *@brief   Retorna o título e o nome do autor de um post, dado o id do mesmo.
+  *@param   TAD_community estrutura que guarda toda a informação.
+  *@param   long id do post.
+  *return   STR_pair par com título e nome do autor.
+*/
 STR_pair info_from_post(TAD_community com, long id){
   Key k = createKey(id);
   Post p = (Post)g_tree_lookup(com->Posts, k);
@@ -145,16 +153,6 @@ STR_pair info_from_post(TAD_community com, long id){
   return res;
 }
 
-static int date_equal(Date begin, Date end){
-  int d,m,a,r;
-  d = (get_day(begin) == get_day(end)) ? 0 : 1;
-  m = (get_month(begin) == get_month(end)) ? 0 : 1;
-  a = (get_year(begin) == get_year(end)) ? 0 : 1;
-
-  r = (d + m + a) > 0 ? 1 : 0;
-
-  return r;
-}
 
 static gboolean nrposts (gpointer key, gpointer value, gpointer user_data){
   Key k = (Key) key;
@@ -167,7 +165,12 @@ static gboolean nrposts (gpointer key, gpointer value, gpointer user_data){
   return FALSE;
 }
 
-// query 2
+/**
+  *@brief   Retorna o top N utilizadores com maior número de posts de sempre.
+  *@param   TAD_community estrutura que guarda toda a informação.
+  *@param   int N.
+  *return   LONG_list lista dos top N utilizadores.
+*/
 LONG_list top_most_active(TAD_community com, int N){
   int i;
   long id;
@@ -184,7 +187,14 @@ LONG_list top_most_active(TAD_community com, int N){
 }
 
 
-// query 3
+//--- QUERY 3 ---//
+/**
+  *@brief   Retorna o número total de posts efetuados num dado período de tempo.
+  *@param   TAD_community estrutura que guarda toda a informação.
+  *@param   Date data inicial.
+  *@param   Date data final.
+  *return   LONG_pair (número de perguntas,número de respostas).
+*/
 LONG_pair total_posts(TAD_community com, Date begin, Date end){
   long fst = 0;
   long snd = 0; 
@@ -213,6 +223,7 @@ LONG_pair total_posts(TAD_community com, Date begin, Date end){
 }
 
 
+//--- QUERY 4 ---//
 static int existeTag(Post p, char* tag){
     int i, c = 0;
     char** tags = getPostTags(p);
@@ -224,7 +235,14 @@ static int existeTag(Post p, char* tag){
     return c;
 }
 
-// query 4
+/**
+  *@brief   Retorna os IDs de todas as perguntas de um dado intervalo de tempo que contém uma dada tag.
+  *@param   TAD_community estrutura que guarda toda a informação.
+  *@param   char* tag.
+  *@param   Date data inicial.
+  *@param   Date data final.
+  *return   LONG_list lista de IDs ordenada por ordem cronológica inversa.
+*/
 LONG_list questions_with_tag(TAD_community com, char* tag, Date begin, Date end){
     int i, c;
     gpointer x;
@@ -266,7 +284,13 @@ LONG_list questions_with_tag(TAD_community com, char* tag, Date begin, Date end)
 }
 
 
-// query 5
+//--- QUERY 5 ---//
+/**
+  *@brief   Retorna a informação do perfil e as últimas dez publicações de um user do qual é dado o ID.
+  *@param   TAD_community estrutura que guarda toda a informação.
+  *@param   long ID.
+  *return   USER estrutura que contém a biografia e 10 últimos posts.
+*/
 USER get_user_info(TAD_community com, long id){
   int i;
   long* post_history = malloc(10 * sizeof(long));
@@ -283,7 +307,15 @@ USER get_user_info(TAD_community com, long id){
 }
 
 
-// query 6
+//--- QUERY 6 ---//
+/**
+  *@brief   Retorna os ids das N respostas com mais votos feitas num dado intervalo de tempo, por ordem descrescente dos votos.
+  *@param   TAD_community estrutura que guarda toda a informação.
+  *@param   int N.
+  *@param   Date data inicial.
+  *@param   Date data final.
+  *return   LONG_list ID's das respostas.
+*/
 LONG_list most_voted_answers(TAD_community com, int N, Date begin, Date end){
   int i;
   gpointer x;
@@ -321,7 +353,15 @@ LONG_list most_voted_answers(TAD_community com, int N, Date begin, Date end){
 
 
 
-// query 7
+//--- QUERY 7 ---//
+/**
+  *@brief   Retorna os IDs das N perguntas num dado intervalo de tempo com mais respostas.
+  *@param   TAD_community estrutura que guarda toda a informação.
+  *@param   int N.
+  *@param   Date data inicial.
+  *@param   Date data final.
+  *return   LONG_list ID's das perguntas.
+*/
 LONG_list most_answered_questions(TAD_community com, int N, Date begin, Date end){
   int i;
   gpointer x;
@@ -355,8 +395,14 @@ LONG_list most_answered_questions(TAD_community com, int N, Date begin, Date end
   return r;
 }
 
-
-//insere numa heap (ordenada por ordem cronologica inversa) todos os posts que contêm no seu titulo uma dada palavra
+//--- QUERY 8 ---//
+/**
+  *@brief   Iterador da árvore dos Posts que insere aqueles que contêm no seu título uma dada palavra numa max heap ordenada pela data.
+  *@param   gpointer id.
+  *@param   gpointer Post.
+  *@param   gpointer Heap (que guarda a palavra em questão).
+  *return   gboolean.
+*/
 static gboolean pContainsWord(gpointer key, gpointer value, gpointer user_data){
   Key k = (Key) key;
   getKey(k);
@@ -371,7 +417,13 @@ static gboolean pContainsWord(gpointer key, gpointer value, gpointer user_data){
   return FALSE;
 }
 
-// query 8
+/**
+  *@brief   Retorna os IDs das N perguntas cujos títulos contêm uma dada palavra, por ordem cronológica inversa.
+  *@param   TAD_community estrutura que guarda toda a informação.
+  *@param   char* palavra.
+  *@param   int N.
+  *return   LONG_list ID's das perguntas.
+*/
 LONG_list contains_word(TAD_community com, char* word, int N){
   int i;
   Post p;
@@ -386,7 +438,15 @@ LONG_list contains_word(TAD_community com, char* word, int N){
   return r;
 }
 
-// query 9
+//--- QUERY 9 ---//
+/**
+  *@brief   Retorna as últimas N perguntas (por ordem cronológica inversa) em que participaram dois utilizadores específicos.
+  *@param   TAD_community estrutura que guarda toda a informação.
+  *@param   long id do user 1.
+  *@param   long id do user 2.
+  *@param   int N.
+  *return   LONG_list ID's das perguntas.
+*/
 LONG_list both_participated(TAD_community com, long id1, long id2, int N){
   int i,j;
   Post p,p1,p2,p3;
@@ -424,7 +484,7 @@ LONG_list both_participated(TAD_community com, long id1, long id2, int N){
   return r;
 }
 
-
+//--- QUERY 10 ---//
 static gboolean getScCom(gpointer key, gpointer value, gpointer user_data){
   Post p = (Post)value;
   ResPost r = (ResPost) user_data;
@@ -435,7 +495,12 @@ static gboolean getScCom(gpointer key, gpointer value, gpointer user_data){
   return FALSE;
 }
 
-// query 10
+/**
+  *@brief   Retorna a melhor resposta dada a uma certa pergunta, da qual é passada o ID.
+  *@param   TAD_community estrutura que guarda toda a informação.
+  *@param   long ID.
+  *return   long ID da resposta.
+*/
 long better_answer(TAD_community com, long id){
   Post p;
   ResPost r = initResPost(id);
@@ -445,7 +510,8 @@ long better_answer(TAD_community com, long id){
 }
 
 
-static gboolean user_heap (gpointer key, gpointer value,gpointer user_data){
+//--- QUERY 11 ---//
+static gboolean user_heap(gpointer key, gpointer value,gpointer user_data){
   User u = (User) value;
   HeapU us = (HeapU) user_data;
   long id = getUserId(u);
@@ -454,7 +520,7 @@ static gboolean user_heap (gpointer key, gpointer value,gpointer user_data){
   return FALSE;
 }
 
-static LONG_list topN (TAD_community com ,int N){
+static LONG_list topN(TAD_community com ,int N){
   LONG_list ll = init_ll(N);
   HeapU us = initHeapU();
   g_tree_foreach(com->Users, (GTraverseFunc)user_heap, us);
@@ -485,7 +551,7 @@ return -1;
 static ATNum get_allTags(TAD_community com,ATNum pairs,LONG_list ll, Date begin, Date end){
   User u = NULL; Heap posts = NULL;
   Post p = NULL; TNum new = create_tnum_pair(NULL, 0);
-  Date d;
+  //Date d;
   int tam = get_ll_size(ll);
   int i,j,k,t = 0,c;
   char* aux;
@@ -495,11 +561,11 @@ static ATNum get_allTags(TAD_community com,ATNum pairs,LONG_list ll, Date begin,
     t = heap_count(posts);    //conta o numero total de posts
     for(j = 0; j < t; j++){     //Percorre a àrvore com todos os posts desse men
       p = getIndP(posts,j);     //Pega no post
-      d = getPostDate(p);
+      Date d = getPostDate(p);
       if((maisRecente (begin,d)== 1 || maisRecente (begin,d) == 0 ) && (maisRecente (d,end)==1 || maisRecente (d,end) == 0)){ //compara se a data está nesse intervalo
         int numtags =getPostNTags(p);
    //vê o nº de tags do post
-
+        free_date(d);
         for(k = 0; k < numtags;k++){
           //Percorre asx tags todas
           aux = getTagI(p,k);
@@ -518,6 +584,8 @@ static ATNum get_allTags(TAD_community com,ATNum pairs,LONG_list ll, Date begin,
       }
     }
   }
+  free_date(begin);
+  free_date(end);
   return pairs;
 }
 
@@ -535,7 +603,14 @@ static gboolean tags_tree (gpointer key, gpointer value,gpointer user_data){
     return FALSE;
   }
 
-// query 11
+/**
+  *@brief   Retorna, dado um intervalo de tempo, os IDs das N tags mais utilizadas nesse período pelos N utilizadores com melhor reputação.
+  *@param   TAD_community estrutura que guarda toda a informação.
+  *@param   int N.
+  *@param   Date data inicial.
+  *@param   Date data final. 
+  *return   LONG_list IDs das tags.
+*/
 LONG_list most_used_best_rep(TAD_community com, int N, Date begin, Date end){
   LONG_list ll = topN(com,N);
   LONG_list tagsmu = init_ll(N);
@@ -555,9 +630,15 @@ LONG_list most_used_best_rep(TAD_community com, int N, Date begin, Date end){
   return tagsmu;
 }
 
+
+/**
+  *@brief   Limpa da memória todos os dados guardados no load da TAD_community.
+  *return   Devolve a estrutura limpa.
+*/
 TAD_community clean(TAD_community com){
   g_tree_destroy(com->Posts);
   g_hash_table_destroy(com->Hdates);
   g_tree_destroy(com->Users);
+  g_tree_destroy(com->Tags);
   return com;   
 }

@@ -60,9 +60,14 @@ int main(){
   t4 = clock();
   Date data1 = createDate(1,1,2014);
   Date data2 = createDate(31,1,2014);
-  LONG_list l3 = questions_with_tag(tad, "4.1-jelly-bean", data1, data2);
+  LONG_list l3 = questions_with_tag(tad, "google-play-store", data1, data2);
   t4 = clock() - t4;
   a1 = ((double) t4) /CLOCKS_PER_SEC *1000;
+  i=0;
+  while(i < get_ll_size(l3)){
+    printf("%ld\n", get_list(l3,i));
+    i++;
+  }
   printf("Q4: %f ms \n",a1 );
   free_list(l3);
 

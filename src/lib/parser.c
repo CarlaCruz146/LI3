@@ -1,5 +1,10 @@
 #include "parser.h"
 
+/**
+  *@brief   Função de Hash da tabela de Hash de Posts.
+  *@param   gconstpointer.
+  *return   gint.
+*/
 gint hash (gconstpointer a){
   Date b = (Date) a;
   int hash = 7;
@@ -9,6 +14,11 @@ gint hash (gconstpointer a){
   return hash;
 }
 
+/**
+  *@brief   Dada uma data, incrementa-a em 1 dia.
+  *@param   Date.
+  *return   Date.
+*/
 Date incrementaData (Date data){
   int day1 = get_day(data);
   int month1 = get_month(data);
@@ -71,7 +81,13 @@ Date incrementaData (Date data){
   return NULL;
 }
 
-static int date_equal(Date begin, Date end){
+/**
+  *@brief   Compara duas datas.
+  *@param   Date data 1.
+  *@param   Date data 2.
+  *return   int 1 se as datas forem diferentes ou 0 se forem iguais.
+*/
+int date_equal(Date begin, Date end){
   int d,m,a,r;
   d = (get_day(begin) == get_day(end)) ? 0 : 1;
   m = (get_month(begin) == get_month(end)) ? 0 : 1;
@@ -82,6 +98,12 @@ static int date_equal(Date begin, Date end){
   return r;
 }
 
+/**
+  *@brief   Compara duas datas.
+  *@param   gconstpointer.
+  *@param   gconstpointer.
+  *return   gboolean TRUE se as duas datas forem iguas.
+*/
 gboolean iguais (gconstpointer a, gconstpointer b){
   Date data1 = (Date) a;
   Date data2 = (Date) b;
@@ -90,6 +112,12 @@ gboolean iguais (gconstpointer a, gconstpointer b){
   else return FALSE;
 }
 
+/**
+  *@brief   Compara os IDs de dois users.
+  *@param   gconstpointer.
+  *@param   gconstpointer.
+  *return   int valor positivo se o primeiro for maior que o segundo, e vice-versa (ou 0 se forem iguais).
+*/
 int idusercompare(gconstpointer id1, gconstpointer id2){ //sendo id2 o a colocar
   long key1 = getKey((Key) id1);
   long key2 = getKey((Key) id2);
@@ -97,7 +125,12 @@ int idusercompare(gconstpointer id1, gconstpointer id2){ //sendo id2 o a colocar
   return key1-key2;
 }
 
-
+/**
+  *@brief   Compara os IDs de dois posts.
+  *@param   gconstpointer.
+  *@param   gconstpointer.
+  *return   int valor positivo se o primeiro for maior que o segundo, e vice-versa (ou 0 se forem iguais).
+*/
 int idpostcompare(gconstpointer id1, gconstpointer id2){ //sendo id2 o a colocar
   long key1 = getKey((Key) id1);
   long key2 = getKey((Key) id2);
@@ -105,12 +138,24 @@ int idpostcompare(gconstpointer id1, gconstpointer id2){ //sendo id2 o a colocar
   return key1-key2;
 }
 
+/**
+  *@brief   Compara os IDs de duas tags.
+  *@param   gconstpointer.
+  *@param   gconstpointer.
+  *return   int valor positivo se o primeiro for maior que o segundo, e vice-versa (ou 0 se forem iguais).
+*/
 int idtagcompare(gconstpointer id1, gconstpointer id2){ //sendo id2 o a colocar
   long key1 = getKey((Key) id1);
   long key2 = getKey((Key) id2);
   return key1-key2;
 }
 
+/**
+  *@brief   Compara duas datas.
+  *@param   gconstpointer.
+  *@param   gconstpointer.
+  *return   gint valor positivo se a primeira for maior que a segunda, e vice-versa (ou 0 se forem iguais).
+*/
 gint datacompare(gconstpointer data1, gconstpointer data2){ //sendo data1 o a colocar
   Date key1 = (Date) data1;
   Date key2 = (Date) data2;
@@ -139,8 +184,11 @@ gint datacompare(gconstpointer data1, gconstpointer data2){ //sendo data1 o a co
   return 0;
 }
 
-
-
+/**
+  *@brief   Função que realiza o parser do ficheiro Users.xml e guarda numa árvore os dados.
+  *@param   xmlDocPtr ficheiro .xml.
+  *@param   GTree* árvore que guarda os users.
+*/
 void userInfo (xmlDocPtr doc, GTree * arv_users) {
 	xmlNodePtr cur = xmlDocGetRootElement(doc); // Acede à raíz do documento: "<users>"
 	cur = cur->xmlChildrenNode; // Vai para o filho: tag <row>
@@ -179,7 +227,11 @@ void userInfo (xmlDocPtr doc, GTree * arv_users) {
     xmlCleanupParser();
 }
 
-
+/**
+  *@brief   Dada uma string que contém uma data de criação, devolve a string relativa ao ano.
+  *@param   char*.
+  *return   char*.
+*/
 static char* getYear(char* d){
     int i=0;
     while(d[i]!='-')
@@ -188,6 +240,11 @@ static char* getYear(char* d){
     return d;
   }
 
+/**
+  *@brief   Dada uma string que contém uma data de criação, devolve a string relativa ao mês.
+  *@param   char*.
+  *return   char*.
+*/
 static char* getMonth(char* d){
     int j, w=0;
     for(j=0;j<5;j++)
@@ -198,6 +255,11 @@ static char* getMonth(char* d){
     return d;
 }
 
+/**
+  *@brief   Dada uma string que contém uma data de criação, devolve a string relativa ao dia.
+  *@param   char*.
+  *return   char*.
+*/
 static char* getDay(char* d){
     int a, b=0;
     for(a=0;a<8;a++)
@@ -208,7 +270,12 @@ static char* getDay(char* d){
     return d;
 }
 
-
+/**
+  *@brief   Insere na tabela de Hash de Posts (guardados por data) um Post criado numa dada data.
+  *@param   GHashTable*.
+  *@param   Date.
+  *@param   Post.
+*/
 static void inseredatas(GHashTable *hdate, Date date, Post p){
   gpointer x = g_hash_table_lookup(hdate, date);
   if( !x){
@@ -223,6 +290,11 @@ static void inseredatas(GHashTable *hdate, Date date, Post p){
   }
 }
 
+/**
+  *@brief   Devolve o número de tags contidas numa string contendo tags.
+  *@param   char*.
+  *return   int.
+*/
 int count_tags(char* tags){
     int i, num = 0;
     for(i = 0; tags[i] != '\0'; i++)
@@ -231,6 +303,11 @@ int count_tags(char* tags){
     return num;
 }
 
+/**
+  *@brief   Transforma uma string de tags num array de tags.
+  *@param   char*.
+  *return   char**.
+*/
 char** takeTag(char* tags){
     if(!tags) return NULL;
 
@@ -257,6 +334,11 @@ char** takeTag(char* tags){
     return list;
 }
 
+/**
+  *@brief   Devolve o número de tags contidas num array de tags.
+  *@param   char**.
+  *return   int.
+*/
 int nTags(char** list){
     if(list == NULL) return 0;
 
@@ -266,7 +348,13 @@ int nTags(char** list){
     return num;
 }
 
-
+/**
+  *@brief   Função que realiza o parser do ficheiro Posts.xml e guarda numa árvore e numa tabela de Hash os dados. Também guarda na árvore dos users todos os posts que cada um criou.
+  *@param   xmlDocPtr ficheiro .xml.
+  *@param   GTree* árvore que guarda os posts.
+  *@param   GHashTable* tabela de hash que guarda os posts.
+  *@param   GTree* árvore que guarda os users.
+*/
 void postsInfo(xmlDocPtr doc, GTree * arv_posts, GHashTable *datash, GTree * arv_users) {
 	 xmlNodePtr cur = xmlDocGetRootElement(doc);
 	 cur = cur->xmlChildrenNode;
@@ -327,6 +415,10 @@ void postsInfo(xmlDocPtr doc, GTree * arv_posts, GHashTable *datash, GTree * arv
 
           Post p = createPost(id,typeid,pid,score,vcount,date,ownerid,ownerRep,comcount, nres, title, str, ntags);
 
+          for(int i=0; i<ntags; i++)
+              free(str[i]);
+          free(str);
+          
           Heap h = getUserHeap(u);
 
           heap_push(h, p, 'D');
@@ -338,11 +430,6 @@ void postsInfo(xmlDocPtr doc, GTree * arv_posts, GHashTable *datash, GTree * arv
 
           inseredatas(datash, dnova, p);
 
-/*
-          for(int i=0; i<ntags; i++)
-              free(str[i]);
-          free(str);
-*/
           xmlFree(id1);
           xmlFree(ti);
           xmlFree(pid1);
@@ -360,8 +447,11 @@ void postsInfo(xmlDocPtr doc, GTree * arv_posts, GHashTable *datash, GTree * arv
   xmlCleanupParser();
 }
 
-
-
+/**
+  *@brief   Função que realiza o parser do ficheiro Tags.xml e guarda numa árvore os dados.
+  *@param   xmlDocPtr ficheiro .xml.
+  *@param   GTree* árvore que guarda as tags.
+*/
 void tagsInfo (xmlDocPtr doc, GTree * arv_tags) {
 	xmlNodePtr cur = xmlDocGetRootElement(doc); // Acede à raíz do documento: "<tags>"
 	cur = cur->xmlChildrenNode; // Vai para o filho: tag <row>

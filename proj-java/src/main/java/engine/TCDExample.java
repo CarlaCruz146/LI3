@@ -16,7 +16,9 @@ import java.util.Arrays;
 import java.util.List;
 
 public class TCDExample implements TADCommunity {
-
+    private Set<Post> posts;
+    private Set<User> users;
+    private Set <Tag> tags;
     private MyLog qelog;
 
     /*

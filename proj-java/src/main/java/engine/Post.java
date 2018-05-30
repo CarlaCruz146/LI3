@@ -8,8 +8,8 @@ import java.util.ArrayList;
 import java.time.LocalDate;
 
 public class Post{
-    private long id; //id do post
-    private int type; //
+    private long id;
+    private int type;
     private long pid;
     private int score;
     private int vcount;

@@ -1,3 +1,5 @@
+package engine;
+
 /**
  * Classe que contém a implementação da estrutura dos Users
  *
@@ -5,6 +7,8 @@
  */
 
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.HashMap;
 import java.time.LocalDate;
 
 public class User {
@@ -34,7 +38,7 @@ public class User {
     *@param   String nome do User.
     *@param   String biografia do User.
     *@param   int número de Posts do User.
-    *@param   ArrayList<Post> dos Posts do User.
+    *@param   ArrayList<Post>  dos Posts do User.
     *@return  User criado.
     */
     public User(long id, int reputacao, String nome, String bio, int nposts, ArrayList<Post> uposts){
@@ -44,7 +48,26 @@ public class User {
         this.bio = bio;
         this.nposts=nposts;
         this.uposts = new ArrayList<>();
-        uposts.forEach(a->this.uposts.add(a));
+        for(Post p: uposts)
+            this.uposts.add(p);
+    } 
+
+    /**
+    * Cria um User sem o seu Map de posts como parâmetro.
+    *@param   long id do User.
+    *@param   int reputação do User.
+    *@param   String nome do User.
+    *@param   String biografia do User.
+    *@param   int número de Posts do User.
+    *@return  User criado.
+    */
+    public User(long id, int reputacao, String nome, String bio, int nposts){
+        this.id = id;
+        this.reputacao = reputacao;
+        this.nome = nome;
+        this.bio = bio;
+        this.nposts=nposts;
+        this.uposts = new ArrayList<>();
     } 
 
     /**
@@ -56,10 +79,36 @@ public class User {
         this.reputacao = g.getUserRep();
         this.nome = g.getUserName();
         this.bio = g.mygetUserBio();
-        this.nposts = g.getUserNameNPosts();
+        this.nposts = g.getUserNPosts();
         this.uposts = g.getUserPosts();
     }
-
+    
+    public void setUserId(long id){
+        this.id = id;
+    }
+    
+    public void setUserRep(int rep){
+     this.reputacao = rep;   
+    }
+    
+    public void setUserName(String n){
+        this.nome = n;
+    }
+    
+    public void setUserBio(String s){
+        this.bio = s;
+    }
+    
+    public void setUserNPosts(int n){
+        this.nposts = n;
+    }
+    
+    public void setUserPosts(ArrayList<Post> uposts){
+        this.uposts = new ArrayList<>();
+        uposts.forEach((a)->this.uposts.add(a));
+    }
+    
+    
     /**
      * Devolve o ID do user
      * @return long
@@ -96,13 +145,13 @@ public class User {
      * Devolve o número de posts do user
      * @return int
      */
-    public int getUserNameNPosts(){
+    public int getUserNPosts(){
         return this.nposts;
     }
 
     /**
      * Devolve os posts do user
-     * @return ArrayList<Posts>
+     * @return ArrayList<Post> 
      */
     public ArrayList<Post> getUserPosts(){
         return this.uposts;
@@ -127,5 +176,24 @@ public class User {
     @Override
     public User clone(){
         return new User(this);
+    }
+    
+    public void addUserPost(Post p){
+        this.uposts.add(p.clone());
+    }
+    
+    public void incNumPost(){
+        int ret = this.nposts;
+        ret++;
+        this.nposts = ret;
+    }
+
+    public int getCountPosts(){
+        ArrayList<Post> posts = this.getUserPosts();
+        int ret = 0;
+        for(Post p : posts){
+            if( p.getPostType() == 1 || p.getPostType() == 2 ) ret++;
+        }
+        return ret;    
     }
 }

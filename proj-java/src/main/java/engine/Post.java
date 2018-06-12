@@ -1,3 +1,5 @@
+package engine;
+
 /**
  * Classe que contém a implementação da estrutura dos Posts
  *
@@ -72,6 +74,7 @@ public class Post{
         tags.forEach(a->this.tag.add(a));
         this.ntags = ntags;
     }
+    
     /**
      * Construtor por copia
      * @param Post posts
@@ -79,7 +82,7 @@ public class Post{
     public Post(Post g){
         this.id = g.getPostId();
         this.type = g.getPostType();
-        this.pid = g.getPid();
+        this.pid = g.getPostPid();
         this.score = g.getPostScore();
         this.vcount = g.getPostVCount();
         this.date = g.getPostDate();
@@ -89,9 +92,62 @@ public class Post{
         this.nres = g.getPostNRes();
         this.titulo = g.getPostTitulo();
         this.tag = g.getPostTags();
-        this.ntags = g.getnTags();
+        this.ntags = g.getPostnTags();
     }
-
+    
+    public void setPostId(long id){
+        this.id = id;
+    }
+    
+    public void setPostType(int t){
+        this.type = t;
+    }
+    
+    public void setPostPid(long id){
+        this.pid = id;
+    }
+    
+    public void setPostScore(int n){
+        this.score = n;
+    }
+    
+    public void setPostViewCount(int n){
+        this.vcount = n;
+    }
+    
+    public void setPostDate(LocalDate d){
+        this.date = d;
+    }
+    
+    public void setPostOwner(long id){
+        this.owner = id;
+    }
+    
+    public void setPostOwnerRep(int n){
+        this.ownerRep = n;
+    }
+    
+    public void setPostNumCom(int n){
+        this.numcom = n;
+    }
+    
+    public void setPostNumRes(int n){
+        this.nres = n;
+    }
+    
+    public void setPostTitle(String t){
+        this.titulo = t;
+    }
+    
+    public void setPostTags(ArrayList<String> t){
+        this.tag = new ArrayList<>();
+        t.forEach(a->this.tag.add(a));
+    }
+    
+    public void setPostNumTags(int n){
+        this.ntags = n;
+    }
+    
     /**
      * Devolve o ID
      * @return long
@@ -112,7 +168,7 @@ public class Post{
      * Devolve o Parent ID 
      * @return long
      */
-    public long getPid(){
+    public long getPostPid(){
         return this.pid;
     }
 
@@ -192,7 +248,7 @@ public class Post{
      * Devolve o número de tags
      * @return int
      */
-    public int getnTags(){
+    public int getPostnTags(){
         return this.ntags;
     }
 

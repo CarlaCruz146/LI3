@@ -1,3 +1,5 @@
+package engine;
+
 /**
  * Classe que contém a implementação da estrutura das Tags
  *
@@ -38,7 +40,15 @@ public class Tag {
         this.id = t.getTagId();
         this.name = t.getTagName();
     }
-
+    
+    public void setTagId(long id){
+        this.id = id;
+    }
+    
+    public void setTagName(String n){
+        this.name = n;
+    }
+    
     /**
      * Devolve o ID da tag
      * @return long

@@ -28,7 +28,7 @@ public class TagBD {
      */
     public TagBD(HashMap<Long,Tag> t){
         HashMap<Long,Tag> tagmap = new HashMap<>();
-        t.entrySet().stream().forEach(entry -> tagmap.put(entry.getKey(), entry.getValue().clone()));
+        t.entrySet().stream().forEach(entry -> tagmap.put(entry.getKey(), entry.getValue()));
     }   
 
     /**
@@ -51,7 +51,7 @@ public class TagBD {
      * @param Tag
      */
     public void addTag(Tag u){
-        this.tagmap.put(u.getTagId(),u.clone());
+        this.tagmap.put(u.getTagId(),u);
     }
     
     /**
@@ -60,7 +60,7 @@ public class TagBD {
      */
     public HashMap<Long,Tag> getTagMap(){
         HashMap<Long,Tag> tagmap = new HashMap<>();
-        this.tagmap.entrySet().stream().forEach(entry -> tagmap.put(entry.getKey(), entry.getValue().clone()));
+        this.tagmap.entrySet().stream().forEach(entry -> tagmap.put(entry.getKey(), entry.getValue()));
         return tagmap;
     }
     

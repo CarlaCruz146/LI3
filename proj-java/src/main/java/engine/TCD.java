@@ -1,3 +1,5 @@
+package engine;
+
 /**
  * Classe que contém a implementação da estrutura geral TCD
  *
@@ -5,38 +7,39 @@
  */
 
 import java.util.ArrayList;
+import java.util.List;
 import java.time.LocalDate;
 import java.util.Set;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Collections;
 import java.util.TreeSet;
 
 public class TCD{
-    private Set<Post> posts;
-    private Set<User> users;
-    private Set <Tag> tags;
+    private PostBD posts;
+    private UserBD users;
+    private TagBD tags;
 
     /**
      * Construtor vazio
      */
     public TCD(){
-        this.posts = new TreeSet<>();
-        this.users = new TreeSet<>();
-        this.tags = new TreeSet<>();
+        this.posts = new PostBD();
+        this.users = new UserBD();
+        this.tags = new TagBD();
     }
+    
     /**
      * Contrutor parametizado
-     * @param Set<Post> posts
-     * @param Set<User> users
-     * @param Set<Tag> tags
+     * @param Map<Ineger,Post> posts
+     * @param Map<Integer,User> users
+     * @param Map<Integer,Tag> tags
      */
-    public TCD (Set<Post> postsp,Set<User> usersp, Set<Tag> tagsp){
-        this.posts = new TreeSet<>();
-        postsp.forEach(a->this.posts.add(a));
-        
-        this.users = new TreeSet<>();
-        usersp.forEach(a->this.users.add(a));
-        
-        this.tags = new TreeSet<>();
-        tagsp.forEach(a->this.tags.add(a));
+    public TCD (PostBD postsp, UserBD usersp, TagBD tagsp){
+        this.posts = new PostBD(postsp);
+        this.users = new UserBD(usersp);
+        this.tags = new TagBD(tagsp);
     }
 
     /**
@@ -44,33 +47,39 @@ public class TCD{
      * @param TCD TCD
      */
     public TCD(TCD community){
-        this.posts = community.getTCDPosts();
-        this.users = community.getTCDUsers();
-        this.tags = community.getTCDTags();
+        this.posts = community.getPosts();
+        this.users = community.getUsers();
+        this.tags = community.getTags();
     }
 
     /**
-     * Devolve o set com todos os posts
-     * @return Set<Post>
+     * Devolve o Map com todos os posts
+     * @return Map<Integer,Post>
      */
-    public Set<Post> getTCDPosts(){
+    public PostBD getPosts(){
         return this.posts;
     }
 
     /**
-     * Devolve o set com todos os users
-     * @return Set<User>
+     * Devolve o Map com todos os users
+     * @return Map<Integer,User>
      */
-    public Set<User> getTCDUsers(){
+    public UserBD getUsers(){
         return this.users;
     }
 
     /**
-     * Devolve o set com todos as tags
-     * @return Set<Tag>
+     * Devolve o Map com todos as tags
+     * @return Map<Integer,Tag>
      */
-    public Set<Tag> getTCDTags(){
+    public TagBD getTags(){
         return this.tags;
     }
-
+    
+    public void clear(){
+        this.posts.clear();
+        this.users.clear();
+        this.tags.clear();
+    }
 }
+

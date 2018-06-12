@@ -94,24 +94,107 @@ public class TCDCommunity implements TADCommunity {
     }
 
     // Query 1
+    /**
+     * Dado o id de um post devolver o par com o título do post e nome de quem o publicou
+     * @param long id
+     * @return Pair<String,String>
+     */
     public Pair<String,String> infoFromPost(long id) {
-        Pair<String,String> par = new Pair<>(null,null);     
+        UserBD users = com.getUsers();
+        PostBD posts = com.getPosts();
+        Pair<String,String> par = new Pair<>(null,null);
+        Post post = null;
+        User user = null;
+        String name;
+        int type = 0;
+        long id2;
+        
+        try{
+            post = posts.getPostMap().get(id);
+        } 
+        catch(NullPointerException ex){ 
+            return par;      
+        }
+        
+        try{
+            type = post.getPostType();
+        } 
+        catch(NullPointerException ex){}
+        
+        if(type == 1){
+            id2 = post.getPostOwner();
+            user = users.getUserMap().get(id2);
+            par.setFst(post.getPostTitulo());
+            try{
+                name = user.getUserName();
+            } 
+            catch(NullPointerException ex){ 
+                name = null;      
+            }
+            par.setSecond(name);
+        }
+        
+        if(type == 2){
+            id2 = post.getPostPid();
+            post = posts.getPostMap().get(id2);
+            user = users.getUserMap().get(post.getPostOwner());
+            par.setFst(post.getPostTitulo());
+            par.setSecond(user.getUserName());
+        }
+        
         return par;
     }
 
     // Query 2
-/*
+    /**
+     * Dado um inteiro N devolve uma lista com os id's dos N utilizadores mais ativos  
+     * @param int N tamanho da lista  
+     * @return List<Long> com os id's dos N utilizadores mais ativos
+     */
     public List<Long> topMostActive(int N) {
-    
+        UserBD users = com.getUsers();
+        Set<User> usersS = new TreeSet<>(new ComparatorUserNPosts());
+        List<User> aux = new ArrayList<>();
+        List<Long> ret = new ArrayList<>();
+        for(User u : users.getUserMap().values())
+            usersS.add(u);
+        int i = 0;
+        for(User u : usersS){
+            aux.add(i,u);
+            i++;
+        }
+        for(i = 0; i < N; i++)
+           ret.add(i,aux.get(i).getUserId());    
+        return ret;
+
     }
-    */
 
     // Query 3
-    /*
+    /**
+     * Dado um intervalo de tempo devolve o número de perguntas e o número de respostas feitas nesse intervalo
+     * @param LocalDate data inicial 
+     * @param LocalDate data final
+     * @return Pair<Long,Long> com o número de perguntas e respostas respetivamente.
+     */
     public Pair<Long,Long> totalPosts(LocalDate begin, LocalDate end){
-        
+        TreeMap<LocalDate,ArrayList<Post>> postdatas = this.com.getPosts().getPostDatas();
+        ArrayList<Post> p = null;
+        Pair<Long,Long> ret = new Pair<>(null,null);
+        int res = 0, per = 0;
+
+        while(!begin.equals(end.plusDays(1))){
+            p  = postdatas.get(begin);
+            for(Post post: p){
+                if(post.getPostType() == 1) per++;
+                if(post.getPostType() == 2) res++;
+            }
+            begin = begin.plusDays(1);
+        }
+
+        ret.setFst(Long.valueOf(per));
+        ret.setSecond(Long.valueOf(res));
+        return ret;
     }
-    */
     
     // Query 4
     /**

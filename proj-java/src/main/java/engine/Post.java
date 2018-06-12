@@ -17,12 +17,12 @@ public class Post{
     private int vcount;
     private LocalDate date;
     private long owner;
-    private int ownerRep;
     private int numcom;
     private int nres;
     private String titulo;
     private ArrayList<String> tag;
     private int ntags;
+
      /**
      * Construtor vazio
      */
@@ -34,7 +34,6 @@ public class Post{
         this.vcount = 0;
         this.date = null;
         this.owner = 0;
-        this.ownerRep = 0;
         this.numcom = 0;
         this.nres = 0;
         this.titulo = null;
@@ -66,7 +65,6 @@ public class Post{
         this.vcount = vcount;
         this.date = date;
         this.owner = owner;
-        this.ownerRep = ownerRep;
         this.numcom = numcom;
         this.nres = nres;
         this.titulo = titulo;
@@ -87,7 +85,6 @@ public class Post{
         this.vcount = g.getPostVCount();
         this.date = g.getPostDate();
         this.owner = g.getPostOwner();
-        this.ownerRep = g.getPostOwnerRep();
         this.numcom = g.getPostNumCom();
         this.nres = g.getPostNRes();
         this.titulo = g.getPostTitulo();
@@ -95,55 +92,99 @@ public class Post{
         this.ntags = g.getPostnTags();
     }
     
+    /**
+     * Define o id do Post
+     * @param long id
+     */
     public void setPostId(long id){
         this.id = id;
     }
     
+    /**
+     * Define o tipo do Post
+     * @param int
+     */
     public void setPostType(int t){
         this.type = t;
     }
     
+    /**
+     * Define o id da pergunta correspondente ao Post
+     * @param long
+     */
     public void setPostPid(long id){
         this.pid = id;
     }
     
+    /**
+     * Define o score do Post
+     * @param int
+     */
     public void setPostScore(int n){
         this.score = n;
     }
     
+    /**
+     * Define o número de visualizações do Post
+     * @param int
+     */
     public void setPostViewCount(int n){
         this.vcount = n;
     }
     
+    /**
+     * Define a data do Post
+     * @param LocalDate
+     */
     public void setPostDate(LocalDate d){
         this.date = d;
     }
     
+    /**
+     * Define o id do dono do Post
+     * @param long id
+     */
     public void setPostOwner(long id){
         this.owner = id;
     }
     
-    public void setPostOwnerRep(int n){
-        this.ownerRep = n;
-    }
-    
+    /**
+     * Define o número de comentários do Post
+     * @param int
+     */
     public void setPostNumCom(int n){
         this.numcom = n;
     }
     
+    /**
+     * Define o número de respostas do Post
+     * @param int
+     */
     public void setPostNumRes(int n){
         this.nres = n;
     }
     
+    /**
+     * Define o titulo do Post
+     * @param String
+     */
     public void setPostTitle(String t){
         this.titulo = t;
     }
     
+    /**
+     * Define a lista de Tags do Post
+     * @param ArrayList<String>
+     */
     public void setPostTags(ArrayList<String> t){
         this.tag = new ArrayList<>();
         t.forEach(a->this.tag.add(a));
     }
     
+    /**
+     * Define o número de tags do Post
+     * @param int
+     */
     public void setPostNumTags(int n){
         this.ntags = n;
     }
@@ -205,14 +246,6 @@ public class Post{
     }
 
     /**
-     * Devolve a reputação do owner
-     * @return int
-     */
-    public int getPostOwnerRep(){
-        return this.ownerRep;
-    }
-
-    /**
      * Devolve o número de comentários
      * @return int
      */
@@ -254,7 +287,7 @@ public class Post{
 
     /**
      * Devolve a tag da posição i
-     * @return( String
+     * @return String
      */
     public String getTagI(int i){
         ArrayList<String> ptr = new ArrayList<>();
@@ -264,7 +297,7 @@ public class Post{
 
     /**
     * Verifica a igualdade com outro objecto
-    * @param o Objeto
+    * @param Object
     * @return boolean
     */
     public boolean equals(Object cont){

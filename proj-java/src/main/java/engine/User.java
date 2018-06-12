@@ -32,7 +32,7 @@ public class User {
     }
     
     /**
-    * Cria um User.
+    * Construtor parametrizado.
     *@param   long id do User.
     *@param   int reputação do User.
     *@param   String nome do User.
@@ -53,26 +53,8 @@ public class User {
     } 
 
     /**
-    * Cria um User sem o seu Map de posts como parâmetro.
-    *@param   long id do User.
-    *@param   int reputação do User.
-    *@param   String nome do User.
-    *@param   String biografia do User.
-    *@param   int número de Posts do User.
-    *@return  User criado.
-    */
-    public User(long id, int reputacao, String nome, String bio, int nposts){
-        this.id = id;
-        this.reputacao = reputacao;
-        this.nome = nome;
-        this.bio = bio;
-        this.nposts=nposts;
-        this.uposts = new ArrayList<>();
-    } 
-
-    /**
      * Construtor por copia
-     * @param User posts
+     * @param User
      */
     public User(User g){
         this.id = g.getUserId();
@@ -83,31 +65,54 @@ public class User {
         this.uposts = g.getUserPosts();
     }
     
+    /**
+     * Define o id do User
+     * @param long
+     */
     public void setUserId(long id){
         this.id = id;
     }
     
+    /**
+     * Define a reputaçao do User
+     * @param int
+     */
     public void setUserRep(int rep){
      this.reputacao = rep;   
     }
     
+    /**
+     * Define o nome do User
+     * @param String
+     */
     public void setUserName(String n){
         this.nome = n;
     }
     
+    /**
+     * Define a biografia do User
+     * @param String
+     */
     public void setUserBio(String s){
         this.bio = s;
     }
     
+    /**
+     * Define o número de posts publicados pelo User
+     * @param int
+     */
     public void setUserNPosts(int n){
         this.nposts = n;
     }
     
+    /**
+     * Define a lista de posts do User
+     * @param ArrayList<Post>
+     */
     public void setUserPosts(ArrayList<Post> uposts){
         this.uposts = new ArrayList<>();
         uposts.forEach((a)->this.uposts.add(a));
     }
-    
     
     /**
      * Devolve o ID do user
@@ -159,7 +164,7 @@ public class User {
 
     /**
     * Verifica a igualdade com outro objecto
-    * @param o Objeto
+    * @param Object
     * @return boolean
     */
     public boolean equals(Object cont){
@@ -178,16 +183,27 @@ public class User {
         return new User(this);
     }
     
+    /**
+     * Adiciona um post à lista de posts do User
+     * @param Post 
+     */
     public void addUserPost(Post p){
         this.uposts.add(p.clone());
     }
     
+    /**
+     * Incrementa o número de posts do User 
+     */
     public void incNumPost(){
         int ret = this.nposts;
         ret++;
         this.nposts = ret;
     }
 
+    /**
+     * Devolve o número de posts significativos do User
+     * @return int
+     */
     public int getCountPosts(){
         ArrayList<Post> posts = this.getUserPosts();
         int ret = 0;

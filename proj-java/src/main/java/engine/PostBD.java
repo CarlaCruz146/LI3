@@ -1,7 +1,7 @@
 package engine;
 
 /**
- * Classe que contém a implementação da base de dados dos Users
+ * Classe que contém a implementação da base de dados dos Posts
  *
  * @author Grupo 51
  */
@@ -20,12 +20,19 @@ public class PostBD {
     private HashMap<Long,Post> postmap;
     private TreeMap<LocalDate,ArrayList<Post>> postdatas;
     
-
+    /**
+     * Construtor vazio
+     */
     public PostBD(){
         this.postmap = new HashMap<Long,Post>();
         this.postdatas = new TreeMap<LocalDate,ArrayList<Post>>(new ComparatorDatas());
     }
 
+    /**
+     * Construtor parametrizado
+     * @param HashMap<Long,Post> 
+     * @param TreeMap<LocalDate,ArrayList<Post>>
+     */
     public PostBD(HashMap<Long,Post> p, TreeMap<LocalDate,ArrayList<Post>> d){
         postmap = new HashMap<Long,Post>();
         p.entrySet().stream().forEach(entry -> postmap.put(entry.getKey(), entry.getValue().clone()));
@@ -33,16 +40,27 @@ public class PostBD {
         
     }
 
+    /**
+     * Construtor de cópia
+     * @param PostBD
+     */
     public PostBD(PostBD p){
         postmap = p.getPostMap();
         postdatas = p.getPostDatas();
     }
 
+    /**
+     * Função que limpa a estrutura
+     */
     public void clear(){
         this.postmap.clear();
         this.postdatas.clear();
     }
     
+    /**
+     * Dado um post, adiciona-o à base de dados
+     * @param Post
+     */
     public void addPost(Post p){
         ArrayList<Post> posts = null;
         this.postmap.put(p.getPostId(),p.clone());
@@ -56,12 +74,20 @@ public class PostBD {
         }
     }
     
+    /**
+     * Devolve o map que contém todos os posts e respetivos id's.
+     * @return HashMap<Long,Post>
+     */
     public HashMap<Long,Post> getPostMap(){
         HashMap<Long,Post> postmap = new HashMap<>();
         this.postmap.entrySet().stream().forEach(entry -> postmap.put(entry.getKey(), entry.getValue().clone()));
         return postmap;
     }
     
+    /**
+     * Devolve o map que contém todos os posts e respetivos id's, organizados em listas, por dia de criação.
+     * @return TreeMap<LocalDate,ArrayList<Post>>
+     */
     public TreeMap<LocalDate,ArrayList<Post>> getPostDatas(){
         TreeMap<LocalDate,ArrayList<Post>> postdatas = new TreeMap<>();
         for(Map.Entry<LocalDate,ArrayList<Post>> a: this.postdatas.entrySet())
@@ -69,12 +95,19 @@ public class PostBD {
         return postdatas;
     }
     
+    /**
+     * Devolve o clone do objeto
+     * @return PostBD
+     */
     public PostBD clone(){
         return new PostBD(this);
     }
     
-    
-    
+    /**
+     * Verifica se dois objetos são iguais
+     * @param Object
+     * @return boolean
+     */
     public boolean equals(Object o){
         if(this==o) return true;
         

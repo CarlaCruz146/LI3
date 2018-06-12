@@ -6,9 +6,8 @@ package engine;
  */
 
 import java.util.Comparator;
-import java.io.Serializable;
 
-public class ComparatorUserNPosts implements Comparator<User>, Serializable{
+public class ComparatorUserNPosts implements Comparator<User>{
     public int compare(User u1, User u2){
         int n1,n2;
         n1 = u1.getCountPosts();

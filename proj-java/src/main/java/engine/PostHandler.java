@@ -22,10 +22,9 @@ import java.util.TreeSet;
 import java.util.Set;
 
 /**
- * Write a description of class PostHandler here.
+ * Classe que efetua o parsing do ficheiro Posts.xml
  *
- * @author (your name)
- * @version (a version number or a date)
+ * @author Grupo 51
  */
 public class PostHandler extends DefaultHandler {
 
@@ -33,14 +32,23 @@ public class PostHandler extends DefaultHandler {
     private Post post = null;
     private HashMap<Integer,ArrayList<Post>> userposts = null;
 
+    /**
+     * Devolve a base de dados de posts
+     * @return PostBD
+     */
     public PostBD getPosts(){
         return posts;
     }
 
+    /**
+     * Devolve um conjunto que associa aos id's de users uma lista com os seus posts
+     * @return HashMap<Integer,ArrayList<Post>>
+     */
     public HashMap<Integer,ArrayList<Post>> getUserPosts(){
         return userposts;
     }
 
+    
     @Override
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
 
@@ -121,7 +129,8 @@ public class PostHandler extends DefaultHandler {
         }
     }
 
-    public static LocalDate StringToLD(String s){
+    
+    private static LocalDate StringToLD(String s){
         String aux = "";
         for (int i = 0; i < s.length() && s.charAt(i) != 'T'; i++)
             aux += s.charAt(i);
@@ -129,7 +138,7 @@ public class PostHandler extends DefaultHandler {
         return date;
     }
 
-    public static ArrayList<String> takeTag(String s){
+    private static ArrayList<String> takeTag(String s){
         String aux;
         Set<String> auxret = new TreeSet<>();
         for (int i = 0; i < s.length(); i++){

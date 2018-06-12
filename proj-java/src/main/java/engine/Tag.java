@@ -22,7 +22,7 @@ public class Tag {
     }
 
     /**
-    * Cria uma Tag.
+    * Construtor parametrizado
     *@param   long id da Tag.
     *@param   String nome da Tag.
     *@return  Tag criada.
@@ -41,10 +41,18 @@ public class Tag {
         this.name = t.getTagName();
     }
     
+    /**
+     * Define o id da Tag
+     * @param long id
+     */
     public void setTagId(long id){
         this.id = id;
     }
     
+    /**
+     * Define o nome da Tag
+     * @param String
+     */
     public void setTagName(String n){
         this.name = n;
     }
@@ -67,7 +75,7 @@ public class Tag {
 
     /**
     * Verifica a igualdade com outro objecto
-    * @param o Objeto
+    * @param Object
     * @return boolean
     */
     public boolean equals(Object cont){

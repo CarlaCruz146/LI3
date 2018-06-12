@@ -19,17 +19,21 @@ import org.xml.sax.helpers.DefaultHandler;
 import java.time.LocalDate;
 import java.util.TreeSet;
 import java.util.Set;
+
 /**
- * Write a description of class UserHandler here.
+ * Classe que efetua o parsing do ficheiro Users.xml
  *
- * @author (your name)
- * @version (a version number or a date)
+ * @author Grupo 51
  */
 public class UserHandler extends DefaultHandler {
 
     private UserBD users = null;
     private User usr = null;
 
+    /**
+     * Devolve a base de dados de users
+     * @return UserBD
+     */
     public UserBD getUsers(){
         return users;
     }

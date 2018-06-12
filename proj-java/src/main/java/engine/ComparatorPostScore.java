@@ -6,10 +6,9 @@ package engine;
  */
 
 import java.util.Comparator;
-import java.io.Serializable;
 import java.time.LocalDate;
 
-public class ComparatorPostScore implements Comparator<Post>, Serializable{
+public class ComparatorPostScore implements Comparator<Post>{
     public int compare(Post p1, Post p2){
         int s1, s2;
         s1 = p1.getPostScore();

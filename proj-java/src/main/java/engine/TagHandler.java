@@ -21,16 +21,19 @@ import java.util.TreeSet;
 import java.util.Set;
 
 /**
- * Write a description of class TagHandler here.
+ * Classe que implementa o parsing do ficheiro Tags.xml
  *
- * @author (your name)
- * @version (a version number or a date)
+ * @author Grupo 51
  */
 public class TagHandler extends DefaultHandler {
 
     private TagBD tags = null;
     private Tag tag = null;
 
+    /**
+     * Devolve a base de dados de tags
+     * @return TagBD
+     */
     public TagBD getTags(){
         return tags;
     }

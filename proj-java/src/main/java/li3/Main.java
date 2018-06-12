@@ -31,6 +31,7 @@ public class Main {
         qe.load(args[0]);
         after = System.currentTimeMillis();
         logtime.writeLog("LOAD -> "+(after-before)+" ms");
+        System.out.println("Ola");
         } catch(IndexOutOfBoundsException e){
             System.out.println("Deve passar o caminho do dump como argumento.");
         }
@@ -42,6 +43,7 @@ public class Main {
         Pair<String,String> q1 = qe.infoFromPost(801049);
         after = System.currentTimeMillis();
         logtime.writeLog("Query 1: -> "+(after-before)+" ms");
+        System.out.println("Query1 ->" + q1);
         log.writeLog("Query1 -> " + q1);
 
         /*
@@ -51,6 +53,7 @@ public class Main {
         List<Long> q2 = qe.topMostActive(10);
         after = System.currentTimeMillis();
         logtime.writeLog("Query 2 -> "+(after-before)+" ms");
+        System.out.println("Query2 ->" + q2);
         log.writeLog("Query 2 -> "+q2);
 
         /*
@@ -61,6 +64,7 @@ public class Main {
                 LocalDate.of(2016,Month.JULY,31));
         after = System.currentTimeMillis();
         logtime.writeLog("Query 3 -> "+(after-before)+" ms");
+        System.out.println("Query3 ->" + q3);
         log.writeLog("Query 3 -> "+q3);
 
         /*
@@ -71,11 +75,12 @@ public class Main {
                 LocalDate.of(2013, Month.MARCH,31));
         after = System.currentTimeMillis();
         logtime.writeLog("Query 4 -> " + (after - before) + " ms");
+        System.out.println("Query4 ->" + query4);
         log.writeLog("Query 4 -> " + query4);
 
         /*
            Query 5
-        */
+        
         before = System.currentTimeMillis();
         Pair<String, List<Long>> q5 = qe.getUserInfo(15811);
         after = System.currentTimeMillis();
@@ -84,7 +89,7 @@ public class Main {
 
         /*
            Query 6
-        */
+        
         before = System.currentTimeMillis();
         List<Long> q6 = qe.mostVotedAnswers(5, LocalDate.of(2015, Month.NOVEMBER, 1),
                 LocalDate.of(2015, Month.NOVEMBER,30));
@@ -94,7 +99,7 @@ public class Main {
 
         /*
            Query 7
-        */
+        
         before = System.currentTimeMillis();
         List<Long> q7 = qe.mostAnsweredQuestions(10, LocalDate.of(2014,Month.AUGUST,1),
                 LocalDate.of(2014,Month.AUGUST,10));
@@ -104,7 +109,7 @@ public class Main {
 
         /*
            Query 8
-        */
+        
         before = System.currentTimeMillis();
         List<Long> q8 = qe.containsWord(10, "kde");
         after = System.currentTimeMillis();
@@ -119,10 +124,12 @@ public class Main {
         after = System.currentTimeMillis();
         logtime.writeLog("Query9 -> " + (after - before) + " ms");
         log.writeLog("Query 9 -> " + q9);
+        System.out.println("Query9 ->" + q9);
+
 
         /*
            Query 10
-        */
+        
         before = System.currentTimeMillis();
         long q10 = qe.betterAnswer(30334);
         after = System.currentTimeMillis();
@@ -131,7 +138,7 @@ public class Main {
 
         /*
             Query 11
-        */
+        
         before = System.currentTimeMillis();
         List<Long> q11 = qe.mostUsedBestRep(5, LocalDate.of(2013,Month.NOVEMBER,01),
                 LocalDate.of(2013,Month.NOVEMBER,30));

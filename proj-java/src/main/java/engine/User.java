@@ -49,7 +49,7 @@ public class User {
         this.nposts=nposts;
         this.uposts = new ArrayList<>();
         for(Post p: uposts)
-            this.uposts.add(p.clone());
+            this.uposts.add(p);
     } 
 
     /**
@@ -111,7 +111,7 @@ public class User {
      */
     public void setUserPosts(ArrayList<Post> uposts){
         this.uposts = new ArrayList<>();
-        uposts.forEach((a)->this.uposts.add(a.clone()));
+        uposts.forEach((a)->this.uposts.add(a));
     }
     
     /**
@@ -161,7 +161,7 @@ public class User {
     public ArrayList<Post> getUserPosts(){
         ArrayList<Post> posts = new ArrayList<Post>();
         for(Post p: this.uposts)
-            posts.add(p.clone());
+            posts.add(p);
         return posts;
     }
 

@@ -504,11 +504,11 @@ public class TCDCommunity implements TADCommunity {
             }
             maptags.remove(aux);
             tag_set.remove(aux);
-            try{
+           // try{
                 ret.add(j,tcdtags.get(aux));
                 j++;
-            }
-            catch(NullPointerException ex){}
+           // }
+            //catch(NullPointerException ex){}
             max = 0;
         }
 

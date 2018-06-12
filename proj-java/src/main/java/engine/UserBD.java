@@ -28,7 +28,7 @@ public class UserBD {
      */
     public UserBD(HashMap<Long,User> u){
         HashMap<Long,User> usermap = new HashMap<>();
-        u.entrySet().stream().forEach(entry -> usermap.put(entry.getKey(), entry.getValue().clone()));
+        u.entrySet().stream().forEach(entry -> usermap.put(entry.getKey(), entry.getValue()));
     }
 
     /**
@@ -52,7 +52,7 @@ public class UserBD {
      * @return User
      */
     public User getUser(long id){
-        return this.usermap.get(id).clone();
+        return this.usermap.get(id);
     }
     
     /**
@@ -60,7 +60,7 @@ public class UserBD {
      * @param User
      */
     public void addUser(User u){
-        this.usermap.put(u.getUserId(),u.clone());
+        this.usermap.put(u.getUserId(),u);
     }
     
     /**
@@ -69,7 +69,7 @@ public class UserBD {
      */
     public HashMap<Long,User> getUserMap(){
         HashMap<Long,User> usermap = new HashMap<>();
-        this.usermap.entrySet().stream().forEach(entry -> usermap.put(entry.getKey(), entry.getValue().clone()));
+        this.usermap.entrySet().stream().forEach(entry -> usermap.put(entry.getKey(), entry.getValue()));
         return usermap;
     }
     

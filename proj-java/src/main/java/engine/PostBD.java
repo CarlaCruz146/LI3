@@ -35,7 +35,7 @@ public class PostBD {
      */
     public PostBD(HashMap<Long,Post> p, TreeMap<LocalDate,ArrayList<Post>> d){
         postmap = new HashMap<Long,Post>();
-        p.entrySet().stream().forEach(entry -> postmap.put(entry.getKey(), entry.getValue().clone()));
+        p.entrySet().stream().forEach(entry -> postmap.put(entry.getKey(), entry.getValue()));
         postdatas = new TreeMap<LocalDate,ArrayList<Post>>();
         
     }
@@ -65,7 +65,7 @@ public class PostBD {
         ArrayList<Post> posts = null;
         this.postmap.put(p.getPostId(),p.clone());
         if(this.postdatas.containsKey(p.getPostDate())){
-            this.postdatas.get(p.getPostDate()).add(p.clone());
+            this.postdatas.get(p.getPostDate()).add(p);
         }
         else {
             posts = new ArrayList<>();

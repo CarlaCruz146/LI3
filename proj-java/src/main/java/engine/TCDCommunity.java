@@ -51,7 +51,7 @@ public class TCDCommunity implements TADCommunity {
         this.com = new TCD();
         this.qelog = new MyLog("queryengine");
     }
-    
+
     /**
      * Efetua o load das informações contidas nos ficheiros .xml para a estrutura
      * @param String path onde se encontram os ficheiros
@@ -67,8 +67,8 @@ public class TCDCommunity implements TADCommunity {
         saxParser.parse(new File(dumpPath+"Users.xml"), userh);
         saxParser.parse(new File(dumpPath+"Posts.xml"), posth);
         saxParser.parse(new File(dumpPath+"Tags.xml"), tagh);
-        
-        
+
+
 
         for(User u: userh.getUsers().getUserMap().values())
             this.com.getUsers().addUser(u);
@@ -83,7 +83,7 @@ public class TCDCommunity implements TADCommunity {
 
         for(Tag t: tagh.getTags().getTagMap().values())
             this.com.getTags().addTag(t);
-        
+
         } catch (SAXException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -108,32 +108,32 @@ public class TCDCommunity implements TADCommunity {
         String name;
         int type = 0;
         long id2;
-        
+
         try{
             post = posts.getPostMap().get(id);
-        } 
-        catch(NullPointerException ex){ 
-            return par;      
         }
-        
+        catch(NullPointerException ex){
+            return par;
+        }
+
         try{
             type = post.getPostType();
-        } 
+        }
         catch(NullPointerException ex){}
-        
+
         if(type == 1){
             id2 = post.getPostOwner();
             user = users.getUserMap().get(id2);
             par.setFst(post.getPostTitulo());
             try{
                 name = user.getUserName();
-            } 
-            catch(NullPointerException ex){ 
-                name = null;      
+            }
+            catch(NullPointerException ex){
+                name = null;
             }
             par.setSecond(name);
         }
-        
+
         if(type == 2){
             id2 = post.getPostPid();
             post = posts.getPostMap().get(id2);
@@ -141,14 +141,14 @@ public class TCDCommunity implements TADCommunity {
             par.setFst(post.getPostTitulo());
             par.setSecond(user.getUserName());
         }
-        
+
         return par;
     }
 
     // Query 2
     /**
-     * Dado um inteiro N devolve uma lista com os id's dos N utilizadores mais ativos  
-     * @param int N tamanho da lista  
+     * Dado um inteiro N devolve uma lista com os id's dos N utilizadores mais ativos
+     * @param int N tamanho da lista
      * @return List<Long> com os id's dos N utilizadores mais ativos
      */
     public List<Long> topMostActive(int N) {
@@ -164,7 +164,7 @@ public class TCDCommunity implements TADCommunity {
             i++;
         }
         for(i = 0; i < N; i++)
-           ret.add(i,aux.get(i).getUserId());    
+           ret.add(i,aux.get(i).getUserId());
         return ret;
 
     }
@@ -172,7 +172,7 @@ public class TCDCommunity implements TADCommunity {
     // Query 3
     /**
      * Dado um intervalo de tempo devolve o número de perguntas e o número de respostas feitas nesse intervalo
-     * @param LocalDate data inicial 
+     * @param LocalDate data inicial
      * @param LocalDate data final
      * @return Pair<Long,Long> com o número de perguntas e respostas respetivamente.
      */
@@ -184,9 +184,11 @@ public class TCDCommunity implements TADCommunity {
 
         while(!begin.equals(end.plusDays(1))){
             p  = postdatas.get(begin);
-            for(Post post: p){
+            if(p!= null){
+              for(Post post: p){
                 if(post.getPostType() == 1) per++;
                 if(post.getPostType() == 2) res++;
+              }
             }
             begin = begin.plusDays(1);
         }
@@ -195,12 +197,12 @@ public class TCDCommunity implements TADCommunity {
         ret.setSecond(Long.valueOf(res));
         return ret;
     }
-    
+
     // Query 4
     /**
      * Dado um intervalo de tempo devolve todas as perguntas com determinada tag
      * @param String tag
-     * @param LocalDate data inicial 
+     * @param LocalDate data inicial
      * @param LocalDate data final
      * @return List<Long> com todas as perguntas com a tag
      */
@@ -212,11 +214,13 @@ public class TCDCommunity implements TADCommunity {
 
         while(!begin.equals(end.plusDays(1))){
             p  = postdatas.get(begin);
-            for(Post post: p){
+            if(p!= null) {
+              for(Post post: p){
                 tags = post.getPostTags();
                 for(String s: tags)
                     if (s.equals(tag))
                         res.add(post.getPostId());
+              }
             }
             begin = begin.plusDays(1);
         }
@@ -269,9 +273,11 @@ public class TCDCommunity implements TADCommunity {
 
         while(!begin.equals(end.plusDays(1))){
             datepost = posts.get(begin);
-            for(Post p : datepost){
+            if(datepost!= null){
+              for(Post p : datepost){
                 if(p.getPostType() == 2)
                     retS.add(p);
+              }
             }
             begin = begin.plusDays(1);
         }
@@ -303,8 +309,10 @@ public class TCDCommunity implements TADCommunity {
 
         while(!begin.equals(end.plusDays(1))){
             datepost = posts.get(begin);
-            for(Post p : datepost){
+            if(datepost != null){
+              for(Post p : datepost){
                     retS.add(p);
+              }
             }
             begin = begin.plusDays(1);
         }
@@ -326,7 +334,7 @@ public class TCDCommunity implements TADCommunity {
     /**
      * Dado uma palavra devolver uma lista com is Id's das N perguntas cujo o titulo contenha
      * @param int N
-     * @param String palavra 
+     * @param String palavra
      * @return List<Long> com todas as perguntas cujo título contenha a palavra
      */
     public List<Long> containsWord(int N, String word) {
@@ -336,7 +344,7 @@ public class TCDCommunity implements TADCommunity {
         List<Long> ret = new ArrayList<Long>();
         for(Post p : posts.getPostMap().values()){
             if(p.getPostType() == 1 && p.getPostTitulo().contains(word))
-                postsS.add(p);   
+                postsS.add(p);
         }
         int i = 0;
         for(Post p : postsS){
@@ -370,8 +378,8 @@ public class TCDCommunity implements TADCommunity {
             for(Post p2 : posts2){
                 if(p1.getPostType() == 2 && p2.getPostType() == 1 && p2.getPostId() == p1.getPostPid())
                     setaux.add(p2.clone());
-                 
-                if(p1.getPostType() == 1 && p2.getPostType() == 2 && p2.getPostPid() == p1.getPostId())   
+
+                if(p1.getPostType() == 1 && p2.getPostType() == 2 && p2.getPostPid() == p1.getPostId())
                     setaux.add(p1.clone());
 
                 if(p1.getPostType() == 2 && p2.getPostType() == 2 && p2.getPostPid() == p1.getPostPid()){
@@ -395,11 +403,11 @@ public class TCDCommunity implements TADCommunity {
 
         return res;
     }
-    
+
     // Query 10
     /**
      * Dado o id de um post obter a melhor resposta
-     * @param long id do post 
+     * @param long id do post
      * @return long id da melhor resposta
      */
     public long betterAnswer(long id){
@@ -410,18 +418,18 @@ public class TCDCommunity implements TADCommunity {
         for(Post p : posts.values())
             if(p.getPostType()==2 && p.getPostPid()==id){
                 sposts.add(p);
-                
+
             }
         if(sposts != null){
             for(Post p : sposts){
                 x = ((p.getPostScore()*0.65) + (com.getUsers().getUser(p.getPostOwner()).getUserRep()*0.25) + (p.getPostNumCom()*0.1));
-                if(x>media){ 
+                if(x>media){
                     media = x;
                     ret = p.getPostId();
                 }
             }
         }
-        return ret;        
+        return ret;
     }
 
     //Query 11
@@ -521,6 +529,6 @@ public class TCDCommunity implements TADCommunity {
     public void clear(){
         this.com.clear();
     }
-    
-    
+
+
 }

@@ -184,12 +184,13 @@ public class TCDCommunity implements TADCommunity {
 
         while(!begin.equals(end.plusDays(1))){
             p  = postdatas.get(begin);
-            if(p!= null){
+            try{
               for(Post post: p){
                 if(post.getPostType() == 1) per++;
                 if(post.getPostType() == 2) res++;
               }
             }
+            catch(NullPointerException ex){}
             begin = begin.plusDays(1);
         }
 
@@ -214,7 +215,7 @@ public class TCDCommunity implements TADCommunity {
 
         while(!begin.equals(end.plusDays(1))){
             p  = postdatas.get(begin);
-            if(p!= null) {
+            try {
               for(Post post: p){
                 tags = post.getPostTags();
                 for(String s: tags)
@@ -222,6 +223,7 @@ public class TCDCommunity implements TADCommunity {
                         res.add(post.getPostId());
               }
             }
+            catch(NullPointerException ex){}
             begin = begin.plusDays(1);
         }
         return res;
@@ -234,6 +236,7 @@ public class TCDCommunity implements TADCommunity {
      * @return Pair<String,List<Long>> com short bio do user e o id dos ultimos 10 posts
      */
     public Pair<String, List<Long>> getUserInfo(long id){
+      try{
         UserBD users = com.getUsers();
         User u = users.getUser(id);
         ArrayList<Post> uposts = u.getUserPosts();
@@ -255,6 +258,10 @@ public class TCDCommunity implements TADCommunity {
         String bio = u.mygetUserBio();
         Pair<String, List<Long>> ret = new Pair<>(bio, list);
         return ret;
+      }
+      catch(NullPointerException ex){
+        return null;
+      }
     }
 
     // Query 6
@@ -273,12 +280,13 @@ public class TCDCommunity implements TADCommunity {
 
         while(!begin.equals(end.plusDays(1))){
             datepost = posts.get(begin);
-            if(datepost!= null){
+            try{
               for(Post p : datepost){
                 if(p.getPostType() == 2)
                     retS.add(p);
               }
             }
+            catch(NullPointerException ex){}
             begin = begin.plusDays(1);
         }
         List<Long> list = new ArrayList<>();
@@ -309,11 +317,12 @@ public class TCDCommunity implements TADCommunity {
 
         while(!begin.equals(end.plusDays(1))){
             datepost = posts.get(begin);
-            if(datepost != null){
+            try{
               for(Post p : datepost){
                     retS.add(p);
               }
             }
+            catch(NullPointerException ex){}
             begin = begin.plusDays(1);
         }
         List<Long> list = new ArrayList<>();
@@ -338,6 +347,7 @@ public class TCDCommunity implements TADCommunity {
      * @return List<Long> com todas as perguntas cujo título contenha a palavra
      */
     public List<Long> containsWord(int N, String word) {
+      try{
         PostBD posts = com.getPosts();
         Set<Post> postsS = new TreeSet<>(new ComparatorPostDate());
         List<Post> aux = new ArrayList<>();
@@ -355,6 +365,10 @@ public class TCDCommunity implements TADCommunity {
            ret.add(i,aux.get(i).getPostId());
 
         return ret;
+      }
+      catch(NullPointerException ex){
+        return null;
+      }
     }
 
     // Query 9
@@ -366,6 +380,7 @@ public class TCDCommunity implements TADCommunity {
     *return   LONG_list ID's das perguntas.
     */
     public List<Long> bothParticipated (int N, long id1, long id2){
+      try{
         Integer key1 = (int)(long)id1;
         Integer key2 = (int)(long)id2;
         ArrayList<Post> posts1 = new ArrayList<>((this.com.getUsers().getUserMap().get(id1).getUserPosts()));
@@ -400,8 +415,11 @@ public class TCDCommunity implements TADCommunity {
             res.add(post.getPostId());
             i++;
         }
-
         return res;
+      }
+      catch(NullPointerException ex){
+        return null;
+      }
     }
 
     // Query 10
@@ -411,6 +429,7 @@ public class TCDCommunity implements TADCommunity {
      * @return long id da melhor resposta
      */
     public long betterAnswer(long id){
+      try{
         Map<Long,Post> posts = com.getPosts().getPostMap();
         Set<Post> sposts = new HashSet<>();
         long ret = -1;
@@ -418,9 +437,9 @@ public class TCDCommunity implements TADCommunity {
         for(Post p : posts.values())
             if(p.getPostType()==2 && p.getPostPid()==id){
                 sposts.add(p);
-
             }
-        if(sposts != null){
+
+        try{
             for(Post p : sposts){
                 x = ((p.getPostScore()*0.65) + (com.getUsers().getUser(p.getPostOwner()).getUserRep()*0.25) + (p.getPostNumCom()*0.1));
                 if(x>media){
@@ -429,7 +448,13 @@ public class TCDCommunity implements TADCommunity {
                 }
             }
         }
+        catch(NullPointerException ex){}
+
         return ret;
+      }
+      catch(NullPointerException ex){
+        return -2;
+      }
     }
 
     //Query 11
@@ -479,10 +504,11 @@ public class TCDCommunity implements TADCommunity {
             }
             maptags.remove(aux);
             tag_set.remove(aux);
-            if(tcdtags.get(aux)!= null){
+            try{
                 ret.add(j,tcdtags.get(aux));
                 j++;
             }
+            catch(NullPointerException ex){}
             max = 0;
         }
 

@@ -504,11 +504,10 @@ public class TCDCommunity implements TADCommunity {
             }
             maptags.remove(aux);
             tag_set.remove(aux);
-           // try{
+            if(tcdtags.get(aux)!= null){
                 ret.add(j,tcdtags.get(aux));
                 j++;
-           // }
-            //catch(NullPointerException ex){}
+            }
             max = 0;
         }
 
@@ -530,7 +529,7 @@ public class TCDCommunity implements TADCommunity {
             nusersaux.add(u);
         }
         List<User> nusers = new ArrayList<>();
-        for(int j = 0 ; j < N && j < nusersaux.size(); j++)
+        for(int j = 0 ; j < N ; j++)
             nusers.add(j,nusersaux.get(j));
         return nusers;
     }
@@ -555,6 +554,4 @@ public class TCDCommunity implements TADCommunity {
     public void clear(){
         this.com.clear();
     }
-
-
 }

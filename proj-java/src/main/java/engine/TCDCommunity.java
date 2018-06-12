@@ -163,7 +163,7 @@ public class TCDCommunity implements TADCommunity {
             aux.add(i,u);
             i++;
         }
-        for(i = 0; i < N; i++)
+        for(i = 0; i < N && i < aux.size(); i++)
            ret.add(i,aux.get(i).getUserId());
         return ret;
 
@@ -252,7 +252,7 @@ public class TCDCommunity implements TADCommunity {
             }
         }
         List<Long> list = new ArrayList<>();
-        for(int j = 0; j < 10; j++){
+        for(int j = 0; j < 10 && j < aux.size(); j++){
             list.add(j,Long.valueOf(aux.get(j)));
         }
         String bio = u.mygetUserBio();
@@ -296,7 +296,7 @@ public class TCDCommunity implements TADCommunity {
             aux.add(i,p);
             i++;
         }
-        for(int j = 0; j < N; j++){
+        for(int j = 0; j < N && j < aux.size(); j++){
             list.add(j,Long.valueOf(aux.get(j).getPostId()));
         }
         return list;
@@ -332,7 +332,7 @@ public class TCDCommunity implements TADCommunity {
             aux.add(i,p);
             i++;
         }
-        for(int j = 0; j < N; j++){
+        for(int j = 0; j < N && j < aux.size(); j++){
             list.add(j,Long.valueOf(aux.get(j).getPostId()));
         }
         return list;
@@ -361,7 +361,7 @@ public class TCDCommunity implements TADCommunity {
             aux.add(i,p.clone());
             i++;
         }
-        for(i = 0; i < N; i++)
+        for(i = 0; i < N && i < aux.size(); i++)
            ret.add(i,aux.get(i).getPostId());
 
         return ret;
@@ -425,8 +425,8 @@ public class TCDCommunity implements TADCommunity {
     // Query 10
     /**
      * Dado o id de um post obter a melhor resposta
-     * @param long id do post
      * @return long id da melhor resposta
+     * @param long id do post
      */
     public long betterAnswer(long id){
       try{
@@ -530,7 +530,7 @@ public class TCDCommunity implements TADCommunity {
             nusersaux.add(u);
         }
         List<User> nusers = new ArrayList<>();
-        for(int j = 0 ; j < N ; j++)
+        for(int j = 0 ; j < N && j < nusersaux.size(); j++)
             nusers.add(j,nusersaux.get(j));
         return nusers;
     }

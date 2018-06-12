@@ -52,7 +52,7 @@ public class UserBD {
      * @return User
      */
     public User getUser(long id){
-        return this.usermap.get(id);
+        return this.usermap.get(id).clone();
     }
     
     /**

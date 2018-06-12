@@ -334,7 +334,6 @@ public class TCDCommunity implements TADCommunity {
         Set<Post> postsS = new TreeSet<>(new ComparatorPostDate());
         List<Post> aux = new ArrayList<>();
         List<Long> ret = new ArrayList<Long>();
-        System.out.println("oi");
         for(Post p : posts.getPostMap().values()){
             if(p.getPostType() == 1 && p.getPostTitulo().contains(word))
                 postsS.add(p);   

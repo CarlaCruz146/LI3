@@ -114,23 +114,98 @@ public class TCDCommunity implements TADCommunity {
     */
     
     // Query 4
-    /*
+    /**
+     * Dado um intervalo de tempo devolve todas as perguntas com determinada tag
+     * @param String tag
+     * @param LocalDate data inicial 
+     * @param LocalDate data final
+     * @return List<Long> com todas as perguntas com a tag
+     */
     public List<Long> questionsWithTag(String tag, LocalDate begin, LocalDate end) {
+        TreeMap<LocalDate,ArrayList<Post>> postdatas = this.com.getPosts().getPostDatas();
+        ArrayList<Post> p = null;
+        ArrayList<String> tags = null;
+        List<Long> res = new ArrayList<>();
+
+        while(!begin.equals(end.plusDays(1))){
+            p  = postdatas.get(begin);
+            for(Post post: p){
+                tags = post.getPostTags();
+                for(String s: tags)
+                    if (s.equals(tag))
+                        res.add(post.getPostId());
+            }
+            begin = begin.plusDays(1);
+        }
+        return res;
     }
-*/
+
     // Query 5
-     /*
+    /**
+     * Dado um id devolver a short bio do User e os seus ultimos 10 posts
+     * @param long Id do User
+     * @return Pair<String,List<Long>> com short bio do user e o id dos ultimos 10 posts
+     */
     public Pair<String, List<Long>> getUserInfo(long id){
+        UserBD users = com.getUsers();
+        User u = users.getUser(id);
+        ArrayList<Post> uposts = u.getUserPosts();
+        Set<Post> upostsS = new TreeSet<>(new ComparatorPostDate());
+        for(Post p : uposts)
+            upostsS.add(p);
+        List<Long> aux = new ArrayList<>();
+        int i = 0;
+        for(Post p : upostsS){
+            if(p.getPostType() == 1 || p.getPostType() == 2 ){
+                aux.add(i,Long.valueOf(p.getPostId()));
+                i++;
+            }
+        }
+        List<Long> list = new ArrayList<>();
+        for(int j = 0; j < 10; j++){
+            list.add(j,Long.valueOf(aux.get(j)));
+        }
+        String bio = u.mygetUserBio();
+        Pair<String, List<Long>> ret = new Pair<>(bio, list);
+        return ret;
     }
-*/
 
     // Query 6
-   /*
+    /**
+     * Dado um intervalo de tempo arbitrário devolver os id's das N respostas com mais votos.
+     * @param int N
+     * @param LocalDate data inicial
+     * @param LocalDate data final
+     * @return List<Long> com os id's das N melhor respostas
+     */
     public List<Long> mostVotedAnswers(int N, LocalDate begin, LocalDate end){
-    }
-*/
+        TreeMap<LocalDate,ArrayList<Post>> posts = this.com.getPosts().getPostDatas();
+        PostBD postbd = new PostBD();
+        ArrayList<Post> datepost = null;
+        Set<Post> retS = new TreeSet<>(new ComparatorPostScore());
 
-        // Query 7
+        while(!begin.equals(end.plusDays(1))){
+            datepost = posts.get(begin);
+            for(Post p : datepost){
+                if(p.getPostType() == 2)
+                    retS.add(p);
+            }
+            begin = begin.plusDays(1);
+        }
+        List<Long> list = new ArrayList<>();
+        List<Post> aux = new ArrayList<>();
+        int i = 0;
+        for(Post p : retS){
+            aux.add(i,p);
+            i++;
+        }
+        for(int j = 0; j < N; j++){
+            list.add(j,Long.valueOf(aux.get(j).getPostId()));
+        }
+        return list;
+    }
+
+    // Query 7
     /**
      * Dado um intervalo de tempo arbitrário devolver os id's das N perguntas com mais perguntas.
      * @param long Id do User
@@ -268,11 +343,98 @@ public class TCDCommunity implements TADCommunity {
     }
 
     //Query 11
-    /*
+    /**
+     * Dado o um intervalo de tempo devolver os id's das N tags mais usadas pelos N utilizadores com melhor reputação
+     * @param int N
+     * @param LocalDate begin
+     * @param LocalDate end
+     * @return long id da melhor resposta
+     */
     public List<Long> mostUsedBestRep(int N, LocalDate begin, LocalDate end){
-    
+        UserBD users = com.getUsers();
+        TagBD tags = com.getTags();
+        List<User> ntop = getNTopRep(users,N);
+        List<String> alltags = new ArrayList<>();
+        List<Long> ret = new ArrayList<>();
+        Map<String, Long> tcdtags = new HashMap<>();
+        tags.getTagMap().forEach((a,b) -> tcdtags.put(b.getTagName(),b.getTagId()));
+
+        for(User u: ntop){
+            ArrayList<Post> uposts = new ArrayList<>(u.getUserPosts());
+            for(Post p : uposts){
+                boolean fstfst = begin.equals(p.getPostDate());
+                boolean fstsnd = (p.getPostDate()).isAfter(begin);
+                boolean sndfst = end.isAfter(p.getPostDate());
+                boolean sndsnd = end.equals(p.getPostDate());
+                if ( (fstfst || fstsnd) &&  ( sndfst || sndsnd ) )
+                    p.getPostTags().forEach((t)->alltags.add(t));
+            }
+        }
+
+        Map<String,Integer> maptags = new TreeMap<>();
+        alltags.forEach(a->addMapTag(maptags,a));
+        Set<String> tag_set = maptags.keySet();
+        int size = maptags.size();
+        int max = 0;
+        int n;
+        String aux = null;
+        for(int i = 0,j = 0; i < size && j < N; i++){
+
+            for(String tag : tag_set){
+                n = maptags.get(tag);
+                if (n > max){
+                    max = n;
+                    aux = tag;
+                }
+            }
+            maptags.remove(aux);
+            tag_set.remove(aux);
+            if(tcdtags.get(aux)!= null){
+                ret.add(j,tcdtags.get(aux));
+                j++;
+            }
+            max = 0;
+        }
+
+        return ret;
     }
-    */
+
+    /**
+     * Dado um Map com todos os users devolver uma lista com os N top users pela reputação
+     * @param UserBD users
+     * @param int N
+     * @return List<User>
+     */
+    private List<User> getNTopRep(UserBD users,int N){
+        Set<User> usersS = new TreeSet<>(new ComparatorUserRep());
+        List<User> nusersaux = new ArrayList<>();
+        for(User u : users.getUserMap().values())
+            usersS.add(u);
+        for(User u : usersS){
+            nusersaux.add(u);
+        }
+        List<User> nusers = new ArrayList<>();
+        for(int j = 0 ; j < N ; j++)
+            nusers.add(j,nusersaux.get(j));
+        return nusers;
+    }
+
+    /**
+     * Dado um Map com a tag e o número de ocorrências acrescenta uma tag ou incrementa o número de ocorrências
+     * @param Map<String,Integer> tags
+     * @param String tag
+     * @return
+     */
+    private void addMapTag(Map<String,Integer> tags, String tag){
+        if(tags.containsKey(tag)){
+            Integer novo = tags.get(tag);
+            novo++;
+            tags.replace(tag,tags.get(tag), novo);
+        }
+        else{
+            tags.put(tag,1);
+        }
+    }
 
     public void clear(){
         this.com.clear();
